@@ -1,0 +1,163 @@
+{%include 'parts/nav.html'%}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ajouter un membre</title>
+    <style>
+        /* Styles pour la page de formulaire, ajustez selon vos besoins */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 60%;
+            margin: 0 auto;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .button11 {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #007bff;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+        }
+        .button11:hover {
+            background-color: #0056b3;
+        }
+        .right-left{
+background-color:#F6F2F2; 
+border-radius: 15px;
+height: 100%;
+width: 81%;
+position: absolute;
+top: 131px;
+left:17.5%;
+overflow:auto;
+box-shadow: 
+        2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
+        4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
+        6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
+    }
+    </style>
+</head>
+<body>
+    <div class="left-side">
+        {%include 'parts/button.html'%}
+    </div>
+    <div class="right-left">
+    <div class="container">
+        <h1>Ajouter un membre</h1>
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">Nom d'utilisateur:</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <div class="form-error">
+                        {% for error in form.username.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.email.id_for_label }}">Email:</label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <div class="form-error">
+                        {% for error in form.email.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.first_name.id_for_label }}">Prénom:</label>
+                {{ form.first_name }}
+                {% if form.first_name.errors %}
+                    <div class="form-error">
+                        {% for error in form.first_name.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.last_name.id_for_label }}">Nom:</label>
+                {{ form.last_name }}
+                {% if form.last_name.errors %}
+                    <div class="form-error">
+                        {% for error in form.last_name.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.password1.id_for_label }}">Mot de passe:</label>
+                {{ form.password1 }}
+                {% if form.password1.errors %}
+                    <div class="form-error">
+                        {% for error in form.password1.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.password2.id_for_label }}">Confirmation du mot de passe:</label>
+                {{ form.password2 }}
+                {% if form.password2.errors %}
+                    <div class="form-error">
+                        {% for error in form.password2.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.user_type.id_for_label }}">Type d'utilisateur:</label>
+                {{ form.user_type }}
+                {% if form.user_type.errors %}
+                    <div class="form-error">
+                        {% for error in form.user_type.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <button type="submit" class="button11">Ajouter le membre</button>
+
+        </form>
+        <!-- Lien pour voir la liste des membres -->
+    <a href="{% url 'member_list' %}">Voir la Liste des Membres</a>
+
+    </div>
+</div>
+</body>
+</html>

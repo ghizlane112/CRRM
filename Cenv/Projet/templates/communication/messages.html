@@ -1,0 +1,209 @@
+{% include 'parts/nav.html' %}
+
+<style>
+ :root {
+    --body-bg: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    --msger-bg: #fff;
+    --border: 2px solid #ddd;
+    --left-msg-bg: #ececec;
+    --right-msg-bg: #579ffb;
+    --header-bg: #eee;
+    --header-text-color: #666;
+    --input-bg: #ddd;
+    --send-btn-bg: #00c441;
+    --send-btn-hover-bg: #00b431;
+}
+
+/* Container principal avec deux colonnes */
+.right-side {
+    display: flex;
+    height: calc(100vh - 131px); /* Ajuster la hauteur en fonction de la nav */
+    width: 81%;
+    height: auto;
+    position: absolute;
+    top: 131px;
+    left: 17.5%;
+    background-color: #F6F2F2;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 
+        2px 2px 5px rgba(0, 0, 0, 0.2),
+        4px 4px 10px rgba(0, 0, 0, 0.4),
+        6px 6px 15px rgba(0, 0, 0, 0.6);
+}
+
+/* Style pour la colonne de gauche avec la liste d'utilisateurs */
+.user-list {
+    flex: 1 0 35%; /* Largeur initiale de 35%, flexible avec possibilité d'ajustement */
+    border-right: var(--border);
+    background: #fff;
+    overflow-y: auto;
+    padding: 10px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Style pour la partie chat */
+.chat-area {
+    flex: 1 0 65%; /* Largeur initiale de 65%, flexible avec possibilité d'ajustement */
+    display: flex;
+    flex-direction: column;
+    background: var(--msger-bg);
+    overflow: hidden;
+}
+
+/* Header de chat */
+.msger-header {
+    background: var(--header-bg);
+    padding: 10px;
+    border-bottom: var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.msger-header-title {
+    font-size: 16px;
+}
+
+/* Liste des utilisateurs dans la colonne de gauche */
+.people-list {
+    padding: 10px;
+    background: #f5f5f5;
+    border-bottom: 1px solid #ddd;
+}
+
+.people-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0; /* Supprimer la marge pour éviter le débordement */
+}
+
+.people-list li {
+    margin-bottom: 10px;
+    padding: 10px;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    overflow: hidden; /* Assurer que le texte ne déborde */
+    word-break: break-word; /* Éviter les débordements de texte */
+}
+
+/* Zone de chat */
+.chat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    overflow-y: auto;
+    background: #F6F2F2;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 
+                0px 4px 4px rgba(0, 0, 0, 0.25), 
+                0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 21px;
+}
+
+.chat ul {
+    list-style: none;
+    padding: 0;
+    margin: 0; /* Supprimer la marge pour éviter le débordement */
+}
+
+.chat li {
+    margin-bottom: 10px;
+    padding: 10px;
+    background: #448AF7;
+    color: white;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.chat-form {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-form textarea {
+    resize: none;
+    margin-bottom: 10px;
+}
+
+</style>
+
+<body>
+    <div class="left-side">
+        {% include 'parts/button.html' %}
+    </div>
+
+    {% block content %}
+    <div class="right-side">
+        <div id="plist" class="people-list">
+            <!-- Liste des utilisateurs ou contacts -->
+            <div class="user-list">
+                <h3>Contacts</h3>
+            <ul>
+                {% for user in users %}
+                <li>
+                    <a href="{% url 'inbox' %}?user={{ user.id }}">{{ user.username }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+            </div>
+        </div>
+
+
+<div class="chat-area">
+    <header class="msger-header">
+        <div class="msger-header-title">
+            <a href="javascript:void(0);" data-toggle="modal" data-target="#view_info">
+                <!-- Avatar ou image de l'utilisateur -->
+              </a>
+              <div class="chat-about">
+                  <h6 class="m-b-0">{{ request.user.username }}</h6>
+                  <small>Last seen: {{ request.user.last_login }}</small>
+              </div>
+
+        </div>
+    </header>
+
+
+
+        <div class="chat">
+            <div class="chat-header clearfix">
+                <div class="row">
+                    <div class="col-lg-6">
+                       
+                    </div>
+                </div>
+            </div>
+
+            <h2>{% if form %}Send a Message{% else %}Inbox{% endif %}</h2>
+
+            {% if form %}
+                <!-- Formulaire d'envoi de message -->
+                <form method="post" class="chat-form">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Send</button>
+                </form>
+                <a href="{% url 'inbox' %}">Back to Inbox</a>
+            {% else %}
+                <!-- Liste des messages reçus -->
+                <ul>
+                    {% for message in messages %}
+                    <li>
+                        <strong>From:</strong> {{ message.sender }}<br>
+                        <strong>To:</strong> {{ message.receiver }}<br>
+                        <strong>Lead:</strong> {{ message.lead }}<br>
+                        <strong>Message:</strong> {{ message.content }}<br>
+                        <strong>Sent at:</strong> {{ message.timestamp }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                <a href="{% url 'send_message' %}">Send a new message</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</body>
+{%endblock%}

@@ -1,0 +1,18 @@
+<!-- communication/templates/communication/lead_notes.html -->
+<h2>Notes for {{ lead.name }}</h2>
+
+<ul>
+    {% for note in notes %}
+    <li>
+        <strong>{{ note.user.username }}:</strong> {{ note.content }}
+        <br><small>{{ note.created_at }}</small>
+    </li>
+    {% endfor %}
+</ul>
+
+<h3>Add a Note</h3>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add Note</button>
+</form>

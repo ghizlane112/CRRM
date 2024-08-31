@@ -1,0 +1,100 @@
+{% include 'parts/nav.html' %}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ajouter une Campagne</title>
+    <style>
+
+        /* Style pour la navigation et le layout */
+        .right-left {
+            background-color: #F6F2F2; 
+            border-radius: 15px;
+            height: 100%;
+            width: 81%;
+            position: absolute;
+            top: 131px;
+            left: 17.5%;
+            overflow: hidden;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
+                4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
+                6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
+            padding: 20px;
+        }
+       .right-left form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+            max-width: 600px;
+        }
+        h1 {
+          
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+       .right-left input,
+        .right-left select,
+        .right-left textarea {
+            width: 100%;
+            margin-top: 7px;
+            margin-bottom: 7px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .right-left textarea {
+            resize: vertical;
+        }
+
+       .right-left button[type="submit"] {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            display: block;
+            width: 100%;
+        }
+        .right-left   button[type="submit"]:hover {
+            background-color: #84c9f7;
+        }
+
+       .right-left a {
+            display: block;
+            margin-top: 20px;
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .right-left a:hover {
+            text-decoration: underline;
+        }
+          </style>
+</head>
+<body>
+     <div class="left-side">
+        {% include 'parts/button.html' %}
+    </div>
+    <div class="right-left">
+    <h1>Ajouter une Nouvelle Campagne</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Ajouter la Campagne</button>
+    </form>
+    <a href="{% url 'campaign_list' %}">Retour à la Liste des Campagnes</a>
+</div>
+</body>
+</html>
