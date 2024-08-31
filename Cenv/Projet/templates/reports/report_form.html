@@ -1,0 +1,119 @@
+{% include 'parts/nav.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Créer un Rapport</title>
+    <style>
+        .right-side {
+            background-color: #F6F2F2;
+            border-radius: 15px;
+            height: 100%;
+            width: 81%;
+            position: absolute;
+            top: 131px;
+            left: 17.5%;
+            overflow: auto;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
+                4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
+                6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
+        }
+
+        .right-side-desous {
+            padding: 20px; /* Ajouter du padding pour un meilleur espacement */
+        }
+
+        .right-side-desous img {
+            height: 240px;
+            width: 520px;
+            display: block; /* Centrer l'image */
+            margin: 0 auto; /* Centrer l'image */
+            position: relative;
+            left: 20px;
+            top: -20px;
+        }
+
+        .right-side-desous-form {
+            text-align: center; /* Centrer le titre et le formulaire */
+            margin-top: 20px;
+        }
+
+        .right-side-desous-form h1 {
+            color: #3B4582;
+            margin-bottom: 20px; /* Espacement sous le titre */
+            margin-right: 10px;
+            margin-top:-40px ;
+        }
+
+        .right-side-desous-form form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .right-side-desous-form form input,
+        .right-side-desous-form form textarea {
+            padding: 8px;
+            width: 390px;
+            margin-bottom: 10px;
+             /* Espacement entre les champs */
+        }
+        .right-side-desous-form form label{
+          font-size: 18px;
+          font-weight:600px;
+          
+        }
+        .right-side-desous-form form textarea{
+            margin-left: 13px;
+        }
+        .right-side-desous-form form select{
+            padding: 8px;
+            width: 410px;
+            margin-right: 14px;
+            margin-bottom: 10px;
+        }
+
+        .right-side-desous-form button {
+            padding: 10px 20px;
+            background-color: #3B4582;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .right-side-desous-form a {
+            display: block;
+            margin-top: 20px;
+            color: #3B4582;
+            text-decoration: none;
+        }
+
+        .right-side-desous-form a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="left-side">
+        {% include 'parts/button.html' %}
+    </div>
+
+    <div class="right-side">
+        <div class="right-side-desous">
+            {% load static %}
+            <img src="{% static 'images/img11.jpg' %}" alt="Image" />
+            <div class="right-side-desous-form">      
+                <h1>Créer un Rapport</h1>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Générer ce Rapport</button>
+                </form>
+                <a href="{% url 'report_dashboard' %}">Retour au tableau de bord</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

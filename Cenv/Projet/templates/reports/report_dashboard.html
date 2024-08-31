@@ -1,0 +1,176 @@
+{%include 'parts/nav.html'%}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tableau de Bord des Rapports</title>
+    <style>
+        .right-left {
+            background-color: #F6F2F2; 
+            border-radius: 15px;
+            height: 100%;
+            width: 81%;
+            position: absolute;
+            top: 131px;
+            left: 17.5%;
+            overflow: hidden;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
+                4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
+                6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
+        }
+        .right-side-desous {
+            position: relative;
+            top: 23px;
+            left: 12px;
+        }
+        .right-side-desous li {
+            list-style-type: none;
+        }
+        .right-side-desous a {
+            text-decoration: none;
+        }
+
+        /***cards div***/
+        .ag-courses_box {
+            display: inline-block;
+            flex-wrap: wrap;
+            padding: 10px 0; /* Réduit le padding pour réduire l'espace global autour des cartes */
+            justify-content: space-between; /* Ajuste la distribution des cartes dans le conteneur */
+        }
+
+        .ag-courses_item {
+            width: 360px;
+            flex-basis: calc(30% - 30px); /* Réduit la largeur des cartes à 30% */
+            margin: 0 15px 30px;
+            overflow: hidden;
+            border-radius: 28px;
+        }
+
+        .ag-courses-item_link {
+          background-color: #121212;
+            display: block;
+            overflow: hidden;
+            position: relative;
+            text-decoration: none;
+            padding: 22px 20px; /* Augmente la hauteur des cartes en ajustant le padding */
+        }
+
+        .ag-courses-item_title {
+            min-height: 87px;
+            margin: 0 0 25px;
+            overflow: hidden;
+            font-weight: bold;
+            font-size: 30px;
+            color: #FFF;
+            z-index: 2;
+            position: relative;
+        }
+
+        .ag-courses-item_link:hover {
+            color: #FFF;
+            text-decoration: none;
+        }
+
+        .ag-courses-item_link:hover .ag-courses-item_bg {
+            -webkit-transform: scale(10);
+            -ms-transform: scale(10);
+            transform: scale(10);
+        }
+
+        .ag-courses-item_bg {
+            height: 128px;
+            width: 128px;
+            background-color: #f9b234;
+            z-index: 1;
+            position: absolute;
+            top: -75px;
+            right: -75px;
+            border-radius: 50%;
+            transition: all .5s ease;
+        }
+
+        .card-color-1 .ag-courses-item_bg {
+            background-color: #f9b234; /* Couleur pour la première carte */
+        }
+
+        .card-color-2 .ag-courses-item_bg {
+            background-color: #3ecd5e; /* Couleur pour la deuxième carte */
+        }
+
+        .card-color-3 .ag-courses-item_bg {
+            background-color: #e44002; /* Couleur pour la troisième carte */
+        }
+        
+        .card-color-4 .ag-courses-item_bg {
+            background-color:  #952aff; /* Couleur pour la troisième carte */
+        }
+        .hidden {
+            display: none;
+        }
+
+        .visible {
+            display: block;
+        }
+        .h22{
+        margin-left: 12px;
+        margin-bottom: 34px;
+        font-style: Abhaya Libre ExtraBold;
+        }
+    </style>
+</head>
+<body>
+    <div class="left-side">
+        {% include 'parts/button.html' %}
+    </div>
+
+    <div class="right-left">
+        <div class="right-side-desous">
+            <h1 class="h22">Tableau de Bord des Rapports</h1>
+
+            {% if report_options %}
+                <div class="div-card">
+                    {% for option in report_options %}
+                        <div class="ag-courses_box">
+                            <div class="ag-courses_item card-color-{{ forloop.counter }}">
+                                <a href="{% url 'report_dashboard' %}{{ option.url }}" class="ag-courses-item_link">
+                                    <div class="ag-courses-item_bg"></div>
+                                    <div class="ag-courses-item_title">{{ option.name }}</div>
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if form %}
+                <h2>{{ report_type }}</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Générer ce Rapport</button>
+                </form>
+            {% endif %}
+
+            {% if reports %}
+                <h2 class="h22">Historique des Rapports</h2>
+                <ul>
+                    {% for report in reports %}
+                        <li>
+                            <a href="{% url 'report_detail' report.id %}">{{ report.title }}</a> |
+                            <a href="{% url 'report_detail' report.id %}?export=pdf">Exporter en PDF</a> |
+                            <a href="{% url 'report_detail' report.id %}?export=excel">Exporter en Excel</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <h2>Exporter les Données</h2>
+            <ul>
+                <li><a href="{% url 'export_data' 'excel' %}">Exporter les Leads en Excel</a></li>
+                <li><a href="{% url 'export_data' 'pdf' %}">Exporter les Leads en PDF</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
