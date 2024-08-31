@@ -82,7 +82,7 @@ class LeadHistory(models.Model):
     )
     
     lead = models.ForeignKey(Lead, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     action = models.CharField(max_length=10, choices=ACTION_CHOICES)
     timestamp = models.DateTimeField(default=timezone.now)
     details = models.TextField(blank=True, null=True)
