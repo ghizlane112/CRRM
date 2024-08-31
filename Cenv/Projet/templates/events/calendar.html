@@ -1,0 +1,414 @@
+{% include 'parts/nav.html' %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendrier</title>
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css' rel='stylesheet' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/locales/fr.js'></script>
+
+    <style>
+        .right-side {
+            background-color: #F6F2F2;
+            border-radius: 15px;
+            height: auto;
+            width: 81%;
+            position: absolute;
+            top: 131px;
+            left: 17.5%;
+            overflow: hidden;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2),
+                        4px 4px 10px rgba(0, 0, 0, 0.4),
+                        6px 6px 15px rgba(0, 0, 0, 0.6);
+        }
+          /* Text */
+        .right-side h1{
+            color: #3837D3;
+            font-family: 'Inter';
+            font-style:  Bold italic;
+            font-weight: 600;
+            font-size: 32px;
+            line-height: 20px;
+            position: relative;
+            top: 43px;
+            left: 35px;
+        }
+
+
+
+
+
+
+
+        .right-side-calendar {
+         
+            position: relative;
+            top: 100px;
+            left: 15px;
+            right: 5px;
+        }
+
+        .right-side-calendar h2{
+         color: #3837D3;
+
+          
+        }
+
+        .btn-history {
+            display: inline-block;
+            float: right;
+            position: relative;
+            right:12px;
+            top:17px;
+            font-family: 'Inter';
+            font-style:  Bold italic;
+            font-weight: 600;
+            width: 270px;
+            padding-top: 14px;
+            padding-bottom: 14px;
+            margin: 20px 0;
+            font-size: 18px;
+            text-decoration: none;
+            color: #fff;
+            background-color: #3D46F2;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-history:hover {
+            background-color: #0056b3;
+        }
+
+
+
+
+
+        .right-side-calendar form{
+            margin-top: 23px;
+         width: 50%;
+         height: auto;
+         margin-left: 84px;
+        }
+
+
+        .right-side-calendar form label{
+             margin-top: 12px;
+            font-family: 'Inter';
+            font-style:  Bold italic;
+            font-weight: 600;
+            font-size: 18px;
+            color: #1a056e;
+        }
+        .right-side-calendar form input{
+         width: 330px;
+         border-radius: 12px;
+         padding-top: 8px;
+         padding-bottom: 8px;
+         margin-top: 12px;
+         margin-bottom: 12px;
+         border: none;
+        }
+        .right-side-calendar form textarea{
+            width: 330px;
+            height: 100px;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            padding-top: 12px;
+            padding-bottom: 12px;
+        }
+
+        .right-side-calendar form button{
+            width: 290px;
+            padding-top: 6px;
+            padding-bottom: 6px;
+            padding-left: 8px;
+            padding-right: 8px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+          margin-right: 34px;
+          border: none;
+          cursor: pointer;
+          background-color: #784089;
+          color: white;
+          font-family: 'Inter';
+            font-style:  Bold italic;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        #calendar {
+            width: 96%;
+            height: 660px;
+            background-color: white;
+            position: relative;
+            left: 12px;
+            bottom: 90px;
+        }
+        /* Style pour la fenêtre modale */
+
+        #eventModal {
+            z-index: 2;
+            display: none; /* Masqué par défaut */
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+            justify-content: center;
+            align-items: center;
+        }
+        #eventModalContent {
+            background-color: #E7DDFC;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 100%;
+
+
+            animation: scale-up-center 0.6s;
+        }
+        .right-side-calendar form .button-container {
+    display: flex; /* Aligne les boutons horizontalement */
+    gap: 10px; /* Espace entre les boutons */
+}
+
+
+
+
+       
+
+@-webkit-keyframes scale-up-center {
+  0% {
+    -webkit-transform: scale(0.5);
+            transform: scale(0.5);
+  }
+  100% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+}
+@keyframes scale-up-center {
+  0% {
+    -webkit-transform: scale(0.5);
+            transform: scale(0.5);
+  }
+  100% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+}
+
+
+
+
+    </style>
+</head>
+<body>
+    <div class="left-side">
+        {% include 'parts/button.html' %}
+    </div>
+
+    <div class="right-side">
+    <h1>Appoitement</h1>
+
+    <div>{% load static %}<form method="get" action="{%url  'history_view'%}"><button type="submit" class="btn-history" ><img src="{%static 'images/Rectangle2093.png'%}" alt="calendanr logo"/> &nbsp  l'Historique des Rendez-vous</button></form></div>
+    
+
+
+
+    <div class="right-side-calendar">
+<!-- Modal pour ajouter/modifier un événement -->
+<div id="eventModal">
+    <div id="eventModalContent">
+        <h2 id="eventModalTitle">Ajouter un événement</h2>
+        <form id="eventForm">
+            <label for="title">Titre:</label>
+            <input type="text" id="title" name="title" required placeholder="     entrer le titre"><br>
+            <label for="heur">Heure:</label>
+            <input type="time" id="heur" name="heur" required><br>
+            <label  for="lieu">Lieu:</label>
+            <input type="text" id="lieu" name="lieu" placeholder="entrer le lieu"/>
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" placeholder="   entrer une description"></textarea>
+            <br>
+             
+            <!-- Champ caché pour raison de suppression -->
+            <div id="deleteReasonContainer" style="display: none;">
+                <label for="deleteReason">Raison de la suppression:</label>
+                <textarea id="deleteReason" name="reason" placeholder="Entrez la raison ici"></textarea>
+            </div>
+
+            
+
+
+
+
+            <div class="button-container">
+            <button type="submit" id="saveEventBtn">Enregistrer</button>
+            <button type="button" id="deleteEventBtn" style="display: none;">Supprimer</button>
+            <button type="button" id="cancelBtn">Annuler</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+            <div id='calendar'></div>
+        </div>
+    </div>
+
+   
+
+
+
+    
+    <script>
+     document.addEventListener('DOMContentLoaded', function() {
+    const calendarEl = document.getElementById('calendar');
+    const modal = document.getElementById('eventModal');
+    const form = document.getElementById('eventForm');
+    const saveEventBtn = document.getElementById('saveEventBtn');
+    const deleteEventBtn = document.getElementById('deleteEventBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const eventModalTitle = document.getElementById('eventModalTitle');
+    const deleteReasonContainer = document.getElementById('deleteReasonContainer');
+    const deleteReason = document.getElementById('deleteReason');
+    
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'fr',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        editable: true,
+        selectable: true,
+        events: '/events/',
+
+        dateClick: function(info) {
+            form.reset();
+            eventModalTitle.textContent = 'Ajouter un événement';
+            form.dataset.action = 'add';
+            form.removeAttribute('data-event-id');
+            deleteEventBtn.style.display = 'none';
+            deleteReasonContainer.style.display = 'none';  // Cache le champ de raison
+
+            saveEventBtn.textContent = 'Ajouter';
+            modal.style.display = 'flex';
+
+            cancelBtn.onclick = function() {
+                modal.style.display = 'none';
+            };
+
+            form.onsubmit = function(e) {
+                e.preventDefault();
+                const title = document.getElementById('title').value;
+                const heur = document.getElementById('heur').value;
+                const description = document.getElementById('description').value;
+                const action = form.dataset.action;
+                const url = action === 'add' ? '/add-event/' : '/update-event/';
+
+                if (title && heur) {
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: new URLSearchParams({
+                            id: form.dataset.eventId || '',
+                            title: title,
+                            start_date: info.dateStr,
+                            heur: heur,
+                            description: description
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            calendar.refetchEvents();
+                            modal.style.display = 'none';
+                        } else {
+                            console.error('Erreur:', data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erreur:', error);
+                    });
+                } else {
+                    alert('Veuillez remplir tous les champs obligatoires.');
+                }
+            };
+        },
+
+        eventClick: function(info) {
+            eventModalTitle.textContent = 'Modifier l\'événement';
+            form.dataset.action = 'update';
+            form.dataset.eventId = info.event.id;
+
+            document.getElementById('title').value = info.event.title;
+            document.getElementById('heur').value = info.event.extendedProps.heur;
+            document.getElementById('description').value = info.event.extendedProps.description;
+
+            saveEventBtn.textContent = 'Modifier';
+            deleteEventBtn.style.display = 'inline-block';
+            deleteReasonContainer.style.display = 'none';  // Cache le champ de raison au début
+
+            deleteEventBtn.onclick = function() {
+                deleteReasonContainer.style.display = 'block';  // Affiche le champ de raison
+
+                // Lorsqu'on clique sur le bouton de suppression, on récupère la raison
+                const reason = deleteReason.value;
+
+                if (!reason) {
+                    alert('Veuillez entrer une raison pour la suppression.');
+                    return;
+                }
+
+                fetch('/delete-event/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: new URLSearchParams({
+                        id: form.dataset.eventId,
+                        reason: reason  // Envoie la raison au serveur
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        calendar.refetchEvents();
+                        modal.style.display = 'none';
+                    } else {
+                        console.error('Erreur:', data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                });
+            };
+
+            cancelBtn.onclick = function() {
+                modal.style.display = 'none';
+            };
+
+            modal.style.display = 'flex';
+        }
+    });
+
+    calendar.render();
+});
+
+    </script>
+</body>
+</html>

@@ -21,8 +21,9 @@ from django.conf import settings
 from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('',include('lead.urls')),
+    path('',include('profils.urls')),
     path('admin/', admin.site.urls),
-
+  
 
    #  path('',include('lead.urls')),
  
