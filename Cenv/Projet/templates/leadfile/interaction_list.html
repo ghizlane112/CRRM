@@ -1,0 +1,31 @@
+<!-- lead/templates/lead/interaction_list.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Historique des Interactions</title>
+</head>
+<body>
+    <h1>Historique des Interactions pour {{ lead.nom }}</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Note</th>
+                <th>Utilisateur</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for interaction in interactions %}
+                <tr>
+                    <td>{{ interaction.date_interaction }}</td>
+                    <td>{{ interaction.get_type_interaction_display }}</td>
+                    <td>{{ interaction.note }}</td>
+                    <td>{{ interaction.utilisateur.username }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'add_interaction' lead_id=lead.id %}">Ajouter une Interaction</a>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<style>
+.container1{
+background-color: white;
+border-radius: 15px;
+width: 195px;
+height: 100vh;
+position: relative;
+top: 23px;
+left: 12px;
+border: 1px solid #cccccccf; /* Bordure du div */
+box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.5),
+2px 2px 5px rgba(0, 0, 0, 0.2);/* Première ombre */
+}
+.div-container1 {
+    border-radius: 15px;
+    margin-top: 12px;
+    background-color: white;
+    width: 164px;
+    height: 40px;
+    margin-left: 12px;
+    border: 1px solid #ccc;
+    box-shadow: 
+        2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
+        4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
+        6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
+    overflow: hidden;
+}
+
+.div-container1 button, 
+.div-container1 a.button {
+    background-color: white;
+    color: black;
+    cursor: pointer;
+    width: 164px;
+    height: 40px;
+    border: none;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Abyssinica SIL', sans-serif;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.div-container1 button:hover, 
+.div-container1 a.button:hover {
+    background-color: #3837D3;
+    color: white;
+    text-decoration: none;
+}
+
+.div-container1 img {
+    margin-right: 8px;
+}
+@media (max-width: 768px) {
+
+    .container1{
+width: 170px;
+height: 100vh;
+position: relative;
+top: 23px;
+left: 8px;
+}
+.div-container1 {
+    margin-top: 12px;
+    width: 150px;
+    height: 40px;
+    margin-left: 9px;
+}
+.div-container1 button, 
+.div-container1 a.button {
+    font-size: 14px;
+}
+
+.div-container1 img {
+    margin-right: 12px;
+}
+}
+
+</style>
+
+
+
+
+<body>
+<div class="container1">
+
+
+    
+    <div class="div-container1">
+        {% load static %}
+        <!--<a href="{%url 'dashboard'%}" class="button"><img src="{% static 'images/Rectangle_364.png' %}" alt="dashboard icon">dashboard</a>-->
+        <a href="#" class="button"><img src="{% static 'images/Rectangle_364.png' %}" alt="dashboard icon">dashboard</a>
+    </div>
+    <div class="div-container1">
+        {% load static %}
+        <a href="{% url 'lead_list' %}" class="button"><img src="{% static 'images/Rectangle_395.png' %}" alt="affiche icon">List leads</a>
+    </div>
+    <div class="div-container1">
+        {% load static %}
+        <a href="#" class="button"><img src="{% static 'images/Rectangle_397.png' %}" alt="analyse icon">Analyse</a>
+    </div>
+    <div class="div-container1">
+        {% load static %}
+        <!---<a href="{% url 'calendar_view'%}" class="button"><img src="{% static 'images/Rectangle_398.png' %}" alt="appoitement icon">Rendez-vous</a>-->
+        <a href="#" class="button"><img src="{% static 'images/Rectangle_398.png' %}" alt="appoitement icon">Rendez-vous</a>
+    </div>
+    <div class="div-container1">
+        {% load static %}
+        <!--<a href="{% url 'report_dashboard'%}" class="button"><img src="{% static 'images/Rectangle_369.png' %}" alt="rapport progress icon">Rapports</a>-->
+        <a href="#" class="button"><img src="{% static 'images/Rectangle_369.png' %}" alt="rapport progress icon">Rapports</a>
+    </div>
+    <div class="div-container1">
+        {% load static %}
+        <a href="#" class="button"><img src="{% static 'images/Rectangle_365.png' %}" alt="clients icon">Clients</a>
+    </div>
+
+    <div class="div-container1">
+        {% load static %}
+       <!-- <a href="{%url 'inbox'%}" class="button"><img src="{% static 'images/Rectangle_366.png' %}" alt="chat icon">Communication</a>-->
+       <a href="#" class="button"><img src="{% static 'images/Rectangle_366.png' %}" alt="chat icon">Communication</a>
+    </div>
+
+    <div class="div-container1">
+        {% load static %}
+       <!-- <a href="{%url 'campaign_list'%}" class="button"><img src="{% static 'images/Rectangle_368.png' %}" alt="Campagne icon">Campagne</a>-->
+        <a href="#" class="button"><img src="{% static 'images/Rectangle_368.png' %}" alt="Campagne icon">Campagne</a>
+    </div>
+
+
+     <!-- Afficher le lien pour ajouter un membre uniquement pour les administrateurs -->
+     {% if user.is_superuser %}
+    <div class="div-container1">
+        {% load static %}
+        <!--<a href="{% url 'member_list'%}" class="button"><img src="{% static 'images/Rectangle_367.png' %}" alt="Ajouter member icon">Ajouter member</a>-->
+        <a href="#" class="button"><img src="{% static 'images/Rectangle_367.png' %}" alt="Ajouter member icon">Ajouter member</a>
+    </div>
+    {% endif %}
+
+
+</div>
+</body>

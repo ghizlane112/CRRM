@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'path/to/bootstrap.min.css' %}"> <!-- Assurez-vous de charger Bootstrap -->
+    <style>
+        /* Style de la barre de navigation */
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #a580f570; /* Couleur de fond */
+            border-bottom: 1px solid #e0e0e0; /* Bordure en bas */
+            padding: 2px 10px; /* Espacement intérieur */
+        }
+        .container-fluid {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar-brand img {
+            width: 100px;
+            height: 100px;
+            max-width: 100%;
+        }
+        .form-control {
+            padding-left: 90px;
+            padding-right: 90px;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            border: 1px solid #ced4da;
+        }
+        .search-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+        #search-input {
+            padding-left: 40px;
+            padding-right: 10px;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 20px;
+            width: 100%;
+        }
+
+
+        /* Container pour les boutons de notification et de profil */
+.nav-buttons {
+    display: flex;
+    align-items: center;
+    margin-right: 23px; /* Espacement à droite du profil */
+}
+        /* Style du bouton de profil */
+        .profile-btn {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+            text-align: center;
+            font-size: 16px;
+            
+        }
+        .profile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            min-width: 150px;
+            background-color: #fff;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            z-index: 1000;
+            border-radius: 5px;
+        }
+        .profile-menu a, .profile-menu button ,.notification-menu a {
+            display: block;
+            padding: 10px;
+            color: #333;
+            text-decoration: none;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+        }
+        .profile-menu a:hover, .profile-menu button:hover {
+            background-color: #f0f0f0;
+        }
+        .profile-menu button {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .notification-btn {
+            position: relative;
+            cursor: pointer;
+            font-size: 24px; /* Adjust size as needed */
+        }
+        .notification-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            min-width: 350px;
+            height: 500px;
+            background-color: #fff;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            z-index: 1000;
+            border-radius: 5px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        .notification-menu ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .notification-menu li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .notification-menu li:last-child {
+            border-bottom: none;
+        }
+        .notification-count {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+    position: absolute;
+    top: -5px; /* Ajustez selon vos besoins */
+    right: -5px; /* Ajustez selon vos besoins */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 20px; /* Ajustez selon vos besoins */
+    height: 20px; /* Ajustez selon vos besoins */
+}
+
+
+    </style>
+</head>
+<body>
+<nav class="navbar bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'images/v1360_10778.png' %}" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+        </a>
+        <form class="d-flex" role="search" id="search-form">
+            <div class="search-container">
+                <input id="search-input" class="form-control me-2" type="search" placeholder="Rechercher..." aria-label="Rechercher">
+            </div>
+        </form>
+
+
+
+
+        <div class="nav-buttons">
+            <div class="notification-btn" id="notificationBtn">
+                🔔
+                <span class="notification-badge" id="notificationCount">{{ unread_count }}</span>
+                <div class="notification-menu" id="notificationMenu">
+                    
+                    {% if notifications %}
+                        <ul>
+                            {% for notification in notifications %}
+                                <li>
+                                    <strong>From:</strong> {{ notification.sender }}<br>
+                                    <strong>Message:</strong> {{ notification.message }}<br>
+                                    <strong>Received at:</strong> {{ notification.created_at }}<br>
+                                    {% if not notification.is_read %}
+                                        <span>Unread</span>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No notifications</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+
+
+
+
+
+        <div class="profile-btn" id="profileBtn">
+            <!-- Affiche la première lettre du nom d'utilisateur -->
+            {{ user.username|slice:":1"|upper }}
+            <div class="profile-menu" id="profileMenu">
+                <a href="{% url 'view_profile' %}">Profile</a>
+                <form action="{% url 'logout' %}" method="post" style="margin: 0;">
+                    {% csrf_token %}
+                    <button type="submit">Logout</button>
+                </form>
+            </div>
+        </div>
+
+        </div>
+
+
+
+        
+
+    </div>
+</nav>
+
+<script src="{% static 'path/to/bootstrap.bundle.min.js' %}"></script>
+<script>
+    document.getElementById('profileBtn').addEventListener('click', function(event) {
+        const profileMenu = document.getElementById('profileMenu');
+        profileMenu.style.display = profileMenu.style.display === 'block' ? 'none' : 'block';
+        event.stopPropagation(); // Empêche la propagation de l'événement de clic
+    });
+
+    // Fermer le menu si on clique en dehors
+    document.addEventListener('click', function(event) {
+        const profileMenu = document.getElementById('profileMenu');
+        const profileBtn = document.getElementById('profileBtn');
+        const notificationMenu = document.getElementById('notificationMenu');
+        const notificationBtn = document.getElementById('notificationBtn');
+        if (!profileBtn.contains(event.target)) {
+            profileMenu.style.display = 'none';
+        }
+        if (!notificationBtn.contains(event.target)) {
+            notificationMenu.style.display = 'none';
+        }
+    });
+
+
+
+
+    document.getElementById('notificationBtn').addEventListener('click', function(event) {
+    const notificationMenu = document.getElementById('notificationMenu');
+    const notificationCount = document.getElementById('notificationCount');
+    if (notificationMenu.style.display === 'block') {
+        notificationMenu.style.display = 'none';
+    } else {
+        loadNotifications(); // Charge les notifications seulement si elles ne sont pas déjà chargées
+        notificationMenu.style.display = 'block';
+    }
+    event.stopPropagation(); // Empêche la propagation de l'événement de clic
+});
+
+document.getElementById('modalClose').addEventListener('click', function() {
+    document.getElementById('notificationModal').style.display = 'none';
+});
+
+function loadNotifications() {
+    fetch('{% url "notifications" %}')
+        .then(response => response.text())
+        .then(html => {
+            document.querySelector('#notificationMenu').innerHTML = html;
+            updateNotificationCount(); // Met à jour le nombre de notifications non lues
+        })
+        .catch(error => {
+            console.error('Error loading notifications:', error);
+            document.querySelector('#notificationMenu').innerHTML = '<p>Error loading notifications.</p>';
+        });
+}
+
+function updateNotificationCount() {
+    fetch('{% url "notifications" %}')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('notificationCount').textContent = data.unread_count;
+        })
+        .catch(error => {
+            console.error('Error fetching notification count:', error);
+        });
+}
+
+
+    document.getElementById('search-form').addEventListener('submit', function(event) {
+       event.preventDefault(); // Empêche le formulaire de se soumettre de manière traditionnelle
+       performSearch();
+    });
+
+    function performSearch() {
+        const query = document.getElementById('search-input').value;
+        if (query.trim()) {
+            console.log('Recherche effectuée pour :', query);
+            // Ici, tu peux remplacer le console.log par l'appel de ta fonction de recherche ou redirection
+        }
+    }
+
+    
+</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter une Note</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ajouter une note pour {{ lead.nom }} {{ lead.prenom }}</h1>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Ajouter</button>
+        </form>
+
+        <hr>
+
+        <h2>Notes existantes</h2>
+        <ul>
+            {% for note in notes %}
+                <li>{{ note.content }} (ajoutée par {{ note.user.username }} le {{ note.created_at }})</li>
+            {% empty %}
+                <li>Aucune note ajoutée.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

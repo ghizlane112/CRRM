@@ -1,0 +1,317 @@
+
+
+{% block navbar %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Liste des Leads</title>
+    <style>
+        body{
+            box-sizing: border-box;
+        }
+        .right {   
+            background-color: #F6F2F2; 
+            border-radius: 15px;
+            height: auto;
+            width: 81%;
+            overflow: hidden;
+            position: absolute;
+            top: 131px;
+            left: 17.5%;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
+                4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
+                6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
+        }
+        .header-container {
+            margin-top: 30px;
+            margin-left: 28px;
+            margin-right: 20px;
+            height: 90px;
+        }
+        h1 {
+            margin: 7px; /* Supprime les marges par défaut du h1 */
+        }
+        .header-container a {
+            margin-left: 20px;
+            margin-right: 12px; /* Ajoute de l'espace entre les liens */
+            text-decoration: none; /* Supprime le soulignement par défaut des liens */
+            color: #007bff; /* Couleur des liens */
+            float: right;
+            transform: translateY(-20px);
+        }
+        .header-container a:hover {
+            text-decoration: underline; /* Ajoute un soulignement au survol */
+        }
+        .buttonfilter input {
+            margin-left: 240px;
+            padding-left: 18px;
+            padding-right: 18px;
+            padding-top: 6px;
+            width: 333px;
+            padding-bottom: 6px;
+        }
+        .buttonfilter button {
+            width: 100px;
+            padding-top: 6px;
+            padding-bottom: 6px;
+        }
+        .sort-section select {
+            float: right;
+            padding-top: 6px;
+            padding-bottom: 6px;
+            transform: translateY(-32px);
+            margin-right: 23px;
+            background-color: #dee2e6ee;
+        }
+        .table1 {
+            position: relative;
+            top: 26px;
+            right: 22px;
+            padding-left: 12px;
+            padding-right: 42px;
+            border-collapse: collapse;
+            width: 60%;
+        }
+        .table1 thead {
+            background-color: #f8f9fa; /* Couleur de fond des en-têtes */
+        }
+        .table1 th {
+            padding: 10px;
+            padding-left: 30px;
+            padding-right: 40px; /* Espacement intérieur */
+            border-bottom: 2px solid #dee2e6; /* Bordure inférieure des en-têtes */
+            text-align: left; /* Alignement du texte */
+            color: #495057; /* Couleur du texte */
+        }
+        .table1 tbody tr {
+            border-bottom: 1px solid #dee2e6; /* Bordure inférieure des lignes */
+        }
+        .table1 td {
+            padding: 10px; /* Espacement intérieur des cellules */
+            text-align: left; /* Alignement du texte */
+            padding-left: 30px;
+            padding-right: 40px;
+        }
+        .table1 tbody tr:nth-child(even) {
+            background-color: #f2f2f2; /* Couleur de fond des lignes paires */
+        }
+        .table1 tbody tr:nth-child(odd) {
+            background-color: #ffffff; /* Couleur de fond des lignes impaires */
+        }
+        .table1 tbody tr:hover {
+            background-color: #e9ecef; /* Couleur de fond au survol */
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+        .pagination a {
+            color: #333;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .pagination a:hover {
+            background-color: #ddd;
+        }
+        .pagination .current {
+            background-color: #007bff;
+            color: #fff;
+        }
+        /* Styles pour le menu contextuel */
+        .context-menu {
+            display: none;
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 2000; /* Assurez-vous que le z-index est élevé */
+            border-radius: 4px;
+            padding: 0;
+        }
+        .context-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .context-menu ul li {
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+        .context-menu ul li:hover {
+            background: #f0f0f0;
+        }
+        .dots {
+            cursor: pointer;
+            z-index: 2000; /* Assurez-vous que ce z-index est élevé */
+        }
+
+
+        @media (max-width: 480px) {
+    .msger-header-title {
+        font-size: 12px;
+    }}
+    </style>
+</head>
+<body>
+    <div class="left">
+       
+    </div>
+    <div class="right">
+        <div class="header-container">
+            <h1 style="color: #3837D3; font-style: Abhaya Libre ExtraBold;">La liste des Leads</h1>
+            <div>
+                <a href="{% url 'lead_create' %}">Ajouter un Lead</a>
+                <a href="{% url 'lead_import' %}">Importer des Leads</a>
+                <a href="{% url 'lead_history'  %}" class="btn btn-info">Voir l'historique</a>
+            </div>
+        </div>
+
+        <div class="buttonfilter">
+            <!-- Formulaire de filtre -->
+            <form id="filter-form" method="GET" action="">
+                <input type="text" name="search" value="{% if search_text %}{{ search_text }}{% endif %}" placeholder="Rechercher: Nom, Prénom, Email, etc.">
+                <button type="submit">Rechercher</button>
+            </form>
+        </div>
+
+        <!-- Trier -->
+        <div class="sort-section">
+            <!-- Formulaire de tri -->
+            <form id="sort-form" method="GET" action="">
+                <select name="sort" onchange="submitSortForm()">
+                    <option value="">Tri Par</option>
+                    <option value="nom" {% if sort_field == 'nom' %}selected{% endif %}>Nom</option>
+                    <option value="prenom" {% if sort_field == 'prenom' %}selected{% endif %}>Prénom</option>
+                    <option value="email" {% if sort_field == 'email' %}selected{% endif %}>Email</option>
+                    <option value="telephone" {% if sort_field == 'telephone' %}selected{% endif %}>Téléphone</option>
+                    <option value="source" {% if sort_field == 'source' %}selected{% endif %}>Source</option>
+                    <option value="statut" {% if sort_field == 'statut' %}selected{% endif %}>Statut</option>
+                    <option value="note" {% if sort_field == 'note' %}selected{% endif %}>Note</option>
+                </select>
+            </form>
+        </div>
+
+        <!-- Table -->
+        <div class="table1">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Email</th>
+                        <th>Téléphone</th>
+                        <th>Source</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for lead in leads %}
+                    <tr>
+                        <td>{{ lead.nom }}</td>
+                        <td>{{ lead.prenom }}</td>
+                        <td>{{ lead.email }}</td>
+                        <td>{{ lead.telephone }}</td>
+                        <td>{{ lead.source }}</td>
+                        <td>{{ lead.statut }}</td>
+                        <td>
+                            <span class="dots" data-id="{{ lead.pk }}">...</span>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7">Aucun lead trouvé.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <span class="step-links">
+                {% if leads.has_previous %}
+                    <a href="?{% if search_text %}search={{ search_text }}&{% endif %}{% if sort_field %}sort={{ sort_field }}&{% endif %}page=1">&laquo; Première</a>
+                    <a href="?{% if search_text %}search={{ search_text }}&{% endif %}{% if sort_field %}sort={{ sort_field }}&{% endif %}page={{ leads.previous_page_number }}">Précédente</a>
+                {% endif %}
+            </span>
+
+            <span class="current">
+                Page {{ leads.number }} sur {{ leads.paginator.num_pages }}.
+            </span>
+
+            <span class="step-links">
+                {% if leads.has_next %}
+                    <a href="?{% if search_text %}search={{ search_text }}&{% endif %}{% if sort_field %}sort={{ sort_field }}&{% endif %}page={{ leads.next_page_number }}">Suivante</a>
+                    <a href="?{% if search_text %}search={{ search_text }}&{% endif %}{% if sort_field %}sort={{ sort_field }}&{% endif %}page={{ leads.paginator.num_pages }}">Dernière &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+
+    <!-- Menu contextuel -->
+    <div id="context-menu" class="context-menu">
+        <ul>
+            <li id="view-details">Voir les détails</li>
+            <li id="edit-lead">Éditer</li>
+            <li id="delete-lead">Supprimer</li>
+            <li id="add-note">Ajouter une note</li>
+        </ul>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var contextMenu = document.getElementById('context-menu');
+            var currentLeadId;
+
+            document.querySelectorAll('.dots').forEach(function(el) {
+                el.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation(); // Empêche la propagation du clic
+                    currentLeadId = el.getAttribute('data-id');
+                    contextMenu.style.top = e.pageY + 'px';
+                    contextMenu.style.left = e.pageX + 'px';
+                    contextMenu.style.display = 'block';
+                });
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!contextMenu.contains(e.target) && !document.querySelector('.dots').contains(e.target)) {
+                    contextMenu.style.display = 'none';
+                }
+            });
+
+            document.getElementById('view-details').addEventListener('click', function() {
+                window.location.href = '/lead/' + currentLeadId + '/';
+            });
+
+            document.getElementById('edit-lead').addEventListener('click', function() {
+                window.location.href = '/lead/' + currentLeadId + '/edit/';
+            });
+
+            document.getElementById('delete-lead').addEventListener('click', function() {
+                if (confirm('Êtes-vous sûr de vouloir supprimer ce lead ?')) {
+                    window.location.href = '/lead/' + currentLeadId + '/delete/';
+                }
+            });
+
+            document.getElementById('add-note').addEventListener('click', function() {
+                window.location.href = '/lead/' + currentLeadId + '/add-note/';
+            });
+        });
+
+        function submitSortForm() {
+            document.getElementById('sort-form').submit();
+        }
+    </script>
+</body>
+</html>
+{%endblock%}

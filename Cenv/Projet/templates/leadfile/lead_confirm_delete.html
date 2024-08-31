@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirmer la Suppression</title>
+</head>
+<body>
+    <h1>Confirmer la Suppression</h1>
+    <p>Êtes-vous sûr de vouloir supprimer le lead "{{ lead.nom }} {{ lead.prenom }}" ?</p>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit">Confirmer</button>
+        <a href="{% url 'lead_list' %}">Annuler</a>
+    </form>
+</body>
+</html>

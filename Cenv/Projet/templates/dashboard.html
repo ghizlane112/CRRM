@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css' rel='stylesheet' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@5.10.1/locales/fr.js'></script>
+
+
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dashboard</title>
+</head>
+<style>
+    .right-left{
+background-color:#F6F2F2; 
+border-radius: 15px;
+height: 100%;
+width: 81%;
+max-width: 87%;
+position: absolute;
+top: 131px;
+left:17.5%;
+overflow: hidden;
+box-shadow: 
+        2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
+        4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
+        6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
+    }
+    @media (max-width: 768px) {
+
+        .right-left{
+background-color:#F6F2F2; 
+border-radius: 15px;
+height: 100%;
+width: 74%;
+position: absolute;
+top: 131px;
+left:24.9%;
+overflow: hidden;
+box-shadow: 
+        2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
+        4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
+        6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
+    }
+
+
+    }
+</style>
+<body>
+<div class="left-side">
+    {%include 'parts/button.html'%}
+</div>
+<div class="right-left">
+
+<br>
+
+
+</div>
+
+
+
+
+</body>
+</html>
+
+

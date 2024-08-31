@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ajouter une Interaction</title>
+</head>
+<body>
+    <h1>Ajouter une Interaction pour {{ lead.nom }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Enregistrer</button>
+    </form>
+    <a href="{% url 'interaction_list' lead_id=lead.id %}">Retour à l'historique des interactions</a>
+</body>
+</html>

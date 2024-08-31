@@ -1,0 +1,68 @@
+{%include 'parts/nav.html'%}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Détails du Lead</title>
+    <style>
+.right-side{
+background-color:#F6F2F2; 
+border-radius: 15px;
+height: 100%;
+width: 81%;
+position: absolute;
+top: 131px;
+left:17.5%;
+overflow: hidden;
+box-shadow: 
+        2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
+        4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
+        6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
+}
+.right-side-container{
+  
+position: absolute;
+top: 48px;
+left: 22px;
+}
+
+.right-side-container h1{
+
+    color: #3837D3;
+    font-style: Abhaya Libre ExtraBold;
+
+}
+.right-side-container p{
+  font-size: 18px;
+ margin-top: 15px;
+ margin-bottom: 12px;
+  }
+.right-side-container a{
+    color: #007bff;
+ text-decoration: none;
+ font-size: 18px;
+}
+  
+    </style>
+</head>
+<body>
+<div class="left-side">
+{%include 'parts/button.html'%}
+</div>
+
+    <div class="right-side">
+        <div class="right-side-container">
+    <h1>Détails du Lead</h1>
+    <p><strong>Nom:</strong> {{ lead.nom }}</p>
+    <p><strong>Prénom:</strong> {{ lead.prenom }}</p>
+    <p><strong>Email:</strong> {{ lead.email }}</p>
+    <p><strong>Téléphone:</strong> {{ lead.telephone }}</p>
+    <p><strong>Source:</strong> {{ lead.source }}</p>
+    <p><strong>Statut:</strong> {{ lead.statut }}</p>
+    <p><strong>Note:</strong> {{ lead.note }}</p>
+    <a href="{% url 'lead_list' %}">Retour à la liste</a>
+        </div>
+</div>
+</body>
+</html>

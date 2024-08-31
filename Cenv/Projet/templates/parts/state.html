@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+<head>
+
+<!-- FullCalendar CSS -->
+<link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.2/main.min.css' rel='stylesheet' />
+<!-- FullCalendar JS -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.2/main.min.js'></script>
+
+
+<style>
+/* Styles de base pour les cartes */
+.card {
+    border-radius: 17px;
+    padding: 20px;
+    box-sizing: border-box;
+    position: absolute; /* Conserve la position fixe */
+}
+
+/* Premier card */
+#first-card {
+    width: 598px;
+    height: 187px;
+    color: white;
+    background-color: #3D46F2;
+    font-style: Inter;
+    top: 9px;
+    left: 23px;
+    /* Positionnement et dimensions fixes */
+}
+
+#first-card h2 {
+    margin-left: 11px;
+}
+
+#first-card img {
+    width: 242px;
+    float: right;
+    position: relative;
+    bottom: 100px;
+    margin-right: -19px;
+}
+
+#first-card .card-text {
+    width: 269px;
+    margin-left: 11px;
+    font-size: 14px;
+}
+
+/* Deuxième card */
+#second-card {
+    width: 349px;
+    height: 312px;
+    border-radius: 17px;
+    /* Positionnement fixe */
+    top: -9px;
+    right: 48px;
+}
+
+#calendar {
+    width: 349px; 
+    height: 312px;/* Hauteur complète du conteneur */
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 17px;
+}
+
+.fc-toolbar-title {
+    font-size: 1em;
+}
+
+.fc-daygrid-day-number {
+    font-size: 0.8em;
+}
+
+/* Ajustements pour les écrans plus petits */
+@media (max-width: 1200px) {
+    #first-card {
+        width: 90%; /* Réduit la largeur pour les écrans plus petits */
+        left: 5%; /* Ajuste la position horizontale */
+    }
+
+    #second-card {
+        width: 90%; /* Réduit la largeur pour les écrans plus petits */
+        top: 10px; /* Ajuste la position verticale */
+        right: 5%; /* Ajuste la position horizontale */
+    }
+}
+
+@media (max-width: 992px) {
+    #first-card {
+        width: 100%; /* Réduit la largeur à 100% pour les écrans encore plus petits */
+        left: 0; /* Ajuste la position horizontale */
+    }
+
+    #second-card {
+        width: 100%; /* Réduit la largeur à 100% pour les écrans encore plus petits */
+        top: 20px; /* Ajuste la position verticale */
+        right: 0; /* Ajuste la position horizontale */
+    }
+}
+
+@media (max-width: 768px) {
+    #first-card {
+        width: 340px; /* Largeur pleine pour les petits écrans */
+        height: 170px;
+        left: 0; /* Centre la carte horizontalement */
+        margin-left: 12px;
+        
+    }
+    #first-card h2 {
+        margin-top: -15px;
+    margin-left: 8px;
+}
+#first-card img {
+    width: 166px;
+     float: left;
+    position: relative;
+   
+    margin-left: 140px;
+}
+#first-card .card-text {
+    width: 190px;
+    margin-left: 9px;
+    font-size: 12px;
+}
+
+    #second-card {
+        width: 40%; 
+        height: 260px;/* Largeur pleine pour les petits écrans */
+        top: -10px; /* Ajuste la position verticale */
+        right: 10; /* Centre la carte horizontalement */
+    }
+    #calendar {
+    width: 40%;
+    height: 260px;/* Hauteur complète du conteneur */
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 17px;
+}
+}
+
+</style>
+</head>
+<body>
+<div class="row">
+<div class="col">
+<div class="col-md">
+    <!---premier card-->
+   <div class="card text-center text-white mb-3" id="first-card" >
+    <div class="card-body" style="width: 33rem;">
+        <br>
+        <h2 class="card-title">Welcome  {{ user.username }} </h2>
+        <br>
+        <p class="card-text">"Bienvenue sur votre tableau de bord : ici, vous pouvez suivre en un coup d'œil vos leads, rendez-vous et activités récentes pour une gestion efficace de vos prospects.".</p>
+        {%load static%}
+        <img src="{%static 'images/rectangle_2067.png'%}" alt="photo principale"/>
+      </div>
+    </div>
+
+
+    <!----deuxieme card--->
+    <a href="{% url 'calendar_view' %}" class="calendar-link">
+    <div class="card text-center text-white mb-3" id="second-card">
+        <div class="card-body" style="width: 33rem;">
+        
+                <div id="calendar"></div>
+        
+          </div>
+    </div>
+    </a>
+
+
+
+
+    <!----troisieme card-->
+    <div class="card text-center text-white mb-3" id="thrid-card">
+        <div class="card-body" style="width: 33rem;">
+          
+           
+        
+        </div>
+    </div>
+
+
+
+
+
+
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.2/main.min.js'></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: '/events/',  // URL de votre endpoint Django pour les événements
+            eventClick: function(info) {
+                alert('Event: ' + info.event.title + '\nDescription: ' + info.event.extendedProps.description + '\nDate: ' + info.event.start.toISOString());
+            }
+        });
+
+        calendar.render();
+    });
+</script>
+
+</body>
+</html>
