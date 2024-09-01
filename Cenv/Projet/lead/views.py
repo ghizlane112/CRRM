@@ -99,27 +99,30 @@ def lead_detail(request, pk):
 
 
 # Optionnel: ajouter une vue pour la création si vous avez besoin de suivre les créations
+@login_required
 def lead_create(request):
     if request.method == 'POST':
-        form = LeadForm(request.POST)
+        form = LeadForm(request.POST, user=request.user)
         if form.is_valid():
             lead = form.save(commit=False)
-            lead.statut = 'Nouveau'  # Définir le statut à "Nouveau" par défaut
+            if request.user.is_superuser:
+                lead.responsable = form.cleaned_data['responsable']
+            else:
+                lead.responsable = request.user  # Assigne le lead à l'utilisateur actuel
             lead.save()
             
-            # Enregistrer l'action dans l'historique
+            # Enregistrer l'historique
             LeadHistory.objects.create(
                 lead=lead,
                 user=request.user,
                 action='created',
-                details=f"Lead créé avec le statut '{lead.statut}'."
+                details=f'Lead créé avec les informations: {lead}'
             )
-            
             return redirect('lead_list')
     else:
-        form = LeadForm()
+        form = LeadForm(user=request.user)
+    
     return render(request, 'leadfile/lead_form.html', {'form': form})
-
 
 
 
@@ -151,8 +154,51 @@ def lead_import(request):
 
 
 
-@login_required
 
+
+
+
+
+
+
+
+
+
+@login_required
+def lead_edit(request, pk):
+    lead = get_object_or_404(Lead, pk=pk)
+    if request.method == 'POST':
+        form = LeadForm(request.POST, instance=lead, user=request.user)
+        if form.is_valid():
+            old_data = f"Nom: {lead.nom}, Prénom: {lead.prenom}, Email: {lead.email}, Téléphone: {lead.telephone}, Source: {lead.source}, Statut: {lead.statut}, Note: {lead.note}"
+            lead = form.save()  # Mettez à jour l'instance du lead
+            new_data = f"Nom: {lead.nom}, Prénom: {lead.prenom}, Email: {lead.email}, Téléphone: {lead.telephone}, Source: {lead.source}, Statut: {lead.statut}, Note: {lead.note}"
+            LeadHistory.objects.create(
+                lead=lead,
+                user=request.user,
+                action='updated',
+                details=f"Modifié de {old_data} à {new_data}"
+            )
+            return redirect('lead_list')
+    else:
+        form = LeadForm(instance=lead, user=request.user)
+    return render(request, 'leadfile/lead_edit.html', {'form': form})
+
+
+
+
+
+
+def lead_history(request):
+    histories = LeadHistory.objects.all().order_by('-timestamp')
+    return render(request, 'leadfile/LeadHistory.html', {'histories': histories})
+#def lead_history(request, pk):
+ #   lead = get_object_or_404(Lead, pk=pk)
+  #  histories = LeadHistory.objects.filter(lead=lead).order_by('-timestamp')
+   # return render(request, 'leadfile/lead_history.html', {'lead': lead, 'histories': histories})
+
+
+@login_required
 def lead_delete(request, pk):
     lead = get_object_or_404(Lead, pk=pk)
     if request.method == 'POST':
@@ -171,45 +217,11 @@ def lead_delete(request, pk):
             # Optionnel: Enregistrer l'erreur ou effectuer une autre action
             print(f"Une erreur est survenue : {e}")
             # Retourner une réponse d'erreur appropriée
-    return render(request, 'leadfile/lead_confirm_delete.html', {'lead': lead})
+    return render(request, 'leadfile/LeadHistory.html', {'lead': lead})
 
 
 
 
-
-
-
-
-
-
-
-def lead_edit(request, pk):
-    lead = get_object_or_404(Lead, pk=pk)
-    if request.method == 'POST':
-        form = LeadForm(request.POST, instance=lead)
-        if form.is_valid():
-            old_data = f"Nom: {lead.nom}, Prénom: {lead.prenom}, Email: {lead.email}, Téléphone: {lead.telephone}, Source: {lead.source}, Statut: {lead.statut}, Note: {lead.note}"
-            form.save()
-            new_data = f"Nom: {lead.nom}, Prénom: {lead.prenom}, Email: {lead.email}, Téléphone: {lead.telephone}, Source: {lead.source}, Statut: {lead.statut}, Note: {lead.note}"
-            LeadHistory.objects.create(
-                lead=lead,
-                user=request.user,
-                action='updated',
-                details=f"Modifié de {old_data} à {new_data}"
-            )
-            return redirect('lead_list')
-    else:
-        form = LeadForm(instance=lead)
-    return render(request, 'leadfile/lead_edit.html', {'form': form})
-
-
-
-
-
-
-def lead_history(request):
-    histories = LeadHistory.objects.all().order_by('-timestamp')
-    return render(request, 'leadfile/LeadHistory.html', {'histories': histories})
 
 
 class LeadListCreate(generics.ListCreateAPIView):

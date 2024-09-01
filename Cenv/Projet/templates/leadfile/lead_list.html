@@ -12,7 +12,7 @@
         .right {   
             background-color: #F6F2F2; 
             border-radius: 15px;
-            height: auto;
+            height: 100vh;
             width: 81%;
             overflow: hidden;
             position: absolute;
@@ -25,7 +25,7 @@
         }
         .header-container {
             margin-top: 30px;
-            margin-left: 28px;
+            margin-left: 20px;
             margin-right: 20px;
             height: 90px;
         }
@@ -67,19 +67,21 @@
         .table1 {
             position: relative;
             top: 26px;
-            right: 22px;
-            padding-left: 12px;
-            padding-right: 42px;
+            right: 10px;
+            left: 10px;
+            padding-left: 4px;
+            padding-right: 5px;
             border-collapse: collapse;
-            width: 60%;
+            width: 70%;
         }
         .table1 thead {
             background-color: #f8f9fa; /* Couleur de fond des en-têtes */
         }
         .table1 th {
-            padding: 10px;
-            padding-left: 30px;
-            padding-right: 40px; /* Espacement intérieur */
+          padding-top: 6px;
+          padding-bottom: 6px;
+            padding-left: 22px;
+            padding-right: 22px; /* Espacement intérieur */
             border-bottom: 2px solid #dee2e6; /* Bordure inférieure des en-têtes */
             text-align: left; /* Alignement du texte */
             color: #495057; /* Couleur du texte */
@@ -88,10 +90,12 @@
             border-bottom: 1px solid #dee2e6; /* Bordure inférieure des lignes */
         }
         .table1 td {
-            padding: 10px; /* Espacement intérieur des cellules */
+            padding-top: 6px;
+          padding-bottom: 6px;
+            padding-left: 22px;
+            padding-right: 22px;/* Espacement intérieur des cellules */
             text-align: left; /* Alignement du texte */
-            padding-left: 30px;
-            padding-right: 40px;
+          
         }
         .table1 tbody tr:nth-child(even) {
             background-color: #f2f2f2; /* Couleur de fond des lignes paires */
@@ -104,9 +108,11 @@
         }
         .pagination {
             display: flex;
+            padding-top: 10px;
+            padding-bottom: 10px;
             justify-content: center;
             margin-top: 20px;
-            padding: 10px;
+            
             border: 1px solid #ddd;
             border-radius: 5px;
             background-color: #f8f9fa;
@@ -170,7 +176,10 @@
             <div>
                 <a href="{% url 'lead_create' %}">Ajouter un Lead</a>
                 <a href="{% url 'lead_import' %}">Importer des Leads</a>
-                <a href="{% url 'lead_history'  %}" class="btn btn-info">Voir l'historique</a>
+                
+               
+           <a href="{% url 'lead_history' %}" class="btn btn-info">Voir l'historique</a>
+       
             </div>
         </div>
 
@@ -210,6 +219,7 @@
                         <th>Téléphone</th>
                         <th>Source</th>
                         <th>Statut</th>
+                        <th>responsable_lead</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -222,6 +232,7 @@
                         <td>{{ lead.telephone }}</td>
                         <td>{{ lead.source }}</td>
                         <td>{{ lead.statut }}</td>
+                        <td>{{ lead.responsable.username }}</td> 
                         <td>
                             <span class="dots" data-id="{{ lead.pk }}">...</span>
                         </td>

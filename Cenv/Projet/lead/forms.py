@@ -11,33 +11,32 @@ User = get_user_model()
 
 
 # lead/forms.py
-
-
-
 class LeadForm(forms.ModelForm):
     class Meta:
         model = Lead
-        fields = ['nom', 'prenom', 'email', 'telephone', 'source', 'note', 'responsable']  # Inclure 'responsable'
+        fields = ['nom', 'prenom', 'email', 'telephone', 'source', 'note', 'responsable']
 
     def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)  # Retirer l'utilisateur des kwargs
+        user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
         
-        # Si l'utilisateur est un admin, on affiche le champ 'responsable'
         if user and user.is_superuser:
-            self.fields['responsable'].queryset = User.objects.filter(is_staff=True)  # Filtrer pour les utilisateurs normaux
+            self.fields['responsable'].queryset = User.objects.filter(is_staff=True)
         else:
-            # Si ce n'est pas un admin, on masque le champ 'responsable' et on l'affecte automatiquement
-            self.fields['responsable'].widget = forms.HiddenInput()  # Masquer le champ
-            if self.instance and self.instance.pk is None:  # Si c'est une création
-                self.initial['responsable'] = user  # Affecter l'utilisateur connecté
-    
+            self.fields['responsable'].widget = forms.HiddenInput()
+            if self.instance and self.instance.pk is None:
+                self.initial['responsable'] = user
+
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        if Lead.objects.filter(email=email).exists():
-            raise forms.ValidationError("Un lead avec cet email existe déjà.")
+        if self.instance and self.instance.pk:
+            # Exclure le lead actuel de la vérification
+            if Lead.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
+                raise forms.ValidationError("Un lead avec cet email existe déjà.")
+        else:
+            if Lead.objects.filter(email=email).exists():
+                raise forms.ValidationError("Un lead avec cet email existe déjà.")
         return email
-
 
 
 class LeadSortForm(forms.Form):
@@ -57,20 +56,22 @@ class LeadSortForm(forms.Form):
 class CSVImportForm(forms.Form):
    csv_file = forms.FileField()
    
-   def handle_uploaded_file(self, file):
+   def handle_uploaded_file(self, file, user):
         file_content = file.read().decode('utf-8')
         csv_file = StringIO(file_content)
         reader = csv.DictReader(csv_file)
         for row in reader:
             Lead.objects.create(
-               nom=row['nom'],
+                nom=row['nom'],
                 prenom=row['prenom'],
                 email=row['email'],
                 telephone=row['telephone'],
                 source=row['source'],
                 statut=row['statut'],
                 note=row.get('note', ''),
+                responsable=user  # Assigner l'utilisateur qui importe
             )
+
 
 
 
