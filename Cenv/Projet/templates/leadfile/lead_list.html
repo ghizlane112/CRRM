@@ -277,7 +277,10 @@
             <li id="add-note">Ajouter une note</li>
         </ul>
     </div>
-
+   <!-- Formulaire caché pour le token CSRF -->
+   <form id="csrf-form" method="POST" style="display:none;">
+    {% csrf_token %}
+</form>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var contextMenu = document.getElementById('context-menu');
@@ -308,11 +311,33 @@
                 window.location.href = '/lead/' + currentLeadId + '/edit/';
             });
 
-            document.getElementById('delete-lead').addEventListener('click', function() {
-                if (confirm('Êtes-vous sûr de vouloir supprimer ce lead ?')) {
-                    window.location.href = '/lead/' + currentLeadId + '/delete/';
-                }
-            });
+
+
+
+            // Action pour supprimer le lead
+        document.getElementById('delete-lead').addEventListener('click', function() {
+            if (confirm('Êtes-vous sûr de vouloir supprimer ce lead ?')) {
+                // Création d'un formulaire pour soumettre la requête POST
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/lead/' + currentLeadId + '/delete/';
+                
+                // Ajouter le token CSRF au formulaire
+                var csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+                var csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = 'csrfmiddlewaretoken';
+                csrfInput.value = csrfToken;
+                form.appendChild(csrfInput);
+                
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
+
+
+
+
 
             document.getElementById('add-note').addEventListener('click', function() {
                 window.location.href = '/lead/' + currentLeadId + '/add-note/';

@@ -1,11 +1,6 @@
 from django.db import models
-
-# Create your models here.
-from django.db import models
-
-# Create your models here.
 # models.py
-
+from lead.models import Lead
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -19,3 +14,14 @@ class Notification(models.Model):
 
     def __str__(self):
         return f'Notification for {self.recipient.username} from {self.sender.username}'
+
+
+
+class Reminder(models.Model):
+    lead = models.ForeignKey(Lead, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    reminder_time = models.DateTimeField()
+    note = models.TextField()
+
+    def __str__(self):
+        return f"Rappel pour {self.lead.nom} le {self.reminder_time}"

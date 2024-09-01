@@ -201,23 +201,23 @@ def lead_history(request):
 @login_required
 def lead_delete(request, pk):
     lead = get_object_or_404(Lead, pk=pk)
+    
     if request.method == 'POST':
-        try:
-            # Enregistrer l'action de suppression dans l'historique
-            LeadHistory.objects.create(
-                lead=lead,
-                user=request.user,
-                action='deleted',
-                details=f"Lead {lead.nom} {lead.prenom} supprimé."
-            )
-            # Supprimer le lead
-            lead.delete()
-            return redirect('lead_list')
-        except Exception as e:
-            # Optionnel: Enregistrer l'erreur ou effectuer une autre action
-            print(f"Une erreur est survenue : {e}")
-            # Retourner une réponse d'erreur appropriée
-    return render(request, 'leadfile/LeadHistory.html', {'lead': lead})
+        # Enregistrement de l'historique de suppression
+        LeadHistory.objects.create(
+            lead=lead,
+            user=request.user,  # Utilisateur effectuant la suppression
+            action='deleted',
+            details='Lead deleted: {} {}'.format(lead.prenom, lead.nom)
+        )
+        
+        # Suppression effective du Lead
+        lead.delete()
+        
+        return redirect('lead_list')  # Rediriger vers une autre page après la suppression
+    
+    return render(request, 'leadfile/LeadHistory', {'lead': lead})
+
 
 
 
