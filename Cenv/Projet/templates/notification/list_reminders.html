@@ -1,0 +1,6 @@
+<h1>Liste des Rappels</h1>
+<ul>
+  {% for reminder in reminders %}
+    <li>{{ reminder.note }} - {{ reminder.reminder_time }}</li>
+  {% endfor %}
+</ul>

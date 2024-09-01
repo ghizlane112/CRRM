@@ -47,6 +47,7 @@ INSTALLED_APPS = [
      'Rendez',
   #  'clients',
     'communication',
+    'django_celery_beat',
     'reports',
     'notification',
     'member_management',

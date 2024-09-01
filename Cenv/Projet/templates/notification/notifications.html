@@ -1,22 +1,23 @@
 <!-- notification/templates/notification/notifications.html -->
 
 
+
 {% block content %}
-<h2>Notifications</h2>
-{% if notifications %}
+  <h2>Vos Notifications</h2>
+  {% if notifications %}
     <ul>
-        {% for notification in notifications %}
+      {% for notification in notifications %}
         <li>
-            <strong>From:</strong> {{ notification.sender }}<br>
-            <strong>Message:</strong> {{ notification.message }}<br>
-            <strong>Received at:</strong> {{ notification.created_at }}<br>
-            {% if not notification.is_read %}
-                <span>Unread</span>
-            {% endif %}
+          <strong>De :</strong> {{ notification.sender }}<br>
+          <strong>Message :</strong> {{ notification.message }}<br>
+          <strong>Reçu le :</strong> {{ notification.created_at }}<br>
+          {% if not notification.is_read %}
+            <span style="color: red; font-weight: bold;">Non lu</span>
+          {% endif %}
         </li>
-        {% endfor %}
+      {% endfor %}
     </ul>
-{% else %}
-    <p>No notifications</p>
-{% endif %}
+  {% else %}
+    <p>Aucune notification</p>
+  {% endif %}
 {% endblock %}
