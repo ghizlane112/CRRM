@@ -20,3 +20,15 @@ class Message(models.Model):
         return f"Message from {self.sender} to {self.receiver} on {self.timestamp}"
     
 
+
+
+class Document(models.Model):
+    lead = models.ForeignKey(Lead, on_delete=models.CASCADE, related_name='documents')
+    uploaded_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    file = models.FileField(upload_to='documents/')
+    description = models.CharField(max_length=255, blank=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    shared_with = models.ManyToManyField(User, related_name='shared_documents', blank=True)
+
+    def _str_(self):
+        return self.file.name

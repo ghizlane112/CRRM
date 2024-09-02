@@ -21,8 +21,10 @@ class LeadForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         
         if user and user.is_superuser:
-            self.fields['responsable'].queryset = User.objects.filter(is_staff=True)
+            # Pour les admins, afficher uniquement les utilisateurs normaux (non-admins)
+            self.fields['responsable'].queryset = User.objects.filter(is_superuser=False)
         else:
+            # Pour les utilisateurs normaux, cacher le champ 'responsable' et l'assigner automatiquement
             self.fields['responsable'].widget = forms.HiddenInput()
             if self.instance and self.instance.pk is None:
                 self.initial['responsable'] = user
@@ -30,7 +32,6 @@ class LeadForm(forms.ModelForm):
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if self.instance and self.instance.pk:
-            # Exclure le lead actuel de la vérification
             if Lead.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
                 raise forms.ValidationError("Un lead avec cet email existe déjà.")
         else:

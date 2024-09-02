@@ -1,0 +1,24 @@
+
+{% block content %}
+  <h2>Upload Document for {{ lead.name }}</h2>
+  
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Upload</button>
+  </form>
+
+  <h3>Existing Documents</h3>
+  <ul>
+    {% for document in lead.documents.all %}
+      <li>
+        <a href="{{ document.file.url }}">{{ document.file.name }}</a> - {{ document.uploaded_at }}
+        <br>Shared with: 
+        {% for user in document.shared_with.all %}
+          {{ user.username }}
+          {% if not forloop.last %}, {% endif %}
+        {% endfor %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

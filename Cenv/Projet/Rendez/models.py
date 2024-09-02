@@ -15,6 +15,8 @@ class Event(models.Model):
     lieu=models.CharField(max_length=50,null=True,blank=True)
     description = models.TextField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)  # Champ pour associer un événement à un utilisateur
+
 
     def __str__(self):
         return self.title

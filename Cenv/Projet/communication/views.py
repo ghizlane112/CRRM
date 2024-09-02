@@ -1,14 +1,10 @@
-from django.shortcuts import render
-
-# Create your views here.
-# Create your views here.
-from django.shortcuts import render, redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Message
-
 from .forms import MessageForm
 from lead.models import Lead
-
+from .models import Document
+from .forms import DocumentForm
 from notification.models import Notification  # Importer le modèle Notification
 from django.contrib.auth import get_user_model
 from django.db.models import Q
@@ -62,4 +58,20 @@ def send_message(request):
 
 
 
-
+@login_required
+def upload_document(request, pk):  # Utilisation de 'pk'
+    lead = get_object_or_404(Lead, pk=pk)
+    
+    if request.method == 'POST':
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            document = form.save(commit=False)
+            document.lead = lead
+            document.uploaded_by = request.user
+            document.save()
+            form.save_m2m()  # Sauvegarder les relations ManyToMany (utilisateurs partagés)
+            return redirect('lead_detail', pk=lead.pk)  # Utilisation de 'pk' pour correspondre
+    else:
+        form = DocumentForm()
+    
+    return render(request, 'communication/upload_document.html', {'form': form, 'lead': lead})

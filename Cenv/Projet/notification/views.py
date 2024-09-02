@@ -47,7 +47,7 @@ def create_reminder(request, event_id=None):
             reminder.user = request.user
             reminder.event = event  # Assurez-vous que 'event' est correctement attribué
             reminder.save()
-            return redirect('reminders')
+            return redirect('notifications')
     else:
         form = ReminderForm()
     

@@ -12,19 +12,28 @@ from django.shortcuts import get_object_or_404
 
 #logger = logging.getLogger(__name__)
 
+
+@login_required
 def calendar_view(request):
-    if request.method == 'GET':
-        # Renvoie la page HTML du calendrier
-        return render(request, 'events/calendar.html')
+    if request.user.is_superuser:
+        events = Event.objects.all()
+    else:
+        events = Event.objects.filter(user=request.user)
+
+    context = {
+        'events': events
+    }
+    return render(request, 'events/calendar.html', context)
    
 
 @csrf_exempt
+@login_required
 def add_event(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         start_date = request.POST.get('start_date')
         heur = request.POST.get('heur')
-        lieu=request.POST.get('lieu')
+        lieu = request.POST.get('lieu')
         description = request.POST.get('description')
 
         event = Event(
@@ -32,7 +41,8 @@ def add_event(request):
             start_date=start_date,
             heur=heur,
             lieu=lieu,
-            description=description
+            description=description,
+            user=request.user  # Associe l'événement à l'utilisateur connecté
         )
         event.save()
         return JsonResponse({'status': 'success'})
@@ -102,15 +112,23 @@ def dashboard_view(request):
 
 
 
+@login_required
 def event_list(request):
-    # Renvoie les événements en JSON pour FullCalendar
-    events = Event.objects.all()
+    user = request.user
+    if user.is_superuser:
+        # Admin: retourne tous les événements
+        events = Event.objects.all()
+    else:
+        # Utilisateur normal: retourne uniquement les événements associés à cet utilisateur
+        events = Event.objects.filter(user=user)
+
     events_data = [{
         'id': event.id,
         'title': event.title,
         'start': f"{event.start_date}T{event.heur}",  # Combine la date et l'heure pour FullCalendar
         'description': event.description,
     } for event in events]
+    
     return JsonResponse(events_data, safe=False)
 
 

@@ -108,7 +108,7 @@ def lead_create(request):
             if request.user.is_superuser:
                 lead.responsable = form.cleaned_data['responsable']
             else:
-                lead.responsable = request.user  # Assigne le lead à l'utilisateur actuel
+                lead.responsable = request.user
             lead.save()
             
             # Enregistrer l'historique
@@ -123,6 +123,10 @@ def lead_create(request):
         form = LeadForm(user=request.user)
     
     return render(request, 'leadfile/lead_form.html', {'form': form})
+
+
+
+
 
 
 
@@ -188,7 +192,6 @@ def lead_edit(request, pk):
 
 
 
-
 def lead_history(request):
     histories = LeadHistory.objects.all().order_by('-timestamp')
     return render(request, 'leadfile/LeadHistory.html', {'histories': histories})
@@ -197,29 +200,26 @@ def lead_history(request):
   #  histories = LeadHistory.objects.filter(lead=lead).order_by('-timestamp')
    # return render(request, 'leadfile/lead_history.html', {'lead': lead, 'histories': histories})
 
-
 @login_required
 def lead_delete(request, pk):
     lead = get_object_or_404(Lead, pk=pk)
-    
     if request.method == 'POST':
-        # Enregistrement de l'historique de suppression
-        LeadHistory.objects.create(
-            lead=lead,
-            user=request.user,  # Utilisateur effectuant la suppression
-            action='deleted',
-            details='Lead deleted: {} {}'.format(lead.prenom, lead.nom)
-        )
-        
-        # Suppression effective du Lead
+       
+
+        # Créer une entrée dans LeadHistory avec l'utilisateur actuel
+        if request.user:  # Assurez-vous que l'utilisateur est bien défini
+            LeadHistory.objects.create(
+                lead=lead,
+                user=request.user,  # L'utilisateur connecté
+                action='deleted',
+                timestamp=timezone.now(),
+                details=f"Lead {lead.id} supprimé"
+            )
+             # Supprimer le lead
         lead.delete()
-        
-        return redirect('lead_list')  # Rediriger vers une autre page après la suppression
-    
-    return render(request, 'leadfile/LeadHistory', {'lead': lead})
 
-
-
+        return redirect('lead_list')  # Redirection après suppression
+    return render(request, 'leadfile/lead_confirm_delete.html', {'lead': lead})
 
 
 

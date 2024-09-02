@@ -14,7 +14,7 @@ width: 81%;
 position: absolute;
 top: 131px;
 left:17.5%;
-overflow: hidden;
+overflow: auto;
 box-shadow: 
         2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
         4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
@@ -61,6 +61,22 @@ left: 22px;
     <p><strong>Source:</strong> {{ lead.source }}</p>
     <p><strong>Statut:</strong> {{ lead.statut }}</p>
     <p><strong>Note:</strong> {{ lead.note }}</p>
+
+
+    <h3>Documents</h3>
+<ul>
+  {% for document in lead.documents.all %}
+    <li>
+      <a href="{{ document.file.url }}">{{ document.file.name }}</a> - {{ document.uploaded_at }}
+      <br>Shared with: 
+      {% for user in document.shared_with.all %}
+        {{ user.username }}
+        {% if not forloop.last %}, {% endif %}
+      {% endfor %}
+    </li>
+  {% endfor %}
+</ul>
+<a href="{% url 'upload_document' lead.id %}">Upload a new document</a>
     <a href="{% url 'lead_list' %}">Retour à la liste</a>
         </div>
 </div>
