@@ -1,6 +1,7 @@
 from django.db import models
 # models.py
 from lead.models import Lead
+from Rendez.models import Event
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -18,10 +19,10 @@ class Notification(models.Model):
 
 
 class Reminder(models.Model):
-    lead = models.ForeignKey(Lead, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE,null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     reminder_time = models.DateTimeField()
     note = models.TextField()
 
     def __str__(self):
-        return f"Rappel pour {self.lead.nom} le {self.reminder_time}"
+        return f"Rappel pour {self.event.title} le {self.reminder_time}"

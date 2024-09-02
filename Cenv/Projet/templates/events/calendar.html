@@ -58,16 +58,39 @@
           
         }
 
+        .btn-rappels{
+            display: inline-block;
+          
+            border-radius: 12px;
+            border: none;
+            position: relative;
+            left:575px;
+            top:59px;
+            font-family: 'Inter';
+            font-style:  Bold italic;
+            font-weight: 600;
+            text-decoration: none;
+            color: #fff;
+            background-color: #3D46F2;
+            cursor: pointer;
+            padding-left: 9px;
+            padding-right: 9px;
+            padding-top: 20px;
+            padding-bottom: 19px;
+            margin: 20px 0;
+            font-size: 18px;
+        }
         .btn-history {
             display: inline-block;
             float: right;
             position: relative;
-            right:12px;
-            top:17px;
+            right:7px;
+            top:-40px;
             font-family: 'Inter';
             font-style:  Bold italic;
             font-weight: 600;
             width: 270px;
+            border-radius: 12px;
             padding-top: 14px;
             padding-bottom: 14px;
             margin: 20px 0;
@@ -147,8 +170,8 @@
             height: 660px;
             background-color: white;
             position: relative;
-            left: 12px;
-            bottom: 90px;
+            left: 10px;
+            bottom: 145px;
         }
         /* Style pour la fenêtre modale */
 
@@ -218,6 +241,7 @@
     <div class="right-side">
     <h1>Appoitement</h1>
 
+    <div>{%load static%}<form method="post"  action="{%url 'create_reminder'  %}">   {% csrf_token %}<button type="submit" class="btn-rappels">Ajouter Rappele</button></form></div>
     <div>{% load static %}<form method="get" action="{%url  'history_view'%}"><button type="submit" class="btn-history" ><img src="{%static 'images/Rectangle2093.png'%}" alt="calendanr logo"/> &nbsp  l'Historique des Rendez-vous</button></form></div>
     
 

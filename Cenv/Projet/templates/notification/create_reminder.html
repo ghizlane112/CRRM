@@ -1,12 +1,12 @@
 <!-- notification/templates/notification/create_reminder.html -->
 
-{% extends "base.html" %}
 
 {% block content %}
-  <h2>Créer un Rappel pour {{ lead.nom }}</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Créer Rappel</button>
-  </form>
+    <h1>Create Reminder</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Create Reminder">
+    </form>
 {% endblock %}
+
