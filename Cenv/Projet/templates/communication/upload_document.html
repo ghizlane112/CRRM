@@ -1,5 +1,82 @@
-
+{%include 'parts/nav.html'%}
 {% block content %}
+<head>
+  <style>
+   .right-left{
+background-color:#F6F2F2; 
+border-radius: 15px;
+height: 100%;
+width: 81%;
+max-width: 87%;
+position: absolute;
+top: 131px;
+left:17.5%;
+overflow: auto;
+box-shadow: 
+        2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
+        4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
+        6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
+    }
+
+    /* Styles pour le titre principal */
+    .right-left h2 {
+      font-size: 1.5em;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    /* Styles pour le titre secondaire */
+    .right-left h3 {
+      font-size: 1.2em;
+      color: #555;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    /* Styles pour le formulaire */
+    .right-left form {
+      margin-bottom: 20px;
+    }
+
+    .right-left form button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    .right-left form button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Styles pour la liste des documents */
+    .right-left ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .right-left ul li {
+      margin-bottom: 10px;
+    }
+
+    .right-left ul li a {
+      color: #007BFF;
+      text-decoration: none;
+    }
+
+    .right-left ul li a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="left-side">
+    {%include 'parts/button.html'%}
+</div>
+  <div class="right-left">
   <h2>Upload Document for {{ lead.name }}</h2>
   
   <form method="post" enctype="multipart/form-data">
@@ -21,4 +98,8 @@
       </li>
     {% endfor %}
   </ul>
+
+</div>
+
+</body>
 {% endblock %}
