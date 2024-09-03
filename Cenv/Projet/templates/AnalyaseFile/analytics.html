@@ -1,0 +1,154 @@
+{%include 'parts/nav.html'%}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse des Leads</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .chart-container {
+            width: 80%;
+            max-width: 600px; /* Largeur maximale du conteneur des graphiques */
+            margin: 0 auto;
+        }
+        canvas {
+            display: block;
+            margin: 10px auto;
+            /* Réduire la hauteur des graphiques */
+            height: 150px !important; /* Hauteur des graphiques */
+            width: 300px !important; /* Largeur des graphiques */
+        }
+        .right-left{
+background-color:#F6F2F2; 
+border-radius: 15px;
+height: 100%;
+width: 81%;
+max-width: 87%;
+position: absolute;
+top: 131px;
+left:17.5%;
+overflow: auto;
+box-shadow: 
+        2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
+        4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
+        6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
+    }
+    @media (max-width: 768px) {
+
+        .right-left{
+height: 100%;
+width: 74%;
+position: absolute;
+top: 131px;
+left:24.9%;
+
+    }}
+        </style>
+</head>
+<body>
+
+    <div class="left-side">
+        {%include 'parts/button.html'%}
+    </div>
+    <div class="right-left">
+    <h1>Analyse des Leads</h1>
+    <canvas id="leadChart" width="400" height="200"></canvas>
+    <canvas id="sourceChart" width="400" height="200"></canvas>
+    <canvas id="conversionChart" width="400" height="200"></canvas>
+</div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('{% url "lead_status_data" %}')
+                .then(response => response.json())
+                .then(data => {
+                    const labels = data.map(item => item.status);
+                    const counts = data.map(item => item.count);
+
+                    const ctxLead = document.getElementById('leadChart').getContext('2d');
+                    new Chart(ctxLead, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Nombre de Leads par Statut',
+                                data: counts,
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(error => console.error('Erreur:', error));
+
+            // Exemple pour ajouter d'autres graphiques
+            fetch('{% url "lead_source_data" %}')
+                .then(response => response.json())
+                .then(data => {
+                    const labels = data.map(item => item.source);
+                    const counts = data.map(item => item.count);
+
+                    const ctxSource = document.getElementById('sourceChart').getContext('2d');
+                    new Chart(ctxSource, {
+                        type: 'pie',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Répartition des Leads par Source',
+                                data: counts,
+                                backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)'],
+                                borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)'],
+                                borderWidth: 1
+                            }]
+                        }
+                    });
+                })
+                .catch(error => console.error('Erreur:', error));
+
+            fetch('{% url "lead_conversion_data" %}')
+                .then(response => response.json())
+                .then(data => {
+                    const labels = data.map(item => item.campaign);
+                    const counts = data.map(item => item.conversions);
+
+                    const ctxConversion = document.getElementById('conversionChart').getContext('2d');
+                    new Chart(ctxConversion, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Conversions par Campagne',
+                                data: counts,
+                                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                                borderColor: 'rgba(153, 102, 255, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(error => console.error('Erreur:', error));
+        });
+    </script>
+</body>
+</html>
