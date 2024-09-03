@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
-
+import environ
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -29,13 +29,14 @@ DEBUG = True
 
 
 ALLOWED_HOSTS = [
-    '7f40-196-118-150-200.ngrok-free.app',
+    '2fab-196-118-150-200.ngrok-free.app',
     'localhost',
     '127.0.0.1',
 ]
 
 CSRF_TRUSTED_ORIGINS = [  
-       'https://7f40-196-118-150-200.ngrok-free.app',
+       
+       'https://2fab-196-118-150-200.ngrok-free.app'
        
         
 ]
@@ -52,7 +53,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users',
-    #'lead',
     'lead.apps.LeadConfig',
     'rest_framework',
     'profils',
@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     'reports',
     'notification',
     'member_management',
+    'googleAds1',
 ]
 
 MIDDLEWARE = [
@@ -165,7 +166,9 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Europe/Paris'
 
 
-
+################################################33
+GOOGLE_ADS_CLIENT_ID = '284086208728-hudlgh08uut7cq5lbbi9u5n79p5t7fp4.apps.googleusercontent.com'
+GOOGLE_ADS_CLIENT_SECRET = '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'
 
 
 

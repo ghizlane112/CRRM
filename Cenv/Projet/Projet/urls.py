@@ -30,6 +30,8 @@ urlpatterns = [
     path('',include('notification.urls')),
     path('',include('member_management.urls')),
     path('',include('campaigns.urls')),
+    path('analyse/', include('analytics.urls')),
+    #path('',include('googleAds1.urls')),
     path('admin/', admin.site.urls),
   
 
