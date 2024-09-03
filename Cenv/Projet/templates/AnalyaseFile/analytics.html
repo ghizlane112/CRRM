@@ -8,21 +8,40 @@
     <title>Analyse des Leads</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        h1 {
+        h1, h2 {
             text-align: center;
             color: #333;
         }
         .chart-container {
             width: 80%;
             max-width: 600px; /* Largeur maximale du conteneur des graphiques */
-            margin: 0 auto;
+            margin: 20px auto;
         }
         canvas {
             display: block;
             margin: 10px auto;
-            /* Ajuster la taille des graphiques */
-            height: 150px !important; /* Hauteur des graphiques */
-            width: 300px !important; /* Largeur des graphiques */
+            height: 200px !important; /* Hauteur des graphiques */
+            width: 400px !important; /* Largeur des graphiques */
+        }
+        .table-container {
+            width: 80%;
+            max-width: 800px;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        table {
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
         }
         .right-left {
             background-color: #F6F2F2;
@@ -41,11 +60,7 @@
         }
         @media (max-width: 768px) {
             .right-left {
-                height: 100%;
-                width: 74%;
-                position: absolute;
-                top: 131px;
-                left: 24.9%;
+                width: 90%;
             }
         }
     </style>
@@ -56,52 +71,37 @@
     </div>
     <div class="right-left">
         <h1>Analyse des Leads</h1>
-        <canvas id="leadChart" width="300" height="150"></canvas>
-        <canvas id="sourceChart" width="300" height="150"></canvas>
-        <canvas id="conversionChart" width="300" height="150"></canvas>
+        
+        <!-- Graphiques -->
+        <div class="chart-container">
+            <h2>Origine des Leads</h2>
+            <canvas id="sourceChart"></canvas>
+
+            <h2>Taux de Conversion par Campagne</h2>
+            <canvas id="conversionChart"></canvas>
+        </div>
+
+        <!-- Tableaux pour Rapports -->
+        <h2>Rapport de Conversion par Campagne</h2>
+        <div class="table-container">
+            <table id="conversionReportTable">
+                <thead>
+                    <tr>
+                        <th>Campagne</th>
+                        <th>Nombre de Leads</th>
+                        <th>Conversions</th>
+                        <th>Taux de Conversion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Les lignes seront ajoutées dynamiquement ici -->
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Graphique des statuts des leads
-            fetch('{% url "lead_status_data" %}')
-                .then(response => response.json())
-                .then(data => {
-                    const labels = data.map(item => item.status);
-                    const counts = data.map(item => item.count);
-
-                    const backgroundColors = counts.map(() => 
-                        'rgba(' + [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)].join(',') + ', 0.2)'
-                    );
-                    const borderColors = counts.map(() => 
-                        'rgba(' + [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)].join(',') + ', 1)'
-                    );
-
-                    const ctxLead = document.getElementById('leadChart').getContext('2d');
-                    new Chart(ctxLead, {
-                        type: 'bar',
-                        data: {
-                            labels: labels,
-                            datasets: [{
-                                label: 'Nombre de Leads par Statut',
-                                data: counts,
-                                backgroundColor: backgroundColors,
-                                borderColor: borderColors,
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            scales: {
-                                y: {
-                                    beginAtZero: true
-                                }
-                            }
-                        }
-                    });
-                })
-                .catch(error => console.error('Erreur:', error));
-
             // Graphique de répartition des leads par source
             fetch('{% url "lead_source_data" %}')
                 .then(response => response.json())
@@ -152,7 +152,7 @@
 
                     const ctxConversion = document.getElementById('conversionChart').getContext('2d');
                     new Chart(ctxConversion, {
-                        type: 'line',
+                        type: 'bar',
                         data: {
                             labels: labels,
                             datasets: [{
@@ -171,6 +171,21 @@
                                 }
                             }
                         }
+                    });
+                })
+                .catch(error => console.error('Erreur:', error));
+
+            // Charger les rapports de conversion par campagne dans le tableau
+            fetch('{% url "conversion_report_data" %}')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('conversionReportTable').getElementsByTagName('tbody')[0];
+                    data.forEach(item => {
+                        const row = tableBody.insertRow();
+                        row.insertCell().textContent = item.campaign;
+                        row.insertCell().textContent = item.leads;
+                        row.insertCell().textContent = item.conversions;
+                        row.insertCell().textContent = ((item.conversions / item.leads) * 100).toFixed(2) + '%';
                     });
                 })
                 .catch(error => console.error('Erreur:', error));

@@ -28,9 +28,21 @@ def two(request):
 def three(request):
     return render(request,'parts/button.html')
 
-def dashboard(request):
-    return render(request,'dashboard.html')
+#def dashboard(request):
+ #   return render(request,'dashboard.html')
 
+
+#def lead_list_view(request):
+   # leads = Lead.objects.all()  # Vous pouvez ajouter des filtres et de la pagination ici
+   # return render(request, 'parts/lead_list_partial.html', {'leads': leads})
+
+
+
+def dashboard(request):
+    leads = Lead.objects.all()[:5]  # Limiter le nombre de leads affichés
+    return render(request, 'dashboard.html', {
+        'leads': leads
+    })
 
 
 def four(request):

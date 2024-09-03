@@ -10,6 +10,7 @@
 
 <style>
 /* Styles de base pour les cartes */
+
 .card {
     border-radius: 17px;
     padding: 20px;
@@ -37,7 +38,7 @@
     width: 242px;
     float: right;
     position: relative;
-    bottom: 100px;
+    bottom: 130px;
     margin-right: -19px;
 }
 
@@ -54,12 +55,12 @@
     border-radius: 17px;
     /* Positionnement fixe */
     top: -9px;
-    right: 48px;
+    right: 40px;
 }
 /**troisieme card**/
 #calendar {
     width: 349px; 
-    height: 312px;/* Hauteur complète du conteneur */
+    height: 323px;/* Hauteur complète du conteneur */
     background-color: #ffffff;
     border: 1px solid #ddd;
     border-radius: 17px;
@@ -73,7 +74,67 @@
     font-size: 0.8em;
 }
 
+#thrid-card{
+    width: 590px;
+    height: 120px;
+    border-radius: 17px;
+    background-color: white;
+    border-color: #3D46F2;
+    border-style: double;
+    top: 219px;
+    left:19px;
+}
+#forth-card{
+    width: 590px;
+    height: 190px;
+    position: relative;
+    top: 329px;
+    left:19px;
+    background-color: white;
+}
 
+#cinquieme-card{
+    width: 340px;
+    height: 190px;
+    top: 347px;
+    right:38px;
+    background-color: white;
+}
+#six-card{
+    width: 94.5%;
+    height: 270px;
+    left: 19px;
+    background-color: white;
+    position: relative;
+    top: 340px;
+  
+
+}
+#six-card a{
+text-decoration: none;
+}
+/* styles.css */
+
+.lead-list-item {
+    color: #333;
+    padding: 10px;
+
+    border-bottom: 1px solid #ddd;
+}
+
+.lead-list-item:hover {
+    background-color: #f9f9f9;
+}
+#six-card ul li{
+    list-style-type: none;
+}
+
+
+#six-card .ul1 li{
+    color: rgb(119, 163, 195);
+    float: right;
+    margin-left: 12px;
+}
 @media only screen and (min-width: 1440px){
     #first-card {
        margin-top: 3px;
@@ -217,7 +278,7 @@
 
 
  <!----quatrieme card-->
- <div class="card text-center text-white mb-3" id="thrid-card">
+ <div class="card text-center text-white mb-3" id="forth-card">
     <div class="card-body" style="width: 33rem;">
       
        
@@ -232,7 +293,7 @@
 
 
  <!----cinquieme card-->
- <div class="card text-center text-white mb-3" id="thrid-card">
+ <div class="card text-center text-white mb-3" id="cinquieme-card">
     <div class="card-body" style="width: 33rem;">
       
        
@@ -242,6 +303,36 @@
 
 
 
+
+
+ <!----six card-->
+  <!-- Sixième card -->
+  <div class="card text-center text-white  " id="six-card" >
+    <a href="{% url 'lead_list' %}" class="text-decoration-none">
+    <div class="card-body" >
+           <!-- Card avec la liste des leads -->
+                    <h3 class="card-title" style="font-size: 32px;">Liste des Leads</h3>
+                    <ul class="ul1"><li><h4 class="lien-a1">Ajouter Lead</h4> </li>
+                    <li> <h4 class="lien-a1">Importer Lead</h4></li>
+                <li> <h4 class="lien-a">voir l'hitorique</h4></li></ul>
+                   <br>
+                   
+                    <div class="lead-list-container">
+                        <!-- Liste des leads statiques -->
+                        <ul class="list-unstyled">
+                            {% for lead in leads %}
+                                <li class="lead-list-item">
+                                    {{ lead.prenom }} {{ lead.nom }}
+                                </li>
+                            {% empty %}
+                                <li class="lead-list-item">Aucun lead disponible.</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+            </div>
+    </div>
+</a>
+</div>
 
 
 

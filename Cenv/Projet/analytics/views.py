@@ -30,3 +30,14 @@ def lead_conversion_data(request):
     # Exemple hypothétique, ajustez en fonction de votre modèle de données
     data = Lead.objects.values('campaign').annotate(conversions=Count('id'))
     return JsonResponse(list(data), safe=False)
+
+
+
+def conversion_report_view(request):
+    # Code pour récupérer les données et les retourner en JSON
+    data = [
+        {'campaign': 'Campagne A', 'leads': 100, 'conversions': 25},
+        {'campaign': 'Campagne B', 'leads': 150, 'conversions': 45},
+        # autres données
+    ]
+    return JsonResponse(data, safe=False)
