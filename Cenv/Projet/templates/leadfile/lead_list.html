@@ -273,7 +273,13 @@
         <ul>
             <li id="view-details">Voir les détails</li>
             <li id="edit-lead">Éditer</li>
-            <li id="delete-lead">Supprimer</li>
+            <!---<li id="delete-lead">Supprimer</li>-->
+
+           
+            <a id="delete-lead-link" href="#">Supprimer</a>
+
+         
+         
             <li id="add-note">Ajouter une note</li>
         </ul>
     </div>
@@ -282,71 +288,73 @@
     {% csrf_token %}
 </form>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var contextMenu = document.getElementById('context-menu');
-            var currentLeadId;
+     document.addEventListener('DOMContentLoaded', function() {
+    var contextMenu = document.getElementById('context-menu');
+    var currentLeadId;
 
-            document.querySelectorAll('.dots').forEach(function(el) {
-                el.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation(); // Empêche la propagation du clic
-                    currentLeadId = el.getAttribute('data-id');
-                    contextMenu.style.top = e.pageY + 'px';
-                    contextMenu.style.left = e.pageX + 'px';
-                    contextMenu.style.display = 'block';
-                });
-            });
-
-            document.addEventListener('click', function(e) {
-                if (!contextMenu.contains(e.target) && !document.querySelector('.dots').contains(e.target)) {
-                    contextMenu.style.display = 'none';
-                }
-            });
-
-            document.getElementById('view-details').addEventListener('click', function() {
-                window.location.href = '/lead/' + currentLeadId + '/';
-            });
-
-            document.getElementById('edit-lead').addEventListener('click', function() {
-                window.location.href = '/lead/' + currentLeadId + '/edit/';
-            });
-
-
-
-
-            // Action pour supprimer le lead
-        document.getElementById('delete-lead').addEventListener('click', function() {
-            if (confirm('Êtes-vous sûr de vouloir supprimer ce lead ?')) {
-                // Création d'un formulaire pour soumettre la requête POST
-                var form = document.createElement('form');
-                form.method = 'POST';
-                form.action = '/lead/' + currentLeadId + '/delete/';
-                
-                // Ajouter le token CSRF au formulaire
-                var csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
-                var csrfInput = document.createElement('input');
-                csrfInput.type = 'hidden';
-                csrfInput.name = 'csrfmiddlewaretoken';
-                csrfInput.value = csrfToken;
-                form.appendChild(csrfInput);
-                
-                document.body.appendChild(form);
-                form.submit();
-            }
+    // Lorsqu'un élément avec la classe 'dots' est cliqué
+    document.querySelectorAll('.dots').forEach(function(el) {
+        el.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation(); // Empêche la propagation du clic
+            currentLeadId = el.getAttribute('data-id');
+            contextMenu.style.top = e.pageY + 'px';
+            contextMenu.style.left = e.pageX + 'px';
+            contextMenu.style.display = 'block';
         });
+    });
 
-
-
-
-
-            document.getElementById('add-note').addEventListener('click', function() {
-                window.location.href = '/lead/' + currentLeadId + '/add-note/';
-            });
-        });
-
-        function submitSortForm() {
-            document.getElementById('sort-form').submit();
+    // Lorsque l'utilisateur clique en dehors du menu contextuel
+    document.addEventListener('click', function(e) {
+        if (!contextMenu.contains(e.target) && !document.querySelector('.dots').contains(e.target)) {
+            contextMenu.style.display = 'none';
         }
+    });
+
+    // Lorsque l'utilisateur clique sur "Voir les détails"
+    document.getElementById('view-details').addEventListener('click', function() {
+        window.location.href = '/lead/' + currentLeadId + '/';
+    });
+
+    // Lorsque l'utilisateur clique sur "Éditer"
+    document.getElementById('edit-lead').addEventListener('click', function() {
+        window.location.href = '/lead/' + currentLeadId + '/edit/';
+    });
+
+    // Lorsque l'utilisateur clique sur "Supprimer"
+    document.getElementById('delete-lead-link').addEventListener('click', function(e) {
+        e.preventDefault(); // Empêche le lien de suivre l'URL par défaut
+        if (confirm('Êtes-vous sûr de vouloir supprimer ce lead ?')) {
+            console.log('Deleting lead with ID:', currentLeadId); // Ajoutez ce log pour déboguer
+
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/lead/' + currentLeadId + '/delete/';
+            
+            // Ajoutez le token CSRF au formulaire
+            var csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+            var csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = 'csrfmiddlewaretoken';
+            csrfInput.value = csrfToken;
+            form.appendChild(csrfInput);
+            
+            document.body.appendChild(form);
+            form.submit();
+        }
+    });
+
+    // Lorsque l'utilisateur clique sur "Ajouter une note"
+    document.getElementById('add-note').addEventListener('click', function() {
+        window.location.href = '/lead/' + currentLeadId + '/add-note/';
+    });
+});
+
+// Fonction pour soumettre le formulaire de tri
+function submitSortForm() {
+    document.getElementById('sort-form').submit();
+}
+
     </script>
 </body>
 </html>

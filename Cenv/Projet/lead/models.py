@@ -30,6 +30,8 @@ class Lead(models.Model):
     note=models.TextField(blank=True,null=True)
     date_creation=models.DateTimeField(auto_now_add=True)
     responsable = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='leads')
+    is_deleted = models.BooleanField(default=False)
+    deleted_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.prenom} {self.nom}"
@@ -67,6 +69,7 @@ class Note(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+
 
     def _str_(self):
         return f"Note for {self.lead.nom} {self.lead.prenom} by {self.user.username}"

@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.template import loader
 from rest_framework import generics
+from django.views.decorators.http import require_POST
 from .models import Lead, Interaction,LeadHistory
 import csv
 from django.db import transaction
@@ -213,28 +214,33 @@ def lead_history(request):
    # return render(request, 'leadfile/lead_history.html', {'lead': lead, 'histories': histories})
 
 @login_required
+@require_POST
 def lead_delete(request, pk):
     lead = get_object_or_404(Lead, pk=pk)
-    if request.method == 'POST':
-       
+    
+    # Enregistrez l'action dans l'historique
+    LeadHistory.objects.create(
+        lead=lead,
+        user=request.user,
+        action='deleted',
+        details=f'Lead archivé avec les informations: {lead}'
+    )
+    
+    # Archiver le lead au lieu de le supprimer
+    lead.is_deleted = True
+    lead.deleted_at = timezone.now()
+    lead.save()
 
-        # Créer une entrée dans LeadHistory avec l'utilisateur actuel
-        if request.user:  # Assurez-vous que l'utilisateur est bien défini
-            LeadHistory.objects.create(
-                lead=lead,
-                user=request.user,  # L'utilisateur connecté
-                action='deleted',
-                timestamp=timezone.now(),
-                details=f"Lead {lead.id} supprimé"
-            )
-             # Supprimer le lead
-        lead.delete()
-
-        return redirect('lead_list')  # Redirection après suppression
-    return render(request, 'leadfile/lead_confirm_delete.html', {'lead': lead})
+    return redirect('lead_list')
 
 
 
+def archive_lead(request, lead_id):
+    lead = get_object_or_404(Lead, id=lead_id)
+    lead.is_deleted = True
+    lead.deleted_at = timezone.now()
+    lead.save()
+    return redirect('LeadHistory')
 
 class LeadListCreate(generics.ListCreateAPIView):
     queryset = Lead.objects.all()

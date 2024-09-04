@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'notification',
     'member_management',
     'googleAds1',
+    'django_q',
 ]
 
 MIDDLEWARE = [
@@ -97,6 +98,19 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Projet.wsgi.application'
+
+
+
+Q_CLUSTER = {
+    'name': 'Projet',
+    'workers': 4,
+    'recycle': 500,
+    'timeout': 90,
+    'retry': 120,
+    'queue_limit': 50,
+    'bulk': 10,
+    'orm': 'default',
+}
 
 
 # Database
