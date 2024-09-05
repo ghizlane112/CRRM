@@ -176,19 +176,22 @@
                 .catch(error => console.error('Erreur:', error));
 
             // Charger les rapports de conversion par campagne dans le tableau
-            fetch('{% url "conversion_report_data" %}')
-                .then(response => response.json())
-                .then(data => {
-                    const tableBody = document.getElementById('conversionReportTable').getElementsByTagName('tbody')[0];
-                    data.forEach(item => {
-                        const row = tableBody.insertRow();
-                        row.insertCell().textContent = item.campaign;
-                        row.insertCell().textContent = item.leads;
-                        row.insertCell().textContent = item.conversions;
-                        row.insertCell().textContent = ((item.conversions / item.leads) * 100).toFixed(2) + '%';
-                    });
-                })
-                .catch(error => console.error('Erreur:', error));
+            document.addEventListener('DOMContentLoaded', function() {
+        // Charger les rapports de conversion par campagne dans le tableau
+        fetch('{% url "conversion_report_data" %}')
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.getElementById('conversionReportTable').getElementsByTagName('tbody')[0];
+                data.forEach(item => {
+                    const row = tableBody.insertRow();
+                    row.insertCell().textContent = item.campaign;
+                    row.insertCell().textContent = item.leads;
+                    row.insertCell().textContent = item.conversions;
+                    row.insertCell().textContent = item.conversion_rate;
+                });
+            })
+            .catch(error => console.error('Erreur:', error));
+    });
         });
     </script>
 </body>

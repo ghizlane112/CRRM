@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 #from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
-from campaigns.models import CompanyPublicitaire
+#
 
 User = get_user_model()
 
@@ -30,7 +30,7 @@ class Lead(models.Model):
     responsable = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='leads')
     is_deleted = models.BooleanField(default=False)
     deleted_at = models.DateTimeField(null=True, blank=True)
-    campaign = models.ForeignKey(CompanyPublicitaire, on_delete=models.SET_NULL, null=True, blank=True, related_name='leads')
+    #campaign = models.ForeignKey(CompanyPublicitaire, on_delete=models.SET_NULL, null=True, blank=True, related_name='leads')
     
     
     def __str__(self):
@@ -38,9 +38,8 @@ class Lead(models.Model):
     
 
     def get_campaign(self):
-        from campaigns.models import CompanyPublicitaire  # Importation locale
-        return self.campaign_set.all()  # Exemple d'utilisation du modèle lié
-
+        from campaigns.models import CompanyPublicitaire  # Import local
+        return self.campaign_set.all()
 
 
 

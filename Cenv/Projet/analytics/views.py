@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from lead.models import Lead
 from django.db.models import Count
 from campaigns.models import CompanyPublicitaire
-
+from django.db.models import Count, Q
 
 
 def analytics_view(request):
@@ -46,6 +46,8 @@ def lead_conversion_data(request):
 
 
 
+
+
 def conversion_report_view(request):
     # Obtenir toutes les campagnes
     campaigns = CompanyPublicitaire.objects.all()
@@ -53,15 +55,20 @@ def conversion_report_view(request):
 
     # Calculer les conversions pour chaque campagne
     for campaign in campaigns:
-        leads = Lead.objects.filter(campaign=campaign.name)  # Remplacez campaign.name par le champ approprié si nécessaire
+        # Leads associés à cette campagne
+        leads = campaign.leads.all()
         total_leads = leads.count()
+        # Leads convertis (statut "Converti")
         conversions = leads.filter(statut='Converti').count()
+        # Calculer le taux de conversion (éviter la division par zéro)
+        conversion_rate = (conversions / total_leads * 100) if total_leads > 0 else 0
 
+        # Ajouter les données pour chaque campagne
         data.append({
             'campaign': campaign.name,
             'leads': total_leads,
-            'conversions': conversions
+            'conversions': conversions,
+            'conversion_rate': f"{conversion_rate:.2f}%"
         })
 
     return JsonResponse(data, safe=False)
-

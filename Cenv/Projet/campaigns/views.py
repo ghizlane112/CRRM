@@ -9,7 +9,7 @@ from .models import CompanyPublicitaire
 
 
 def campaign_list(request):
-    campaigns = CompanyPublicitaire.objects.all()
+    campaigns = CompanyPublicitaire.objects.prefetch_related('leads').all()
     context = {
         'campaigns': campaigns,
     }
@@ -18,22 +18,16 @@ def campaign_list(request):
 
 
 
-
-
-
-
 def add_campaign(request):
     if request.method == 'POST':
         form = CampaignForm(request.POST)
         if form.is_valid():
-            form.save()
+            campaign = form.save()  # Sauvegarde la campagne et les relations Many-to-Many
             return redirect('campaign_list')
     else:
         form = CampaignForm()
+
     context = {
         'form': form,
     }
     return render(request, 'campaigns/add_campaign.html', context)
-
-
-
