@@ -14,14 +14,14 @@
         }
         .chart-container {
             width: 80%;
-            max-width: 600px; /* Largeur maximale du conteneur des graphiques */
+            max-width: 600px;
             margin: 20px auto;
         }
         canvas {
             display: block;
             margin: 10px auto;
-            height: 200px !important; /* Hauteur des graphiques */
-            width: 400px !important; /* Largeur des graphiques */
+            height: 200px !important;
+            width: 400px !important;
         }
         .table-container {
             width: 80%;
@@ -54,9 +54,9 @@
             left: 17.5%;
             overflow: auto;
             box-shadow: 
-                2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
-                4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
-                6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
+                2px 2px 5px rgba(0, 0, 0, 0.2),
+                4px 4px 10px rgba(0, 0, 0, 0.4),
+                6px 6px 15px rgba(0, 0, 0, 0.6);
         }
         @media (max-width: 768px) {
             .right-left {
@@ -176,22 +176,19 @@
                 .catch(error => console.error('Erreur:', error));
 
             // Charger les rapports de conversion par campagne dans le tableau
-            document.addEventListener('DOMContentLoaded', function() {
-        // Charger les rapports de conversion par campagne dans le tableau
-        fetch('{% url "conversion_report_data" %}')
-            .then(response => response.json())
-            .then(data => {
-                const tableBody = document.getElementById('conversionReportTable').getElementsByTagName('tbody')[0];
-                data.forEach(item => {
-                    const row = tableBody.insertRow();
-                    row.insertCell().textContent = item.campaign;
-                    row.insertCell().textContent = item.leads;
-                    row.insertCell().textContent = item.conversions;
-                    row.insertCell().textContent = item.conversion_rate;
-                });
-            })
-            .catch(error => console.error('Erreur:', error));
-    });
+            fetch('{% url "conversion_report_data" %}')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('conversionReportTable').getElementsByTagName('tbody')[0];
+                    data.forEach(item => {
+                        const row = tableBody.insertRow();
+                        row.insertCell().textContent = item.campaign;
+                        row.insertCell().textContent = item.leads;
+                        row.insertCell().textContent = item.conversions;
+                        row.insertCell().textContent = item.conversion_rate;
+                    });
+                })
+                .catch(error => console.error('Erreur:', error));
         });
     </script>
 </body>
