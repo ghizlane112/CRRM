@@ -12,6 +12,7 @@ class Notification(models.Model):
     message = models.TextField()
     is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    is_notified = models.BooleanField(default=False)  # Pour marquer les rappels déjà notifiés
 
     def __str__(self):
         return f'Notification for {self.recipient.username} from {self.sender.username}'
@@ -23,6 +24,7 @@ class Reminder(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     reminder_time = models.DateTimeField()
     note = models.TextField()
+    is_sent = models.BooleanField(default=False)  # Ajoutez ce champ
 
     def __str__(self):
         return f"Rappel pour {self.event.title} le {self.reminder_time}"

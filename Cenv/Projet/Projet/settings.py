@@ -29,14 +29,13 @@ DEBUG = True
 
 
 ALLOWED_HOSTS = [
-    '2fab-196-118-150-200.ngrok-free.app',
+    '91a7-196-118-150-200.ngrok-free.app',
     'localhost',
     '127.0.0.1',
 ]
 
 CSRF_TRUSTED_ORIGINS = [  
-       
-       'https://2fab-196-118-150-200.ngrok-free.app'
+       'https://91a7-196-118-150-200.ngrok-free.app'
        
         
 ]
@@ -99,7 +98,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Projet.wsgi.application'
 
-
+#######################################3
 
 Q_CLUSTER = {
     'name': 'Projet',
@@ -179,7 +178,7 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Europe/Paris'
 
-
+BROKER_URL = 'redis://localhost:6379/0'
 ################################################33
 GOOGLE_ADS_CLIENT_ID = '284086208728-hudlgh08uut7cq5lbbi9u5n79p5t7fp4.apps.googleusercontent.com'
 GOOGLE_ADS_CLIENT_SECRET = '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'

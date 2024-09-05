@@ -12,17 +12,22 @@ from django.http import JsonResponse
 
 @login_required
 def notifications(request):
-    # Récupère les notifications pour l'utilisateur connecté
+    if request.method == 'POST':
+        # Marquer les notifications comme lues
+        notification_ids = request.POST.getlist('notification_ids[]')
+        Notification.objects.filter(id__in=notification_ids, recipient=request.user).update(is_read=True)
+        return JsonResponse({'status': 'success'})
+
+    # GET request handling
     notifications = Notification.objects.filter(recipient=request.user).order_by('-created_at')
     unread_count = notifications.filter(is_read=False).count()  # Compte les notifications non lues
-    
+
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         # Retourne les données en JSON pour les appels AJAX
-        return JsonResponse({'unread_count': unread_count})
+        notifications_data = list(notifications.values('id', 'sender', 'message', 'created_at', 'is_read'))
+        return JsonResponse({'unread_count': unread_count, 'notifications': notifications_data})
 
     return render(request, 'notification/notifications.html', {'notifications': notifications, 'unread_count': unread_count})
-
-
 
 
 

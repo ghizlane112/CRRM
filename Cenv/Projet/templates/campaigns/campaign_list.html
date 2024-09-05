@@ -85,7 +85,7 @@
                 <th>Date de Fin</th>
                 <th>Budget</th>
                 <th>Nom de l'Entreprise</th>
-                <th>Nombre de Leads</th>
+                <th> Leads</th>
             </tr>
         </thead>
         <tbody>
@@ -96,7 +96,9 @@
                     <td>{{ campaign.end_date }}</td>
                     <td>{{ campaign.budget }}</td>
                     <td>{{ campaign.nom_entreprise|default:"Non spécifié" }}</td>
-                    <td>{{ campaign.num_leads }}</td>
+                    <td>  {% for lead in campaign.leads.all %}
+                        {{ lead.prenom }} {{ lead.nom }}<br>
+                    {% endfor %}</td>
                 </tr>
             {% endfor %}
         </tbody>

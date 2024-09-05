@@ -50,14 +50,12 @@
             width: 100%;
         }
 
-
         /* Container pour les boutons de notification et de profil */
-.nav-buttons {
-    display: flex;
-    align-items: center;
-    margin-right: 23px; /* Espacement à droite du profil */
-}
-        /* Style du bouton de profil */
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+            margin-right: 23px; /* Espacement à droite du profil */
+        }
         .profile-btn {
             border-radius: 50%;
             width: 40px;
@@ -72,7 +70,6 @@
             position: relative;
             text-align: center;
             font-size: 16px;
-            
         }
         .profile-menu {
             display: none;
@@ -84,7 +81,7 @@
             z-index: 1000;
             border-radius: 5px;
         }
-        .profile-menu a, .profile-menu button ,.notification-menu a {
+        .profile-menu a, .profile-menu button, .notification-menu a {
             display: block;
             padding: 10px;
             color: #333;
@@ -107,6 +104,7 @@
         .notification-btn {
             position: relative;
             cursor: pointer;
+            right: 32px;
             font-size: 24px; /* Adjust size as needed */
         }
         .notification-menu {
@@ -136,22 +134,20 @@
             border-bottom: none;
         }
         .notification-count {
-    background-color: red;
-    color: white;
-    border-radius: 50%;
-    padding: 2px 6px;
-    font-size: 12px;
-    position: absolute;
-    top: -5px; /* Ajustez selon vos besoins */
-    right: -5px; /* Ajustez selon vos besoins */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-width: 20px; /* Ajustez selon vos besoins */
-    height: 20px; /* Ajustez selon vos besoins */
-}
-
-
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+            position: absolute;
+            top: -5px; /* Ajustez selon vos besoins */
+            right: -5px; /* Ajustez selon vos besoins */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 15px; /* Ajustez selon vos besoins */
+            height: 20px; /* Ajustez selon vos besoins */
+        }
     </style>
 </head>
 <body>
@@ -166,63 +162,33 @@
             </div>
         </form>
 
-
-
-
         <div class="nav-buttons">
             <div class="notification-btn" id="notificationBtn">
                 🔔
-                <span class="notification-badge" id="notificationCount">{{ unread_count }}</span>
+                <span class="notification-count" id="notificationCount">{{ unread_count }}</span>
                 <div class="notification-menu" id="notificationMenu">
-                    
-                    {% if notifications %}
-                        <ul>
-                            {% for notification in notifications %}
-                                <li>
-                                    <strong>From:</strong> {{ notification.sender }}<br>
-                                    <strong>Message:</strong> {{ notification.message }}<br>
-                                    <strong>Received at:</strong> {{ notification.created_at }}<br>
-                                    {% if not notification.is_read %}
-                                        <span>Unread</span>
-                                    {% endif %}
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        <p>No notifications</p>
-                    {% endif %}
+                    <!-- Les notifications seront chargées ici -->
+                    <p>Loading notifications...</p>
                 </div>
             </div>
-            
 
-
-
-
-
-        <div class="profile-btn" id="profileBtn">
-            <!-- Affiche la première lettre du nom d'utilisateur -->
-            {{ user.username|slice:":1"|upper }}
-            <div class="profile-menu" id="profileMenu">
-                <a href="{% url 'view_profile' %}">Profile</a>
-                <form action="{% url 'logout' %}" method="post" style="margin: 0;">
-                    {% csrf_token %}
-                    <button type="submit">Logout</button>
-                </form>
+            <div class="profile-btn" id="profileBtn">
+                {{ user.username|slice:":1"|upper }}
+                <div class="profile-menu" id="profileMenu">
+                    <a href="{% url 'view_profile' %}">Profile</a>
+                    <form action="{% url 'logout' %}" method="post" style="margin: 0;">
+                        {% csrf_token %}
+                        <button type="submit">Logout</button>
+                    </form>
+                </div>
             </div>
         </div>
-
-        </div>
-
-
-
-        
-
     </div>
 </nav>
 
 <script src="{% static 'path/to/bootstrap.bundle.min.js' %}"></script>
 <script>
-    document.getElementById('profileBtn').addEventListener('click', function(event) {
+      document.getElementById('profileBtn').addEventListener('click', function(event) {
         const profileMenu = document.getElementById('profileMenu');
         profileMenu.style.display = profileMenu.style.display === 'block' ? 'none' : 'block';
         event.stopPropagation(); // Empêche la propagation de l'événement de clic
@@ -241,50 +207,91 @@
             notificationMenu.style.display = 'none';
         }
     });
+    document.addEventListener('DOMContentLoaded', function() {
+        const notificationBtn = document.getElementById('notificationBtn');
+        const notificationMenu = document.getElementById('notificationMenu');
+        const notificationCount = document.getElementById('notificationCount');
+        
+        // Fonction pour charger les notifications
+        function loadNotifications() {
+            fetch('{% url "notifications" %}', { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                .then(response => response.json())
+                .then(data => {
+                    const notifications = data.notifications;
+                    notificationMenu.innerHTML = notifications.length > 0 
+                        ? notifications.map(n => `
+                            <li data-id="${n.id}">
+                                <strong>From:</strong> ${n.sender}<br>
+                                <strong>Message:</strong> ${n.message}<br>
+                                <strong>Received at:</strong> ${new Date(n.created_at).toLocaleString()}<br>
+                                ${n.is_read ? '' : '<span style="color: red; font-weight: bold;">Unread</span>'}
+                            </li>
+                        `).join('')
+                        : '<p>No notifications</p>';
+                    
+                    updateNotificationCount(data.unread_count);
+                })
+                .catch(error => {
+                    console.error('Error loading notifications:', error);
+                    notificationMenu.innerHTML = '<p>Error loading notifications.</p>';
+                });
+        }
 
+        // Fonction pour mettre à jour le nombre de notifications non lues
+        function updateNotificationCount(count) {
+            notificationCount.textContent = count;
+        }
 
+        // Fonction pour marquer les notifications comme lues
+        function markNotificationsAsRead(notificationIds) {
+            fetch('{% url "notifications" %}', {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: new URLSearchParams({
+                    'notification_ids[]': notificationIds
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    updateNotificationCount(0); // Reset the notification count after marking as read
+                }
+            })
+            .catch(error => {
+                console.error('Error marking notifications as read:', error);
+            });
+        }
 
-
-    document.getElementById('notificationBtn').addEventListener('click', function(event) {
-    const notificationMenu = document.getElementById('notificationMenu');
-    const notificationCount = document.getElementById('notificationCount');
-    if (notificationMenu.style.display === 'block') {
-        notificationMenu.style.display = 'none';
-    } else {
-        loadNotifications(); // Charge les notifications seulement si elles ne sont pas déjà chargées
-        notificationMenu.style.display = 'block';
-    }
-    event.stopPropagation(); // Empêche la propagation de l'événement de clic
-});
-
-document.getElementById('modalClose').addEventListener('click', function() {
-    document.getElementById('notificationModal').style.display = 'none';
-});
-
-function loadNotifications() {
-    fetch('{% url "notifications" %}')
-        .then(response => response.text())
-        .then(html => {
-            document.querySelector('#notificationMenu').innerHTML = html;
-            updateNotificationCount(); // Met à jour le nombre de notifications non lues
-        })
-        .catch(error => {
-            console.error('Error loading notifications:', error);
-            document.querySelector('#notificationMenu').innerHTML = '<p>Error loading notifications.</p>';
+        // Événement de clic pour afficher/cacher les notifications
+        notificationBtn.addEventListener('click', function(event) {
+            if (notificationMenu.style.display === 'block') {
+                notificationMenu.style.display = 'none';
+            } else {
+                loadNotifications(); // Charge les notifications si non déjà chargées
+                notificationMenu.style.display = 'block';
+            }
+            event.stopPropagation();
         });
-}
 
-function updateNotificationCount() {
-    fetch('{% url "notifications" %}')
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('notificationCount').textContent = data.unread_count;
-        })
-        .catch(error => {
-            console.error('Error fetching notification count:', error);
+        // Marque les notifications comme lues lorsque l'icône de notification est cliquée
+        notificationBtn.addEventListener('click', function() {
+            const notificationIds = Array.from(notificationMenu.querySelectorAll('li[data-id]')).map(li => li.dataset.id);
+            if (notificationIds.length > 0) {
+                markNotificationsAsRead(notificationIds);
+            }
         });
-}
 
+        // Fermer le menu si l'utilisateur clique en dehors
+        document.addEventListener('click', function(event) {
+            if (!notificationBtn.contains(event.target)) {
+                notificationMenu.style.display = 'none';
+            }
+        });
+    });
 
     document.getElementById('search-form').addEventListener('submit', function(event) {
        event.preventDefault(); // Empêche le formulaire de se soumettre de manière traditionnelle
@@ -299,7 +306,6 @@ function updateNotificationCount() {
         }
     }
 
-    
 </script>
 </body>
 </html>

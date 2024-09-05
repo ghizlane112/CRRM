@@ -78,11 +78,15 @@
     width: 590px;
     height: 120px;
     border-radius: 17px;
-    background-color: white;
     border-color: #3D46F2;
     border-style: double;
     top: 219px;
     left:19px;
+}
+
+#thrid-card .thrid-card-desous1{
+    width: 160px;
+   
 }
 #forth-card{
     width: 590px;
@@ -91,6 +95,15 @@
     top: 329px;
     left:19px;
     background-color: white;
+}
+#forth-card canvas,#cinquieme-card canvas {
+    height: 150px !important; /* Ajuster la hauteur */
+    width: 300px !important;  /* Ajuster la largeur */
+    margin: 0 auto;           /* Centrer le graphique */
+}
+#cinquieme-card canvas {
+    position: relative;
+   right: 47px;
 }
 
 #cinquieme-card{
@@ -118,7 +131,6 @@ text-decoration: none;
 .lead-list-item {
     color: #333;
     padding: 10px;
-
     border-bottom: 1px solid #ddd;
 }
 
@@ -295,17 +307,51 @@ border-style:groove;
         <div class="card-body" style="width: 33rem;">
           
            
+
+ <!----troisieme card-desous1-->
+ <div class="card text-center text-white mb-3" id="thrid-card-desous1">
+    <div class="card-body" >
+      
+       
+    
+    </div>
+</div>
+
+
+
+<!----troisieme card-desous2-->
+<div class="card text-center text-white mb-3" id="thrid-card-desous2">
+    <div class="card-body" >
+      
+       
+    
+    </div>
+</div>
+
+
+
+<!----troisieme card-desous3-->
+<div class="card text-center text-white mb-3" id="thrid-card-desous3">
+    <div class="card-body" >
+      
+       
+    
+    </div>
+    </div>
         
-        </div>
+
+
+    </div>
     </div>
 
 
- <!----quatrieme card-->
+
+
+ <!-- Quatrième card - Taux de Conversion par Campagne -->
  <div class="card text-center text-white mb-3" id="forth-card">
     <div class="card-body" style="width: 33rem;">
-      
-       
-    
+        <h3>Taux de Conversion par Campagne</h3>
+        <canvas id="forthCardChart"></canvas>
     </div>
 </div>
 
@@ -313,16 +359,17 @@ border-style:groove;
 
 
 
-
-
- <!----cinquieme card-->
- <div class="card text-center text-white mb-3" id="cinquieme-card">
+<!-- Cinquième card - Répartition des Leads par Source -->
+<div class="card text-center text-white mb-3" id="cinquieme-card">
     <div class="card-body" style="width: 33rem;">
-      
-       
-    
+        <h3>Répartition des Leads par Source</h3>
+        <canvas id="fifthCardChart"></canvas>
     </div>
 </div>
+
+
+
+
 
 
 
@@ -386,6 +433,7 @@ border-style:groove;
 
 
 <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.2/main.min.js'></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
@@ -399,6 +447,107 @@ border-style:groove;
         });
 
         calendar.render();
+    });
+
+
+
+
+
+    /***********************************************************/
+
+    document.addEventListener('DOMContentLoaded', function() {
+            // Graphique des conversions par campagne dans le quatrième card
+            fetch('{% url "lead_conversion_data" %}')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data || data.length === 0) {
+                        console.error('Aucune donnée disponible pour le graphique des conversions par campagne.');
+                        return;
+                    }
+
+                    const labels = data.map(item => item.campaign);
+                    const counts = data.map(item => item.conversions);
+
+                    const backgroundColors = counts.map(() => 
+                        'rgba(' + [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)].join(',') + ', 0.2)'
+                    );
+                    const borderColors = counts.map(() => 
+                        'rgba(' + [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)].join(',') + ', 1)'
+                    );
+
+                    const ctxForthCard = document.getElementById('forthCardChart').getContext('2d');
+                    if (!ctxForthCard) {
+                        console.error('Contexte du canvas non trouvé pour le quatrième card.');
+                        return;
+                    }
+
+                    new Chart(ctxForthCard, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Conversions par Campagne',
+                                data: counts,
+                                backgroundColor: backgroundColors,
+                                borderColor: borderColors,
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(error => console.error('Erreur lors du chargement des données pour le graphique des conversions par campagne :', error));
+
+        // Graphique de répartition des leads par source dans le cinquième card
+        fetch('{% url "lead_source_data" %}')
+            .then(response => response.json())
+            .then(data => {
+                if (!data || data.length === 0) {
+                    console.error('Aucune donnée disponible pour le graphique de répartition des leads par source.');
+                    return;
+                }
+
+                const labels = data.map(item => item.source);
+                const counts = data.map(item => item.count);
+
+                const backgroundColors = counts.map(() => 
+                    'rgba(' + [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)].join(',') + ', 0.2)'
+                );
+                const borderColors = counts.map(() => 
+                    'rgba(' + [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)].join(',') + ', 1)'
+                );
+
+                const ctxFifthCard = document.getElementById('fifthCardChart').getContext('2d');
+                if (!ctxFifthCard) {
+                    console.error('Contexte du canvas non trouvé pour le cinquième card.');
+                    return;
+                }
+
+                new Chart(ctxFifthCard, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Répartition des Leads par Source',
+                            data: counts,
+                            backgroundColor: backgroundColors,
+                            borderColor: borderColors,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true
+                    }
+                });
+            })
+            .catch(error => console.error('Erreur lors du chargement des données pour le graphique de répartition des leads par source :', error));
     });
 </script>
 

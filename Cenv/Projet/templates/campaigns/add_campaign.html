@@ -1,29 +1,27 @@
 {% include 'parts/nav.html' %}
 
-
 <!DOCTYPE html>
 <html>
 <head>
     <title>Ajouter une Campagne</title>
     <style>
-
         /* Style pour la navigation et le layout */
         .right-left {
-            background-color: #F6F2F2; 
+            background-color: #F6F2F2;
             border-radius: 15px;
             height: 100%;
             width: 81%;
             position: absolute;
             top: 131px;
             left: 17.5%;
-            overflow: hidden;
+            overflow-y: auto;
             box-shadow: 
-                2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
-                4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
-                6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
+                2px 2px 5px rgba(0, 0, 0, 0.2),
+                4px 4px 10px rgba(0, 0, 0, 0.4),
+                6px 6px 15px rgba(0, 0, 0, 0.6);
             padding: 20px;
         }
-       .right-left form {
+        .right-left form {
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
@@ -32,13 +30,11 @@
             max-width: 600px;
         }
         h1 {
-          
             color: #333;
             margin-bottom: 20px;
             text-align: center;
         }
-
-       .right-left input,
+        .right-left input,
         .right-left select,
         .right-left textarea {
             width: 100%;
@@ -52,8 +48,7 @@
         .right-left textarea {
             resize: vertical;
         }
-
-       .right-left button[type="submit"] {
+        .right-left button[type="submit"] {
             background-color: #3498db;
             color: #fff;
             border: none;
@@ -65,11 +60,10 @@
             display: block;
             width: 100%;
         }
-        .right-left   button[type="submit"]:hover {
+        .right-left button[type="submit"]:hover {
             background-color: #84c9f7;
         }
-
-       .right-left a {
+        .right-left a {
             display: block;
             margin-top: 20px;
             color: #3498db;
@@ -77,24 +71,51 @@
             font-weight: bold;
             text-align: center;
         }
-
         .right-left a:hover {
             text-decoration: underline;
         }
-          </style>
+    </style>
 </head>
 <body>
-     <div class="left-side">
+    <div class="left-side">
         {% include 'parts/button.html' %}
     </div>
     <div class="right-left">
-    <h1>Ajouter une Nouvelle Campagne</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Ajouter la Campagne</button>
-    </form>
-    <a href="{% url 'campaign_list' %}">Retour à la Liste des Campagnes</a>
-</div>
+        <h1>Ajouter une Nouvelle Campagne</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <!-- Nom de la campagne -->
+            <label for="name">Nom de la campagne</label>
+            {{ form.name }}
+
+            <!-- Email de contact -->
+            <label for="contact_email">Email de contact</label>
+            {{ form.contact_email }}
+
+            <!-- Date de début -->
+            <label for="start_date">Date de début</label>
+            {{ form.start_date }}
+
+            <!-- Date de fin -->
+            <label for="end_date">Date de fin</label>
+            {{ form.end_date }}
+
+            <!-- Budget -->
+            <label for="budget">Budget</label>
+            {{ form.budget }}
+
+            <!-- Nom de l'entreprise -->
+            <label for="nom_entreprise">Nom de l'entreprise</label>
+            {{ form.nom_entreprise }}
+
+            <!-- Liste déroulante pour sélectionner les leads -->
+            <label for="leads">Sélectionner des leads</label>
+            {{ form.leads }} <!-- Ce champ affichera la liste des leads -->
+
+            <!-- Bouton pour soumettre le formulaire -->
+            <button type="submit">Enregistrer la Campagne</button>
+        </form>
+        <a href="{% url 'campaign_list' %}">Retour à la Liste des Campagnes</a>
+    </div>
 </body>
 </html>
