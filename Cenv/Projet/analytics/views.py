@@ -72,3 +72,20 @@ def conversion_report_view(request):
         })
 
     return JsonResponse(data, safe=False)
+
+
+
+
+
+def dashboard_view(request):
+    total_leads = Lead.objects.count()
+    total_conversions = Lead.objects.filter(statut='Converti').count()  # Ajuster selon le champ de statut de conversion
+    total_campaigns = CompanyPublicitaire.objects.count()
+
+    context = {
+        'total_leads': total_leads,
+        'total_conversions': total_conversions,
+        'total_campaigns': total_campaigns,
+    }
+    
+    return render(request, 'parts/state.html', context)
