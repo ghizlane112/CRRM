@@ -1,209 +1,196 @@
-{% include 'parts/nav.html' %}
+{%include 'parts/nav.html'%}
 
-<style>
- :root {
-    --body-bg: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    --msger-bg: #fff;
-    --border: 2px solid #ddd;
-    --left-msg-bg: #ececec;
-    --right-msg-bg: #579ffb;
-    --header-bg: #eee;
-    --header-text-color: #666;
-    --input-bg: #ddd;
-    --send-btn-bg: #00c441;
-    --send-btn-hover-bg: #00b431;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+ 
+    <style>
+        .right-left{
+background-color:#F6F2F2; 
+border-radius: 15px;
+height: 100%;
+width: 81%;
+max-width: 87%;
+position: absolute;
+top: 131px;
+left:17.5%;
+overflow: auto;
+box-shadow: 
+        2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
+        4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
+        6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
+    }
+        .chat-container {
+            display: flex;
+            height: 90vh;
+        }
 
-/* Container principal avec deux colonnes */
-.right-side {
-    display: flex;
-    height: calc(100vh - 131px); /* Ajuster la hauteur en fonction de la nav */
-    width: 81%;
-    height: auto;
-    position: absolute;
-    top: 131px;
-    left: 17.5%;
-    background-color: #F6F2F2;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 
-        2px 2px 5px rgba(0, 0, 0, 0.2),
-        4px 4px 10px rgba(0, 0, 0, 0.4),
-        6px 6px 15px rgba(0, 0, 0, 0.6);
-}
+        .user-list {
+            width: 25%;
+            background-color: #f5f5f5;
+            border-right: 1px solid #ccc;
+            overflow-y: auto;
+        }
 
-/* Style pour la colonne de gauche avec la liste d'utilisateurs */
-.user-list {
-    flex: 1 0 35%; /* Largeur initiale de 35%, flexible avec possibilité d'ajustement */
-    border-right: var(--border);
-    background: #fff;
-    overflow-y: auto;
-    padding: 10px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-}
+        .user-list ul {
+            list-style: none;
+            padding: 0;
+        }
 
-/* Style pour la partie chat */
-.chat-area {
-    flex: 1 0 65%; /* Largeur initiale de 65%, flexible avec possibilité d'ajustement */
-    display: flex;
-    flex-direction: column;
-    background: var(--msger-bg);
-    overflow: hidden;
-}
+        .user-list ul li {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
 
-/* Header de chat */
-.msger-header {
-    background: var(--header-bg);
-    padding: 10px;
-    border-bottom: var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+        .user-list ul li a {
+            text-decoration: none;
+            color: black;
+        }
 
-.msger-header-title {
-    font-size: 16px;
-}
+        .chat-area {
+            width: 75%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px;
+        }
 
-/* Liste des utilisateurs dans la colonne de gauche */
-.people-list {
-    padding: 10px;
-    background: #f5f5f5;
-    border-bottom: 1px solid #ddd;
-}
+        .msger-header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
 
-.people-list ul {
-    list-style: none;
-    padding: 0;
-    margin: 0; /* Supprimer la marge pour éviter le débordement */
-}
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #fafafa;
+            border: 1px solid #ddd;
+        }
 
-.people-list li {
-    margin-bottom: 10px;
-    padding: 10px;
-    background: #fff;
-    border-radius: 5px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    overflow: hidden; /* Assurer que le texte ne déborde */
-    word-break: break-word; /* Éviter les débordements de texte */
-}
+        .chat-messages ul {
+            list-style: none;
+            padding: 0;
+        }
 
-/* Zone de chat */
-.chat {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-    overflow-y: auto;
-    background: #F6F2F2;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 
-                0px 4px 4px rgba(0, 0, 0, 0.25), 
-                0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 21px;
-}
+        .chat-messages li {
+            margin-bottom: 10px;
+        }
 
-.chat ul {
-    list-style: none;
-    padding: 0;
-    margin: 0; /* Supprimer la marge pour éviter le débordement */
-}
+        .chat-messages .sent {
+            text-align: right;
+        }
 
-.chat li {
-    margin-bottom: 10px;
-    padding: 10px;
-    background: #448AF7;
-    color: white;
-    border-radius: 5px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
+        .chat-messages .received {
+            text-align: left;
+        }
 
-.chat-form {
-    margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-}
+        .message {
+            display: inline-block;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 70%;
+        }
 
-.chat-form textarea {
-    resize: none;
-    margin-bottom: 10px;
-}
+        .sent .message {
+            background-color: #d1e7dd;
+            border: 1px solid #badbcc;
+        }
 
-</style>
+        .received .message {
+            background-color: #f8d7da;
+            border: 1px solid #f5c2c7;
+        }
 
+        .chat-form {
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+
+        .chat-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .chat-form button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
 <body>
+
     <div class="left-side">
-        {% include 'parts/button.html' %}
+        {%include 'parts/button.html'%}
+    </div>
+    <div class="right-left">
+<div class="chat-container">
+    <!-- Liste des utilisateurs à gauche -->
+    <div class="user-list">
+        <h3>Contacts</h3>
+        <ul>
+            {% for user in users %}
+            <li>
+                <a href="{% url 'inbox' %}?user={{ user.id }}">
+                    {{ user.username }}
+                </a>
+            </li>
+            {% empty %}
+            <li>Aucun utilisateur disponible</li>
+            {% endfor %}
+        </ul>
     </div>
 
-    {% block content %}
-    <div class="right-side">
-        <div id="plist" class="people-list">
-            <!-- Liste des utilisateurs ou contacts -->
-            <div class="user-list">
-                <h3>Contacts</h3>
+    <!-- Zone de chat à droite -->
+    <div class="chat-area">
+        <header class="msger-header">
+            <div class="msger-header-title">
+                Conversation avec {{ request.user.username }}
+            </div>
+        </header>
+
+        <!-- Affichage des messages -->
+        <div class="chat-messages">
             <ul>
-                {% for user in users %}
-                <li>
-                    <a href="{% url 'inbox' %}?user={{ user.id }}">{{ user.username }}</a>
+                {% for message in messages %}
+                <li class="{% if message.sender == request.user %}sent{% else %}received{% endif %}">
+                    <div class="message">
+                        <strong>{{ message.sender.username }}:</strong> {{ message.content }}<br>
+                        <small>{{ message.timestamp }}</small>
+                    </div>
                 </li>
+                {% empty %}
+                <li>Aucun message pour le moment</li>
                 {% endfor %}
             </ul>
-            </div>
         </div>
 
+        <!-- Formulaire d'envoi de message -->
+        <div class="chat-form">
+            <form method="post" action="?user={{ user_id }}">
+                {% csrf_token %}
+                {{ form.receiver }}
+                {{ form.lead }}
+                {{ form.content }}
 
-<div class="chat-area">
-    <header class="msger-header">
-        <div class="msger-header-title">
-            <a href="javascript:void(0);" data-toggle="modal" data-target="#view_info">
-                <!-- Avatar ou image de l'utilisateur -->
-              </a>
-              <div class="chat-about">
-                  <h6 class="m-b-0">{{ request.user.username }}</h6>
-                  <small>Last seen: {{ request.user.last_login }}</small>
-              </div>
-
-        </div>
-    </header>
-
-
-
-        <div class="chat">
-            <div class="chat-header clearfix">
-                <div class="row">
-                    <div class="col-lg-6">
-                       
-                    </div>
-                </div>
-            </div>
-
-            <h2>{% if form %}Send a Message{% else %}Inbox{% endif %}</h2>
-
-            {% if form %}
-                <!-- Formulaire d'envoi de message -->
-                <form method="post" class="chat-form">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit">Send</button>
-                </form>
-                <a href="{% url 'inbox' %}">Back to Inbox</a>
-            {% else %}
-                <!-- Liste des messages reçus -->
-                <ul>
-                    {% for message in messages %}
-                    <li>
-                        <strong>From:</strong> {{ message.sender }}<br>
-                        <strong>To:</strong> {{ message.receiver }}<br>
-                        <strong>Lead:</strong> {{ message.lead }}<br>
-                        <strong>Message:</strong> {{ message.content }}<br>
-                        <strong>Sent at:</strong> {{ message.timestamp }}
-                    </li>
-                    {% endfor %}
-                </ul>
-                <a href="{% url 'send_message' %}">Send a new message</a>
-            {% endif %}
+                <button type="submit">Send</button>
+            </form>
         </div>
     </div>
 </div>
+</div>
 </body>
-{%endblock%}
+</html>

@@ -6,15 +6,16 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
+
 class MessageForm(forms.ModelForm):
-     class Meta:
-         model = Message
-         fields = ['receiver', 'lead', 'content']
-         widgets = {
+    receiver = forms.ModelChoiceField(queryset=User.objects.all(), label="Select Receiver")
+
+    class Meta:
+        model = Message
+        fields = ['receiver','content']
+        widgets = {
             'content': forms.Textarea(attrs={'rows': 3}),
         }
-
-
 
 
 

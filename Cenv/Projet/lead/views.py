@@ -16,6 +16,7 @@ from .forms import LeadForm, NoteForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .serializers import LeadSerializer
 from django.db.models import Q
+from campaigns.models import CompanyPublicitaire
 
 # Create your views here.
 def one(request):
@@ -44,6 +45,43 @@ def dashboard(request):
     return render(request, 'dashboard.html', {
         'leads': leads
     })
+
+
+
+
+
+
+
+
+
+def search_view(request):
+    query = request.GET.get('q')
+    lead_results = []
+    campagne_results = []
+
+    if query:
+        # Rechercher dans le modèle Lead
+        lead_results = Lead.objects.filter(
+            Q(nom__icontains=query) |  # Remplacez par les champs pertinents
+            Q(email__icontains=query)
+        )
+
+        # Rechercher dans le modèle Campagne
+        campagne_results = CompanyPublicitaire.objects.filter(
+            Q(titre__icontains=query) |  # Remplacez par les champs pertinents
+            Q(description__icontains=query)
+        )
+
+    # Combinez les résultats pour les envoyer au template
+    context = {
+        'query': query,
+        'lead_results': lead_results,
+        'campagne_results': campagne_results,
+    }
+
+    return render(request, 'nav.html', context)
+
+
 
 
 def four(request):

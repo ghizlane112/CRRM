@@ -29,13 +29,13 @@ DEBUG = True
 
 
 ALLOWED_HOSTS = [
-    '91a7-196-118-150-200.ngrok-free.app',
+    'fae0-196-118-150-200.ngrok-free.app',
     'localhost',
     '127.0.0.1',
 ]
 
 CSRF_TRUSTED_ORIGINS = [  
-       'https://91a7-196-118-150-200.ngrok-free.app'
+     'https://fae0-196-118-150-200.ngrok-free.app',
        
         
 ]
@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'campaigns',
      'Rendez',
   #  'clients',
+    'channels',
     'communication',
     'django_celery_beat',
     'reports',
@@ -110,7 +111,14 @@ Q_CLUSTER = {
     'bulk': 10,
     'orm': 'default',
 }
+#############################################
+ASGI_APPLICATION = 'Projet.asgi.application'
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
