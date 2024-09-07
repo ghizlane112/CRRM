@@ -1,4 +1,4 @@
-{%include 'parts/nav.html'%}
+{% include 'parts/nav.html' %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,21 +6,21 @@
     <title>Historique des Leads</title>
     <style>
         /* Intégration de styles cohérents avec lead_list */
-        .right-left{
-background-color:#F6F2F2; 
-border-radius: 15px;
-height: 100%;
-width: 81%;
-max-width: 87%;
-position: absolute;
-top: 131px;
-left:17.5%;
-overflow-y: auto;
-box-shadow: 
-        2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
-        4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
-        6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
-    }
+        .right-left {
+            background-color: #F6F2F2; 
+            border-radius: 15px;
+            height: 100%;
+            width: 81%;
+            max-width: 87%;
+            position: absolute;
+            top: 131px;
+            left: 17.5%;
+            overflow-y: auto;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
+                4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
+                6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
+        }
         h1 {
             color: #3837D3;
             font-style: Abhaya Libre ExtraBold;
@@ -45,65 +45,77 @@ box-shadow:
         /* Styles de pagination */
         .pagination {
             margin-top: 20px;
+            text-align: center;
         }
         .pagination a {
             padding: 8px 16px;
             margin: 0 5px;
             border: 1px solid #ddd;
+            text-decoration: none;
+            color: #007bff;
+        }
+        .pagination .current {
+            padding: 8px 16px;
+            margin: 0 5px;
+            border: 1px solid #ddd;
+            background-color: #f8f9fa;
+        }
+        .pagination a:hover {
+            background-color: #e9ecef;
         }
     </style>
 </head>
 <body>
     <div class="left-side">
-        {%include 'parts/button.html'%}
+        {% include 'parts/button.html' %}
     </div>
     <div class="right-left">
-    <h1>Historique des changements pour le lead {{ lead.nom }} {{ lead.prenom }}</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Action</th>
-                <th>Date</th>
-                <th>Utilisateur</th>
-                <th>Détails</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for history in histories %}
+        <h1>Historique des changements pour le lead {{ lead.nom }} {{ lead.prenom }}</h1>
+        <table>
+            <thead>
                 <tr>
-                    <td>{{ history.action }}</td>
-                    <td>{{ history.timestamp }}</td>
-                    <td>{{ history.user.username }}</td>
-                    <td>{{ history.details }}</td>
+                    <th>Action</th>
+                    <th>Date</th>
+                    <th>Utilisateur</th>
+                    <th>Détails</th>
                 </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="4">Aucun historique disponible.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for history in histories %}
+                    <tr>
+                        <td>{{ history.action }}</td>
+                        <td>{{ history.timestamp }}</td>
+                        <td>{{ history.user.username }}</td>
+                        <td>{{ history.details }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">Aucun historique disponible.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <!-- Pagination -->
-    <div class="pagination">
-        <span class="step-links">
-            {% if histories.has_previous %}
-                <a href="?page=1">&laquo; Première</a>
-                <a href="?page={{ histories.previous_page_number }}">Précédente</a>
-            {% endif %}
-        </span>
+        <!-- Pagination -->
+        <div class="pagination">
+            <span class="step-links">
+                {% if histories.has_previous %}
+                    <a href="?page=1">&laquo; Première</a>
+                    <a href="?page={{ histories.previous_page_number }}">Précédente</a>
+                {% endif %}
+            </span>
 
-        <span class="current">
-            Page {{ histories.number }} sur {{ histories.paginator.num_pages }}.
-        </span>
+            <span class="current">
+                Page {{ histories.number }} sur {{ histories.paginator.num_pages }}.
+            </span>
 
-        <span class="step-links">
-            {% if histories.has_next %}
-                <a href="?page={{ histories.next_page_number }}">Suivante</a>
-                <a href="?page={{ histories.paginator.num_pages }}">Dernière &raquo;</a>
-            {% endif %}
-        </span>
+            <span class="step-links">
+                {% if histories.has_next %}
+                    <a href="?page={{ histories.next_page_number }}">Suivante</a>
+                    <a href="?page={{ histories.paginator.num_pages }}">Dernière &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
     </div>
-</div>
 </body>
 </html>

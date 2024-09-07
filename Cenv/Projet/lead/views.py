@@ -233,10 +233,26 @@ def lead_edit(request, pk):
 
 
 
-
 def lead_history(request):
     histories = LeadHistory.objects.all().order_by('-timestamp')
-    return render(request, 'leadfile/LeadHistory.html', {'histories': histories})
+    
+    # Pagination
+    paginator = Paginator(histories, 10)  # 10 éléments par page
+    page_number = request.GET.get('page')
+    
+    try:
+        histories_page = paginator.get_page(page_number)
+    except PageNotAnInteger:
+        histories_page = paginator.get_page(1)
+    except EmptyPage:
+        histories_page = paginator.get_page(paginator.num_pages)
+    
+    return render(request, 'leadfile/LeadHistory.html', {'histories': histories_page})
+
+
+
+
+
 
 @login_required
 @require_POST
