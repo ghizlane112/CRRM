@@ -87,16 +87,13 @@ def search_view(request):
 def four(request):
     return render(request,'parts/state.html')
 
-
 def lead_list(request):
-    leads = Lead.objects.all()
+    # Filtrer les leads pour exclure les archivés
+    leads = Lead.objects.filter(is_deleted=False)
 
-    #return render(request, 'leadfile/lead_list.html', {'leads': leads})
     search_text = request.GET.get('search', '')
     sort_field = request.GET.get('sort', '')
 
-
-    # Appliquer les filtres si le texte de recherche est présent
     if search_text:
         leads = leads.filter(
             Q(nom__icontains=search_text) |
@@ -108,24 +105,18 @@ def lead_list(request):
             Q(note__icontains=search_text)
         )
 
-
-     # Appliquer le tri si un champ de tri est sélectionné
     if sort_field:
         leads = leads.order_by(sort_field)
-    # Rendre les options de filtre disponibles pour le template
 
-    # Pagination
-    paginator = Paginator(leads, 8)  # 5 leads par page
-    page_number = request.GET.get('page')  # Utiliser 1 comme page par défaut
+    paginator = Paginator(leads, 8)  # 8 leads par page
+    page_number = request.GET.get('page')
 
     try:
         leads = paginator.get_page(page_number)
     except PageNotAnInteger:
-        leads = paginator.get_page(1)  # Page 1 si la page demandée n'est pas un entier
+        leads = paginator.get_page(1)
     except EmptyPage:
-        leads = paginator.get_page(paginator.num_pages)  # Dernière page si la page demandée est vide
-
-
+        leads = paginator.get_page(paginator.num_pages)
 
     return render(request, 'leadfile/lead_list.html', {
         'leads': leads,
@@ -246,16 +237,12 @@ def lead_edit(request, pk):
 def lead_history(request):
     histories = LeadHistory.objects.all().order_by('-timestamp')
     return render(request, 'leadfile/LeadHistory.html', {'histories': histories})
-#def lead_history(request, pk):
- #   lead = get_object_or_404(Lead, pk=pk)
-  #  histories = LeadHistory.objects.filter(lead=lead).order_by('-timestamp')
-   # return render(request, 'leadfile/lead_history.html', {'lead': lead, 'histories': histories})
 
 @login_required
 @require_POST
 def lead_delete(request, pk):
     lead = get_object_or_404(Lead, pk=pk)
-    
+
     # Enregistrez l'action dans l'historique
     LeadHistory.objects.create(
         lead=lead,
@@ -263,14 +250,13 @@ def lead_delete(request, pk):
         action='deleted',
         details=f'Lead archivé avec les informations: {lead}'
     )
-    
+
     # Archiver le lead au lieu de le supprimer
     lead.is_deleted = True
     lead.deleted_at = timezone.now()
     lead.save()
 
-    return redirect('lead_list')
-
+    return redirect('lead_list')  # Redirige vers la liste des leads
 
 
 def archive_lead(request, lead_id):

@@ -8,55 +8,46 @@
     <title>Chat</title>
  
     <style>
-        .right-left{
-background-color:#F6F2F2; 
-border-radius: 15px;
-height: 100%;
-width: 81%;
-max-width: 87%;
-position: absolute;
-top: 131px;
-left:17.5%;
-overflow: auto;
-box-shadow: 
-        2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
-        4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
-        6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
-    }
-        .chat-container {
-            display: flex;
-            height: 90vh;
+          .right-left {
+            background-color: #F6F2F2; 
+            border-radius: 15px;
+            height: 100%;
+            width: 81%;
+            max-width: 87%;
+            position: absolute;
+            top: 131px;
+            left: 17.5%;
+            overflow: auto;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.2),
+                4px 4px 10px rgba(0, 0, 0, 0.4),
+                6px 6px 15px rgba(0, 0, 0, 0.6);
         }
+/* Styles pour le conteneur principal */
+.chat-container {
+    display: flex;
+    height: 90vh;
+    width: 100%;
+}
 
-        .user-list {
-            width: 25%;
-            background-color: #f5f5f5;
-            border-right: 1px solid #ccc;
-            overflow-y: auto;
-        }
+/* Style pour la liste des utilisateurs */
+.user-list {
+    width: 25%;
+    background-color: #f5f5f5;
+    border-right: 1px solid #ccc;
+    overflow-y: auto;
+    padding: 10px;
+}
 
-        .user-list ul {
-            list-style: none;
-            padding: 0;
-        }
+/* Style pour la zone de chat */
+.chat-area {
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+}
 
-        .user-list ul li {
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
-        }
-
-        .user-list ul li a {
-            text-decoration: none;
-            color: black;
-        }
-
-        .chat-area {
-            width: 75%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 10px;
-        }
 
         .msger-header {
             background-color: #007bff;
@@ -108,9 +99,14 @@ box-shadow:
             border: 1px solid #f5c2c7;
         }
 
-        .chat-form {
+        .chat-form .user-list {
             border-top: 1px solid #ccc;
             padding-top: 10px;
+            width: 25%;
+            background-color: #f5f5f5;
+            border-right: 1px solid #ccc;
+           
+            padding: 10px;
         }
 
         .chat-form textarea {
@@ -138,22 +134,17 @@ box-shadow:
     </div>
     <div class="right-left">
 <div class="chat-container">
-    <!-- Liste des utilisateurs à gauche -->
+   
     <div class="user-list">
         <h3>Contacts</h3>
         <ul>
-            {% for user in users %}
-            <li>
-                <a href="{% url 'inbox' %}?user={{ user.id }}">
-                    {{ user.username }}
-                </a>
-            </li>
-            {% empty %}
-            <li>Aucun utilisateur disponible</li>
-            {% endfor %}
+            <form method="post" action="?user={{ user_id }}">
+       {% csrf_token %}
+       {{ form.lead }}
+               
+<li> {{ form.receiver }}</li>
         </ul>
     </div>
-
     <!-- Zone de chat à droite -->
     <div class="chat-area">
         <header class="msger-header">
@@ -182,10 +173,7 @@ box-shadow:
         <div class="chat-form">
             <form method="post" action="?user={{ user_id }}">
                 {% csrf_token %}
-                {{ form.receiver }}
-                {{ form.lead }}
                 {{ form.content }}
-
                 <button type="submit">Send</button>
             </form>
         </div>

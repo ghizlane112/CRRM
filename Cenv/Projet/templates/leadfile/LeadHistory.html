@@ -1,37 +1,64 @@
-{% include 'parts/nav.html' %}
-
-
+{%include 'parts/nav.html'%}
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Historique du Lead</title>
+    <title>Historique des Leads</title>
     <style>
-
-.right-side {   
-            background-color: #F6F2F2; 
-            border-radius: 15px;
-            height: 100vh;
-            width: 81%;
-            overflow: hidden;
-            position: absolute;
-            top: 131px;
-            left: 17.5%;
-            box-shadow: 
-                2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
-                4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
-                6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
+        /* Intégration de styles cohérents avec lead_list */
+        .right-left{
+background-color:#F6F2F2; 
+border-radius: 15px;
+height: 100%;
+width: 81%;
+max-width: 87%;
+position: absolute;
+top: 131px;
+left:17.5%;
+overflow-y: auto;
+box-shadow: 
+        2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
+        4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
+        6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
+    }
+        h1 {
+            color: #3837D3;
+            font-style: Abhaya Libre ExtraBold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        thead {
+            background-color: #f8f9fa;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tbody tr:hover {
+            background-color: #e9ecef;
+        }
+        /* Styles de pagination */
+        .pagination {
+            margin-top: 20px;
+        }
+        .pagination a {
+            padding: 8px 16px;
+            margin: 0 5px;
+            border: 1px solid #ddd;
         }
     </style>
 </head>
 <body>
-
     <div class="left-side">
-
-        {% include 'parts/button.html' %}
+        {%include 'parts/button.html'%}
     </div>
-    <div class="right-side">
-    <h1>Historique des changements pour le lead {{ lead }}</h1>
+    <div class="right-left">
+    <h1>Historique des changements pour le lead {{ lead.nom }} {{ lead.prenom }}</h1>
     <table>
         <thead>
             <tr>
@@ -56,8 +83,27 @@
             {% endfor %}
         </tbody>
     </table>
-    <a href="{% url 'lead_list' %}">Retour à la liste</a>
 
- 
+    <!-- Pagination -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if histories.has_previous %}
+                <a href="?page=1">&laquo; Première</a>
+                <a href="?page={{ histories.previous_page_number }}">Précédente</a>
+            {% endif %}
+        </span>
+
+        <span class="current">
+            Page {{ histories.number }} sur {{ histories.paginator.num_pages }}.
+        </span>
+
+        <span class="step-links">
+            {% if histories.has_next %}
+                <a href="?page={{ histories.next_page_number }}">Suivante</a>
+                <a href="?page={{ histories.paginator.num_pages }}">Dernière &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
 </body>
 </html>

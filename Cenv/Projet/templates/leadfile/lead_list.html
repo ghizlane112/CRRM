@@ -95,7 +95,6 @@
             padding-left: 22px;
             padding-right: 22px;/* Espacement intérieur des cellules */
             text-align: left; /* Alignement du texte */
-          
         }
         .table1 tbody tr:nth-child(even) {
             background-color: #f2f2f2; /* Couleur de fond des lignes paires */
@@ -112,7 +111,6 @@
             padding-bottom: 10px;
             justify-content: center;
             margin-top: 20px;
-            
             border: 1px solid #ddd;
             border-radius: 5px;
             background-color: #f8f9fa;
@@ -158,12 +156,11 @@
             cursor: pointer;
             z-index: 2000; /* Assurez-vous que ce z-index est élevé */
         }
-
-
         @media (max-width: 480px) {
-    .msger-header-title {
-        font-size: 12px;
-    }}
+            .msger-header-title {
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -176,10 +173,7 @@
             <div>
                 <a href="{% url 'lead_create' %}">Ajouter un Lead</a>
                 <a href="{% url 'lead_import' %}">Importer des Leads</a>
-                
-               
-           <a href="{% url 'lead_history' %}" class="btn btn-info">Voir l'historique</a>
-       
+                <a href="{% url 'lead_history' %}" class="btn btn-info">Voir l'historique</a>
             </div>
         </div>
 
@@ -219,7 +213,7 @@
                         <th>Téléphone</th>
                         <th>Source</th>
                         <th>Statut</th>
-                        <th>responsable_lead</th>
+                        <th>Responsable</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -239,7 +233,7 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="7">Aucun lead trouvé.</td>
+                        <td colspan="8">Aucun lead trouvé.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -248,23 +242,23 @@
 
         <!-- Pagination -->
         <div class="pagination">
-            <span class="step-links">
-                {% if leads.has_previous %}
-                    <a href="?{% if search_text %}search={{ search_text }}&{% endif %}{% if sort_field %}sort={{ sort_field }}&{% endif %}page=1">&laquo; Première</a>
-                    <a href="?{% if search_text %}search={{ search_text }}&{% endif %}{% if sort_field %}sort={{ sort_field }}&{% endif %}page={{ leads.previous_page_number }}">Précédente</a>
-                {% endif %}
-            </span>
+            {% if page_obj.has_previous %}
+            <a href="?page=1{% if search_text %}&search={{ search_text }}{% endif %}{% if sort_field %}&sort={{ sort_field }}{% endif %}">Première</a>
+            <a href="?page={{ page_obj.previous_page_number }}{% if search_text %}&search={{ search_text }}{% endif %}{% if sort_field %}&sort={{ sort_field }}{% endif %}">Précédente</a>
+            {% endif %}
 
-            <span class="current">
-                Page {{ leads.number }} sur {{ leads.paginator.num_pages }}.
-            </span>
-
-            <span class="step-links">
-                {% if leads.has_next %}
-                    <a href="?{% if search_text %}search={{ search_text }}&{% endif %}{% if sort_field %}sort={{ sort_field }}&{% endif %}page={{ leads.next_page_number }}">Suivante</a>
-                    <a href="?{% if search_text %}search={{ search_text }}&{% endif %}{% if sort_field %}sort={{ sort_field }}&{% endif %}page={{ leads.paginator.num_pages }}">Dernière &raquo;</a>
+            {% for num in page_obj.paginator.page_range %}
+                {% if num == page_obj.number %}
+                <a href="#" class="current">{{ num }}</a>
+                {% else %}
+                <a href="?page={{ num }}{% if search_text %}&search={{ search_text }}{% endif %}{% if sort_field %}&sort={{ sort_field }}{% endif %}">{{ num }}</a>
                 {% endif %}
-            </span>
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if search_text %}&search={{ search_text }}{% endif %}{% if sort_field %}&sort={{ sort_field }}{% endif %}">Suivante</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}{% if search_text %}&search={{ search_text }}{% endif %}{% if sort_field %}&sort={{ sort_field }}{% endif %}">Dernière</a>
+            {% endif %}
         </div>
     </div>
 
@@ -273,88 +267,76 @@
         <ul>
             <li id="view-details">Voir les détails</li>
             <li id="edit-lead">Éditer</li>
-            <!---<li id="delete-lead">Supprimer</li>-->
-
-           
-            <a id="delete-lead-link" href="#">Supprimer</a>
-
-         
-         
+            <li id="delete-lead-link">Supprimer</li>
             <li id="add-note">Ajouter une note</li>
         </ul>
     </div>
-   <!-- Formulaire caché pour le token CSRF -->
-   <form id="csrf-form" method="POST" style="display:none;">
-    {% csrf_token %}
-</form>
+
     <script>
-     document.addEventListener('DOMContentLoaded', function() {
-    var contextMenu = document.getElementById('context-menu');
-    var currentLeadId;
+        document.addEventListener('DOMContentLoaded', function() {
+            var contextMenu = document.getElementById('context-menu');
+            var currentLeadId;
 
-    // Lorsqu'un élément avec la classe 'dots' est cliqué
-    document.querySelectorAll('.dots').forEach(function(el) {
-        el.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation(); // Empêche la propagation du clic
-            currentLeadId = el.getAttribute('data-id');
-            contextMenu.style.top = e.pageY + 'px';
-            contextMenu.style.left = e.pageX + 'px';
-            contextMenu.style.display = 'block';
+            // Lorsqu'un élément avec la classe 'dots' est cliqué
+            document.querySelectorAll('.dots').forEach(function(el) {
+                el.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation(); // Empêche la propagation du clic
+                    currentLeadId = el.getAttribute('data-id');
+                    contextMenu.style.top = e.pageY + 'px';
+                    contextMenu.style.left = e.pageX + 'px';
+                    contextMenu.style.display = 'block';
+                });
+            });
+
+            // Lorsque l'utilisateur clique en dehors du menu contextuel
+            document.addEventListener('click', function(e) {
+                if (!contextMenu.contains(e.target) && !document.querySelector('.dots').contains(e.target)) {
+                    contextMenu.style.display = 'none';
+                }
+            });
+
+            // Lorsque l'utilisateur clique sur "Voir les détails"
+            document.getElementById('view-details').addEventListener('click', function() {
+                window.location.href = '/lead/' + currentLeadId + '/';
+            });
+
+            // Lorsque l'utilisateur clique sur "Éditer"
+            document.getElementById('edit-lead').addEventListener('click', function() {
+                window.location.href = '/lead/' + currentLeadId + '/edit/';
+            });
+
+            // Lorsque l'utilisateur clique sur "Supprimer"
+            document.getElementById('delete-lead-link').addEventListener('click', function(e) {
+                e.preventDefault(); // Empêche le lien de suivre l'URL par défaut
+                if (confirm('Êtes-vous sûr de vouloir supprimer ce lead ?')) {
+                    var form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/lead/' + currentLeadId + '/delete/';
+                    
+                    // Ajoutez le token CSRF au formulaire
+                    var csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+                    var csrfInput = document.createElement('input');
+                    csrfInput.type = 'hidden';
+                    csrfInput.name = 'csrfmiddlewaretoken';
+                    csrfInput.value = csrfToken;
+                    form.appendChild(csrfInput);
+                    
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+
+            // Lorsque l'utilisateur clique sur "Ajouter une note"
+            document.getElementById('add-note').addEventListener('click', function() {
+                window.location.href = '/lead/' + currentLeadId + '/add-note/';
+            });
         });
-    });
 
-    // Lorsque l'utilisateur clique en dehors du menu contextuel
-    document.addEventListener('click', function(e) {
-        if (!contextMenu.contains(e.target) && !document.querySelector('.dots').contains(e.target)) {
-            contextMenu.style.display = 'none';
+        // Fonction pour soumettre le formulaire de tri
+        function submitSortForm() {
+            document.getElementById('sort-form').submit();
         }
-    });
-
-    // Lorsque l'utilisateur clique sur "Voir les détails"
-    document.getElementById('view-details').addEventListener('click', function() {
-        window.location.href = '/lead/' + currentLeadId + '/';
-    });
-
-    // Lorsque l'utilisateur clique sur "Éditer"
-    document.getElementById('edit-lead').addEventListener('click', function() {
-        window.location.href = '/lead/' + currentLeadId + '/edit/';
-    });
-
-    // Lorsque l'utilisateur clique sur "Supprimer"
-    document.getElementById('delete-lead-link').addEventListener('click', function(e) {
-        e.preventDefault(); // Empêche le lien de suivre l'URL par défaut
-        if (confirm('Êtes-vous sûr de vouloir supprimer ce lead ?')) {
-            console.log('Deleting lead with ID:', currentLeadId); // Ajoutez ce log pour déboguer
-
-            var form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '/lead/' + currentLeadId + '/delete/';
-            
-            // Ajoutez le token CSRF au formulaire
-            var csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
-            var csrfInput = document.createElement('input');
-            csrfInput.type = 'hidden';
-            csrfInput.name = 'csrfmiddlewaretoken';
-            csrfInput.value = csrfToken;
-            form.appendChild(csrfInput);
-            
-            document.body.appendChild(form);
-            form.submit();
-        }
-    });
-
-    // Lorsque l'utilisateur clique sur "Ajouter une note"
-    document.getElementById('add-note').addEventListener('click', function() {
-        window.location.href = '/lead/' + currentLeadId + '/add-note/';
-    });
-});
-
-// Fonction pour soumettre le formulaire de tri
-function submitSortForm() {
-    document.getElementById('sort-form').submit();
-}
-
     </script>
 </body>
 </html>
