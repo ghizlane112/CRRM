@@ -242,7 +242,7 @@
     <h1>Appoitement</h1>
 
     <div>{%load static%}<form method="post"  action="{%url 'create_reminder'  %}">   {% csrf_token %}<button type="submit" class="btn-rappels">Ajouter Rappele</button></form></div>
-    <div>{% load static %}<form method="get" action="{%url  'history_view'%}"><button type="submit" class="btn-history" ><img src="{%static 'images/Rectangle2093.png'%}" alt="calendanr logo"/> &nbsp  l'Historique des Rendez-vous</button></form></div>
+    <div>{% load static %}<form method="get" action="{%url  'history_view'%}"><button type="submit" class="btn-history" ><img src="{%static 'images/Rectangle2093.png'%}" alt="calendanr logo"/> &nbsp  liste Rendez-vous</button></form></div>
     
 
 

@@ -240,27 +240,28 @@
             </table>
         </div>
 
-        <!-- Pagination -->
-        <div class="pagination">
-            {% if page_obj.has_previous %}
-            <a href="?page=1{% if search_text %}&search={{ search_text }}{% endif %}{% if sort_field %}&sort={{ sort_field }}{% endif %}">Première</a>
-            <a href="?page={{ page_obj.previous_page_number }}{% if search_text %}&search={{ search_text }}{% endif %}{% if sort_field %}&sort={{ sort_field }}{% endif %}">Précédente</a>
+       <!-- Pagination -->
+       <div class="pagination">
+        <span class="step-links">
+            {% if leads.has_previous %}
+                <a href="?{% if search_text %}search={{ search_text }}&{% endif %}{% if sort_field %}sort={{ sort_field }}&{% endif %}page=1">&laquo; Première</a>
+                <a href="?{% if search_text %}search={{ search_text }}&{% endif %}{% if sort_field %}sort={{ sort_field }}&{% endif %}page={{ leads.previous_page_number }}">Précédente</a>
             {% endif %}
+        </span>
 
-            {% for num in page_obj.paginator.page_range %}
-                {% if num == page_obj.number %}
-                <a href="#" class="current">{{ num }}</a>
-                {% else %}
-                <a href="?page={{ num }}{% if search_text %}&search={{ search_text }}{% endif %}{% if sort_field %}&sort={{ sort_field }}{% endif %}">{{ num }}</a>
-                {% endif %}
-            {% endfor %}
+        <span class="current">
+            Page {{ leads.number }} sur {{ leads.paginator.num_pages }}.
+        </span>
 
-            {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}{% if search_text %}&search={{ search_text }}{% endif %}{% if sort_field %}&sort={{ sort_field }}{% endif %}">Suivante</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}{% if search_text %}&search={{ search_text }}{% endif %}{% if sort_field %}&sort={{ sort_field }}{% endif %}">Dernière</a>
+        <span class="step-links">
+            {% if leads.has_next %}
+                <a href="?{% if search_text %}search={{ search_text }}&{% endif %}{% if sort_field %}sort={{ sort_field }}&{% endif %}page={{ leads.next_page_number }}">Suivante</a>
+                <a href="?{% if search_text %}search={{ search_text }}&{% endif %}{% if sort_field %}sort={{ sort_field }}&{% endif %}page={{ leads.paginator.num_pages }}">Dernière &raquo;</a>
             {% endif %}
-        </div>
+        </span>
     </div>
+</div>
+
 
     <!-- Menu contextuel -->
     <div id="context-menu" class="context-menu">
