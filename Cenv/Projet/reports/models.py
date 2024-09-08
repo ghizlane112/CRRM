@@ -34,7 +34,7 @@ class Report(models.Model):
 
         def convert(value):
             if isinstance(value, (datetime, date)):
-                return value.strftime('%Y-%m-%d')  # Format pour les dates
+                return value.strftime('%Y-%m-%d')  # Convertir en chaîne de caractères
             return value
         
         summary = []
@@ -44,4 +44,4 @@ class Report(models.Model):
             elif isinstance(value, (datetime, date)):
                 value = convert(value)
             summary.append(f"{key.replace('_', ' ').capitalize()}: {value}")
-        return "; ".join(summary)  
+        return "; ".join(summary)

@@ -1,5 +1,8 @@
 from django import forms
 from .models import Report
+from datetime import datetime
+from datetime import date, datetime
+
 
 class ReportForm(forms.ModelForm):
     start_date = forms.DateField(required=False, widget=forms.TextInput(attrs={'type': 'date'}))
@@ -20,7 +23,11 @@ class ReportForm(forms.ModelForm):
             'end_date': self.cleaned_data.get('end_date'),
             'category': self.cleaned_data.get('category')
         }
-        report.filters = {k: v for k, v in filters.items() if v is not None}
+
+        # Convert date fields to string if they are not None
+        filters = {k: (v.strftime('%Y-%m-%d') if isinstance(v, (datetime, date)) else v) for k, v in filters.items() if v is not None}
+        
+        report.filters = filters
         if commit:
             report.save()
         return report

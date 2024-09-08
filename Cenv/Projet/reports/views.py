@@ -13,7 +13,7 @@ from django.http import HttpResponse
 from lead.models import Lead
 
 
-
+from django.http import JsonResponse
 
 def report_view(request, report_id=None):
     if report_id:
@@ -30,7 +30,6 @@ def report_view(request, report_id=None):
                 report = form.save(commit=False)
                 report.created_by = request.user
                 report.report_type = report_type
-                # `filters` est déjà géré dans le formulaire
                 report.save()
                 return redirect('report_dashboard')
         else:
@@ -47,7 +46,21 @@ def report_view(request, report_id=None):
 
     if request.GET.get('action') == 'history':
         reports = Report.objects.filter(created_by=request.user)
-        return render(request, 'reports/report_history.html', {'reports': reports})
+        
+        def serialize_report(report):
+            serialized = {
+                'id': report.id,
+                'title': report.title,
+                'created_by': report.created_by.username,
+                'report_type': report.report_type,
+                'filters': report.filters_summary(),
+                'created_at': report.created_at.strftime('%Y-%m-%d %H:%M:%S'),  # Convertir en chaîne
+                'content': report.content
+            }
+            return serialized
+        
+        reports_data = [serialize_report(report) for report in reports]
+        return JsonResponse({'reports': reports_data})
 
     report_options = [
         {'name': 'Rapport de Conversion', 'url': '?report_type=conversion'},
@@ -56,8 +69,6 @@ def report_view(request, report_id=None):
         {'name': 'Voir Historique des Rapports', 'url': '?action=history'},
     ]
     return render(request, 'reports/report_dashboard.html', {'report_options': report_options})
-
-
 
 
 def export_data(request, format='excel'):
