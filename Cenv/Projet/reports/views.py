@@ -1,19 +1,13 @@
-from django.shortcuts import render
-
-# Create your views here.
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ReportForm
 from .models import Report
-#import pandas as pd
 import io
+#import pandas as pd
 import openpyxl
+from lead.models import Lead
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
-from django.http import HttpResponse
-from lead.models import Lead
-
-
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 
 def report_view(request, report_id=None):
     if report_id:
@@ -46,21 +40,7 @@ def report_view(request, report_id=None):
 
     if request.GET.get('action') == 'history':
         reports = Report.objects.filter(created_by=request.user)
-        
-        def serialize_report(report):
-            serialized = {
-                'id': report.id,
-                'title': report.title,
-                'created_by': report.created_by.username,
-                'report_type': report.report_type,
-                'filters': report.filters_summary(),
-                'created_at': report.created_at.strftime('%Y-%m-%d %H:%M:%S'),  # Convertir en chaîne
-                'content': report.content
-            }
-            return serialized
-        
-        reports_data = [serialize_report(report) for report in reports]
-        return JsonResponse({'reports': reports_data})
+        return render(request, 'reports/report_history.html', {'reports': reports})
 
     report_options = [
         {'name': 'Rapport de Conversion', 'url': '?report_type=conversion'},
@@ -70,60 +50,38 @@ def report_view(request, report_id=None):
     ]
     return render(request, 'reports/report_dashboard.html', {'report_options': report_options})
 
-
 def export_data(request, format='excel'):
     if format == 'excel':
-        # Exporter en Excel
         wb = openpyxl.Workbook()
         ws = wb.active
         ws.title = "Leads"
-
-        # Ajouter des en-têtes
         ws.append(["ID", "Prénom", "Nom", "Statut", "Date"])
 
-        # Ajouter des données
         for lead in Lead.objects.all():
-            # Convertir la date en naïve si elle a un fuseau horaire
             date_naive = lead.date_creation.replace(tzinfo=None) if lead.date_creation else None
             ws.append([lead.id, lead.prenom, lead.nom, lead.statut, date_naive])
-
-        # Préparer la réponse HTTP
         response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         response['Content-Disposition'] = 'attachment; filename="leads.xlsx"'
-
-        # Écrire le classeur Excel dans la réponse
         wb.save(response)
         return response
 
     elif format == 'pdf':
-        # Exporter en PDF
         buffer = io.BytesIO()
         p = canvas.Canvas(buffer, pagesize=letter)
         width, height = letter
-
         p.drawString(100, height - 100, "Leads Report")
         y = height - 120
 
-        # Ajouter des données
         for lead in Lead.objects.all():
-            # Convertir la date en naïve si elle a un fuseau horaire
             date_naive = lead.date_creation.replace(tzinfo=None) if lead.date_creation else None
             p.drawString(100, y, f"ID: {lead.id}, Prénom: {lead.prenom}, Nom: {lead.nom}, Statut: {lead.statut}, Date: {date_naive}")
             y -= 20
 
         p.showPage()
         p.save()
-
         buffer.seek(0)
         response = HttpResponse(buffer, content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="leads.pdf"'
         return response
-
     else:
         return HttpResponse("Format non supporté", status=400)
-
-
-
-
-
-

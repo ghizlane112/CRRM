@@ -1,47 +1,38 @@
-{%include 'parts/nav.html'%}
-
+{% include 'parts/nav.html' %}
 
 <!DOCTYPE html>
 <html>
 <head>
     <title>Détails du Rapport</title>
     <style>
-        .right-side{
-    background-color:#F6F2F2; 
-    border-radius: 15px;
-    height: 100%;
-    width: 81%;
-    position: absolute;
-    top: 131px;
-    left:17.5%;
-    overflow: hidden;
-    box-shadow: 
-            2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
-            4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
-            6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
+        .right-side {
+            background-color: #F6F2F2; 
+            border-radius: 15px;
+            height: 100%;
+            width: 81%;
+            position: absolute;
+            top: 131px;
+            left: 17.5%;
+            overflow: hidden;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
+                4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
+                6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
         }
-    
     </style>
-
-
-
-    
 </head>
 <body>
     <div class="left-side">
-        {%include 'parts/button.html'%}
+        {% include 'parts/button.html' %}
     </div>
     <div class="right-side">
-    <h1>{{ report.title }}</h1>
-    <p><strong>Type de Rapport :</strong> {{ report.get_report_type_display }}</p>
-    <p><strong>Créé par :</strong> {{ report.created_by }}</p>
-    <p><strong>Date de Création :</strong> {{ report.created_at }}</p>
-    <pre>{{ report.content }}</pre>
-    <a href="{% url 'report_dashboard' %}">Retour au tableau de bord</a>
-</div>
-
-
-
-
+        <h1>{{ report.title }}</h1>
+        <p><strong>Type de Rapport :</strong> {{ report.get_report_type_display }}</p>
+        <p><strong>Créé par :</strong> {{ report.created_by }}</p>
+        <p><strong>Date de Création :</strong> {{ report.created_at }}</p>
+        <h2>Contenu :</h2>
+        <pre>{{ report.content }}</pre>
+        <a href="{% url 'report_dashboard' %}">Retour au tableau de bord</a>
+    </div>
 </body>
 </html>
