@@ -16,6 +16,8 @@ class Event(models.Model):
     description = models.TextField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)  # Champ pour associer un événement à un utilisateur
+    deleted = models.BooleanField(default=False)  # Champ pour savoir si l'événement a été supprimé
+    deleted_at = models.DateTimeField(null=True, blank=True)  # Champ pour la date de suppression
 
 
     def __str__(self):
@@ -38,3 +40,14 @@ class History(models.Model):
     def __str__(self):
         return f"{self.event.title} -  le {self.timestamp}"
 
+
+
+
+
+class DeletedEvent(models.Model):
+    title = models.CharField(max_length=255)
+    start_date = models.DateTimeField()
+    heur = models.TimeField()
+    description = models.TextField()
+    deletion_date = models.DateTimeField(auto_now_add=True)
+    deletion_reason = models.TextField()
