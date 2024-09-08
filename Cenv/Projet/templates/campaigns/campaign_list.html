@@ -1,12 +1,9 @@
 {% include 'parts/nav.html' %}
-
-
 <!DOCTYPE html>
 <html>
 <head>
     <title>Liste des Campagnes</title>
     <style>
-
         /* Style pour la navigation et le layout */
         .right-left {
             background-color: #F6F2F2; 
@@ -22,32 +19,26 @@
                 4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
                 6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
             padding: 20px;
-        }
-          
+        } 
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-
         table, th, td {
             border: 1px solid #ddd;
         }
-
         th, td {
             padding: 12px;
             text-align: left;
         }
-
         th {
             background-color: #f4f4f4;
             color: #333;
         }
-
         tr:nth-child(even) {
             background-color: #f9f9f9;
         }
-
         tr:hover {
             background-color: #f1f1f1;
         }
@@ -76,7 +67,9 @@
     </div>
     <div class="right-left">
     <h1>Liste des Campagnes</h1>
-    <a href="{% url 'add_campaign' %}">Ajouter une Campagne</a>
+    <a href="{% url 'add_campaign' %}">Ajouter une Campagne</a> |
+    <a href="{% url 'export_campaigns' %}">Exporter les Campagnes en Excel</a> |
+    <a href="{% url 'export_campaigns_pdf' %}">Exporter les Campagnes en PDF</a>  <!-- Ajoutez ce lien -->
     <table>
         <thead>
             <tr>
@@ -85,7 +78,7 @@
                 <th>Date de Fin</th>
                 <th>Budget</th>
                 <th>Nom de l'Entreprise</th>
-                <th> Leads</th>
+                <th>Leads</th>
             </tr>
         </thead>
         <tbody>

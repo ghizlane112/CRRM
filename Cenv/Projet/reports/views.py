@@ -85,3 +85,7 @@ def export_data(request, format='excel'):
         return response
     else:
         return HttpResponse("Format non supporté", status=400)
+
+
+
+

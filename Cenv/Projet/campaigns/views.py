@@ -1,11 +1,17 @@
 from django.shortcuts import render
-
+from django.http import HttpResponse
+import openpyxl
 # Create your views here.
 from django.shortcuts import render,redirect
 from .forms import CampaignForm
-# Create your views here.
 from lead.models import Lead 
 from .models import CompanyPublicitaire
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from django.http import HttpResponse
+from .models import CompanyPublicitaire
+import io
+
 
 
 def campaign_list(request):
@@ -31,3 +37,96 @@ def add_campaign(request):
         'form': form,
     }
     return render(request, 'campaigns/add_campaign.html', context)
+
+
+
+
+def export_campaigns(request):
+    # Créer un classeur Excel
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Campagnes"
+
+    # Ajouter des en-têtes
+    ws.append(["Nom de la Campagne", "Date de Début", "Date de Fin", "Budget", "Nom de l'Entreprise", "Leads"])
+
+    # Ajouter des données
+    for campaign in CompanyPublicitaire.objects.prefetch_related('leads').all():
+        leads = ', '.join([f"{lead.prenom} {lead.nom}" for lead in campaign.leads.all()])
+        ws.append([
+            campaign.name,
+            campaign.start_date.strftime('%Y-%m-%d'),
+            campaign.end_date.strftime('%Y-%m-%d'),
+            campaign.budget or '',
+            campaign.nom_entreprise or 'Non spécifié',
+            leads
+        ])
+
+    # Préparer la réponse HTTP
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="campagnes.xlsx"'
+
+    # Écrire le classeur Excel dans la réponse
+    wb.save(response)
+    return response
+
+
+
+
+
+
+def export_campaigns_pdf(request):
+    # Créer une réponse HTTP
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="campagnes.pdf"'
+
+    # Créer un tampon pour stocker le PDF
+    buffer = io.BytesIO()
+    p = canvas.Canvas(buffer, pagesize=letter)
+    width, height = letter
+
+    # Ajouter un titre
+    p.setFont("Helvetica-Bold", 16)
+    p.drawString(100, height - 50, "Liste des Campagnes")
+
+    # Définir la police pour le contenu
+    p.setFont("Helvetica", 12)
+
+    y = height - 80
+
+    # Ajouter les en-têtes
+    headers = ["Nom de la Campagne", "Date de Début", "Date de Fin", "Budget", "Nom de l'Entreprise", "Leads"]
+    x_positions = [100, 200, 300, 400, 500, 600]
+    for x, header in zip(x_positions, headers):
+        p.drawString(x, y, header)
+    y -= 20
+
+    # Ajouter les données des campagnes
+    campaigns = CompanyPublicitaire.objects.prefetch_related('leads').all()
+    for campaign in campaigns:
+        leads = ', '.join([f"{lead.prenom} {lead.nom}" for lead in campaign.leads.all()])
+        line = [
+            campaign.name,
+            campaign.start_date.strftime('%Y-%m-%d'),
+            campaign.end_date.strftime('%Y-%m-%d'),
+            str(campaign.budget or ''),
+            campaign.nom_entreprise or 'Non spécifié',
+            leads
+        ]
+        for x, value in zip(x_positions, line):
+            p.drawString(x, y, value)
+        y -= 20
+
+        # Ajouter une nouvelle page si nécessaire
+        if y < 50:
+            p.showPage()
+            y = height - 50
+
+    p.showPage()
+    p.save()
+
+    # Envoyer le PDF dans la réponse HTTP
+    buffer.seek(0)
+    response.write(buffer.read())
+    buffer.close()
+    return response
