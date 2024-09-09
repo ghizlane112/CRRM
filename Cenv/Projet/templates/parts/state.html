@@ -339,7 +339,7 @@ border-style:groove;
  <div class="card text-center text-white mb-3" id="thrid-card-desous1">
     <div class="card-body" >
         <h4>Total Leads</h4>
-        <p>{{ total_leads }}</p>
+        <p id="total-leads">{{ total_leads }}</p>
     </div>
 </div>
 
@@ -350,7 +350,7 @@ border-style:groove;
     <div class="card-body" >
       
         <h4>Total Conversions</h4>
-        <p>{{ total_conversions }}</p>
+        <p id="total-conversions">{{ total_conversions }}</p>
     
     </div>
 </div>
@@ -361,7 +361,7 @@ border-style:groove;
 <div class="card text-center text-white mb-3" id="thrid-card-desous3">
     <div class="card-body" >
         <h4>Total Campaigns</h4>
-        <p>{{ total_campaigns }}</p>
+        <p id="total-campaigns">{{ total_campaigns }}</p>
     </div>
     </div>
         
@@ -581,37 +581,49 @@ border-style:groove;
             /*****************************************************************************************/
     });
 
-
-
     document.addEventListener('DOMContentLoaded', function() {
-    // Fonction pour animer les nombres
-    function animateNumber(id, endValue) {
-        const element = document.getElementById(id);
-        if (!element) return;
+        function animateNumber(id, endValue) {
+            const element = document.getElementById(id);
+            if (!element) return;
 
-        let startValue = 0;
-        const duration = 1500; // Durée de l'animation en ms
-        const stepTime = Math.abs(Math.floor(duration / endValue));
-        const timer = setInterval(() => {
-            startValue += Math.ceil(endValue / (duration / stepTime));
-            if (startValue >= endValue) {
-                startValue = endValue;
-                clearInterval(timer);
+            if (isNaN(endValue) || endValue < 0) {
+                console.error(`Valeur non valide pour ${id}: ${endValue}`);
+                return;
             }
-            element.textContent = startValue;
-        }, stepTime);
-    }
 
-    // Lire les valeurs directement à partir des éléments HTML
-    const totalLeads = parseInt(document.getElementById('total-leads').textContent);
-    const totalConversions = parseInt(document.getElementById('total-conversions').textContent);
-    const totalCampaigns = parseInt(document.getElementById('total-campaigns').textContent);
+            let startValue = 0;
+            const duration = 1500;
+            const stepTime = Math.abs(Math.floor(duration / endValue));
+            const timer = setInterval(() => {
+                startValue += Math.ceil(endValue / (duration / stepTime));
+                if (startValue >= endValue) {
+                    startValue = endValue;
+                    clearInterval(timer);
+                }
+                element.textContent = startValue;
+            }, stepTime);
+        }
 
-    // Animer les nombres des cartes
-    animateNumber('total-leads', totalLeads);
-    animateNumber('total-conversions', totalConversions);
-    animateNumber('total-campaigns', totalCampaigns);
-});
+        // Lire les valeurs directement à partir des éléments HTML
+        const totalLeadsElement = document.getElementById('total-leads');
+        const totalConversionsElement = document.getElementById('total-conversions');
+        const totalCampaignsElement = document.getElementById('total-campaigns');
+
+        console.log('Contenu de total-leads:', totalLeadsElement.textContent.trim());
+        console.log('Contenu de total-conversions:', totalConversionsElement.textContent.trim());
+        console.log('Contenu de total-campaigns:', totalCampaignsElement.textContent.trim());
+
+        const totalLeads = parseInt(totalLeadsElement.textContent.trim(), 10);
+        const totalConversions = parseInt(totalConversionsElement.textContent.trim(), 10);
+        const totalCampaigns = parseInt(totalCampaignsElement.textContent.trim(), 10);
+
+        // Animer les nombres des cartes
+        animateNumber('total-leads', totalLeads);
+        animateNumber('total-conversions', totalConversions);
+        animateNumber('total-campaigns', totalCampaigns);
+    });
+
+
 </script>
 
 </body>
