@@ -14,7 +14,10 @@
       }
 
         .left-side {
-            background-color: #bbbffd89; 
+         /*   background-color: #bbbffd89; */
+         animation-name:color-change-5x ;
+         animation-iteration-count: infinite;
+         animation-duration: 8s;
             border-radius: 15px;
             height: 100vh;
             width: 79%;
@@ -29,6 +32,49 @@
                 4px 4px 10px rgba(0, 0, 0, 0.4),
                 6px 6px 15px rgba(0, 0, 0, 0.6);
         }
+
+
+
+        .color-change-5x {
+	-webkit-animation: color-change-5x 8s linear infinite alternate both;
+	        animation: color-change-5x 8s linear infinite alternate both;
+}
+
+
+@-webkit-keyframes color-change-5x {
+  0% {
+    background: #f2dad8;
+  }
+  25% {
+    background: #dbe7e6;
+  }
+  50% {
+    background: #e5e0d5;
+  }
+  75% {
+    background: #feecc5;
+  }
+  100% {
+    background: #d5bced;
+  }
+}
+@keyframes color-change-5x {
+  0% {
+    background: #f2dad8;
+  }
+  25% {
+    background: #dbe7e6;
+  }
+  50% {
+    background: #e5e0d5;
+  }
+  75% {
+    background: #feecc5;
+  }
+  100% {
+    background: #d5bced;
+  }
+}
 
         h1 {
             text-align: center;

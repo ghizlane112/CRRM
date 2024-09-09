@@ -35,20 +35,25 @@
             border: 1px solid #ced4da;
         }
         .search-container {
-            position: relative;
-            display: flex;
-            align-items: center;
-            flex-grow: 1;
-        }
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    max-width: 100%; /* Assurez-vous que le conteneur ne dépasse pas la largeur du conteneur parent */
+}
+
         #search-input {
-            padding-left: 40px;
-            padding-right: 10px;
-            padding-top: 12px;
-            padding-bottom: 12px;
-            border: 1px solid #ced4da;
-            border-radius: 20px;
-            width: 100%;
-        }
+    padding-left: 20px; /* Ajustez le padding selon vos besoins */
+    padding-right: 10px; /* Ajustez le padding selon vos besoins */
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border: none; /* Supprime la bordure */
+    border-radius: 20px;
+    width: 400px; /* Augmentez la largeur selon vos besoins */
+    box-shadow: 0 0 5px rgba(0,0,0,0.1); /* Optionnel : ajoute une ombre légère pour plus de visibilité */
+}
+
+
 
         /* Container pour les boutons de notification et de profil */
         .nav-buttons {
