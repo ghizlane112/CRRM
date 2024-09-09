@@ -9,12 +9,97 @@
     <title>Ajouter une Note</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        .container {
+   /* Style de base pour le conteneur principal */
+ 
+
+        /* Style de la section principale */
+        .right-left {
+            background-color: #F6F2F2; 
+            border-radius: 15px;
+            height: 100vh; /* Ajuste la hauteur pour éviter de dépasser l'écran */
+            width: 81%;
+            max-width: 81%;
+            position: absolute;
+            top: 153px;
+            left: 17.5%;
+            overflow-y: auto;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
+                4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
+                6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
+        }
+
+        /* Styles pour les écrans plus petits */
+        @media (max-width: 768px) {
+            .right-left {
+                width: 74%;
+                left: 13%;
+                box-shadow: 
+                    2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
+                    4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
+                    6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
+            }
+        }
+
+        /* Styles pour les éléments de formulaire */
+        form {
+            margin-bottom: 20px;
+        }
+
+        form .btn {
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        /* Styles pour les zones de texte (textarea) dans les formulaires */
+        form textarea {
+            width: 100%; /* La largeur du textarea sera égale à celle de son conteneur */
+            max-width: 100%; /* Assure que la largeur ne dépasse pas celle du conteneur */
+            height: 150px; /* Hauteur par défaut, ajustez selon vos besoins */
+            padding: 10px; /* Espace intérieur pour améliorer la lisibilité */
+            border-radius: 5px; /* Coins arrondis pour un look plus moderne */
+            border: 1px solid #ddd; /* Bordure légère */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre légère */
+            resize: vertical; /* Permet de redimensionner uniquement verticalement */
+        }
+
+        /* Styles pour les listes de notes */
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            background: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+
+        /* Styles pour les titres */
+        h1, h2 {
+            color: #333;
+        }
+
+        /* Styles pour les titres h1 */
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        /* Styles pour les titres h2 */
+        h2 {
             margin-top: 20px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 5px;
         }
     </style>
 </head>
 <body>
+    <div class="left-side">
+        {%include 'parts/button.html'%}
+    </div>
+    <div class="right-left">
     <div class="container">
         <h1>Ajouter une note pour {{ lead.nom }} {{ lead.prenom }}</h1>
 
@@ -35,5 +120,6 @@
             {% endfor %}
         </ul>
     </div>
+</div>
 </body>
 </html>

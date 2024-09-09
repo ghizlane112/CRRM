@@ -141,6 +141,7 @@ def lead_detail(request, pk):
 
 
 # Optionnel: ajouter une vue pour la création si vous avez besoin de suivre les créations
+# Création d'un lead
 @login_required
 def lead_create(request):
     if request.method == 'POST':
@@ -151,9 +152,9 @@ def lead_create(request):
                 lead.responsable = form.cleaned_data['responsable']
             else:
                 lead.responsable = request.user
+            lead.statut = 'Nouveau'
             lead.save()
             
-            # Enregistrer l'historique
             LeadHistory.objects.create(
                 lead=lead,
                 user=request.user,
@@ -208,8 +209,7 @@ def lead_import(request):
 
 
 
-
-
+# Modification d'un lead
 @login_required
 def lead_edit(request, pk):
     lead = get_object_or_404(Lead, pk=pk)
@@ -217,7 +217,7 @@ def lead_edit(request, pk):
         form = LeadForm(request.POST, instance=lead, user=request.user)
         if form.is_valid():
             old_data = f"Nom: {lead.nom}, Prénom: {lead.prenom}, Email: {lead.email}, Téléphone: {lead.telephone}, Source: {lead.source}, Statut: {lead.statut}, Note: {lead.note}"
-            lead = form.save()  # Mettez à jour l'instance du lead
+            lead = form.save()
             new_data = f"Nom: {lead.nom}, Prénom: {lead.prenom}, Email: {lead.email}, Téléphone: {lead.telephone}, Source: {lead.source}, Statut: {lead.statut}, Note: {lead.note}"
             LeadHistory.objects.create(
                 lead=lead,
@@ -229,6 +229,7 @@ def lead_edit(request, pk):
     else:
         form = LeadForm(instance=lead, user=request.user)
     return render(request, 'leadfile/lead_edit.html', {'form': form})
+
 
 
 

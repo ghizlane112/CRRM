@@ -14,10 +14,11 @@ User = get_user_model()
 class LeadForm(forms.ModelForm):
     class Meta:
         model = Lead
-        fields = ['nom', 'prenom', 'email', 'telephone', 'source', 'note', 'responsable']
+        fields = ['nom', 'prenom', 'email', 'telephone', 'source', 'note', 'responsable']  # Exclure 'statut' ici
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
+        instance = kwargs.get('instance')
         super().__init__(*args, **kwargs)
         
         if user and user.is_superuser:
@@ -28,6 +29,13 @@ class LeadForm(forms.ModelForm):
             self.fields['responsable'].widget = forms.HiddenInput()
             if self.instance and self.instance.pk is None:
                 self.initial['responsable'] = user
+        
+        if instance and instance.pk:
+            # Lors de l'édition, ajouter 'statut' au formulaire
+            self.fields['statut'] = forms.ChoiceField(choices=Lead.STATUTS)
+        else:
+            # Lors de la création, ne pas inclure 'statut'
+            self.fields.pop('statut', None)
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -38,6 +46,7 @@ class LeadForm(forms.ModelForm):
             if Lead.objects.filter(email=email).exists():
                 raise forms.ValidationError("Un lead avec cet email existe déjà.")
         return email
+
 
 
 class LeadSortForm(forms.Form):
