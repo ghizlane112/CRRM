@@ -55,7 +55,7 @@ class Interaction(models.Model):
     date_interaction = models.DateTimeField()
     note = models.TextField()
     
-    def _str_(self):
+    def __str__(self):
         return f"{self.get_type_interaction_display()} avec {self.lead.nom} le {self.date_interaction}"
 
     class Meta:
@@ -72,7 +72,7 @@ class Note(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
 
-    def _str_(self):
+    def __str__(self):
         return f"Note for {self.lead.nom} {self.lead.prenom} by {self.user.username}"
 
 
