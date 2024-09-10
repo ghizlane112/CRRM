@@ -26,9 +26,9 @@ urlpatterns = [
     path('lead/history/', views.lead_history, name='lead_history'),
     #path('lead/<int:pk>/history/', views.lead_history, name='lead_history'),
     path('lead/<int:pk>/delete/', lead_delete, name='lead_delete'),
-    path('search/', views.search_view, name='search'),
+    #path('search/', views.search_view, name='search'),
     path('lead/archive/<int:lead_id>/', views.archive_lead, name='archive_lead'),
     #path('lead/delete/<int:pk>/', views.lead_delete, name='lead_delete'),
     path('api/leads/<int:pk>/', LeadDetail.as_view(), name='lead-detail'),
-
+    path('search/', views.search_view, name='search_view'),
     ]

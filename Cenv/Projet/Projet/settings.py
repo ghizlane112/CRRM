@@ -35,10 +35,8 @@ ALLOWED_HOSTS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [  
-    
      'https://8b63-196-118-150-200.ngrok-free.app',
        
-        
 ]
 
 

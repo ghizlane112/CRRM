@@ -14,28 +14,32 @@ User = get_user_model()
 class LeadForm(forms.ModelForm):
     class Meta:
         model = Lead
-        fields = ['nom', 'prenom', 'email', 'telephone', 'source', 'note', 'responsable']  # Exclure 'statut' ici
+        fields = ['nom', 'prenom', 'email', 'telephone', 'source', 'note', 'responsable','statut']
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
-        instance = kwargs.get('instance')
         super().__init__(*args, **kwargs)
-        
+
+           # Masquer le champ 'responsable' pour les utilisateurs non super-utilisateurs
         if user and user.is_superuser:
-            # Pour les admins, afficher uniquement les utilisateurs normaux (non-admins)
             self.fields['responsable'].queryset = User.objects.filter(is_superuser=False)
         else:
-            # Pour les utilisateurs normaux, cacher le champ 'responsable' et l'assigner automatiquement
-            self.fields['responsable'].widget = forms.HiddenInput()
-            if self.instance and self.instance.pk is None:
-                self.initial['responsable'] = user
-        
-        if instance and instance.pk:
-            # Lors de l'édition, ajouter 'statut' au formulaire
-            self.fields['statut'] = forms.ChoiceField(choices=Lead.STATUTS)
+            self.fields.pop('responsable', None)  # Retirer le champ 'responsable'
+
+        if self.instance and self.instance.pk:
+            # Le lead existe déjà, donc ajouter le champ 'statut'
+            self.fields['statut'] = forms.ChoiceField(choices=Lead.STATUTS, required=False)
         else:
-            # Lors de la création, ne pas inclure 'statut'
+            # Pas de champ 'statut' pour la création
             self.fields.pop('statut', None)
+
+    def save(self, commit=True):
+        lead = super().save(commit=False)
+        if not self.instance.pk:
+            lead.statut = 'Nouveau'
+        if commit:
+            lead.save()
+        return lead
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -46,6 +50,7 @@ class LeadForm(forms.ModelForm):
             if Lead.objects.filter(email=email).exists():
                 raise forms.ValidationError("Un lead avec cet email existe déjà.")
         return email
+
 
 
 

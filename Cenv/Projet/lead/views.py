@@ -17,6 +17,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .serializers import LeadSerializer
 from django.db.models import Q
 from campaigns.models import CompanyPublicitaire
+from django.http import JsonResponse
 
 # Create your views here.
 def one(request):
@@ -338,3 +339,8 @@ def add_note(request, pk):
         'notes': notes,
         'form': form
     })
+
+
+
+
+
