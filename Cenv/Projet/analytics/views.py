@@ -34,20 +34,6 @@ def lead_conversion_data(request):
 
 
 
-#def conversion_report_view(request):
-    # Code pour récupérer les données et les retourner en JSON
- #   data = [
-  #      {'campaign': 'Campagne A', 'leads': 100, 'conversions': 25},
-   #     {'campaign': 'Campagne B', 'leads': 150, 'conversions': 45},
-        # autres données
-    #]
-    #return JsonResponse(data, safe=False)
-
-
-
-
-
-
 def conversion_report_view(request):
     # Obtenir toutes les campagnes
     campaigns = CompanyPublicitaire.objects.all()
@@ -75,17 +61,16 @@ def conversion_report_view(request):
 
 
 
-
-
 def dashboard_view(request):
     total_leads = Lead.objects.count()
-    total_conversions = Lead.objects.filter(statut='Converti').count()  # Ajuster selon le champ de statut de conversion
+    total_conversions = Lead.objects.filter(statut='Converti').count()
     total_campaigns = CompanyPublicitaire.objects.count()
 
     context = {
         'total_leads': total_leads,
         'total_conversions': total_conversions,
         'total_campaigns': total_campaigns,
+        'show_stats': False  # Mettre à False pour ne pas afficher les statistiques
     }
-    
+
     return render(request, 'parts/state.html', context)
