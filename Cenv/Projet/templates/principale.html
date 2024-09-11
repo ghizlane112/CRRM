@@ -414,7 +414,9 @@
             <!-----div left------->
             <div class="left-side-main1">
             <span class="GrandeTitre1-main1">Notre mission est de simplifier la gestion de vos leads et de vous aider à augmenter vos taux de conversion. Grâce à notre outil intuitif, vous pourrez :</span>
-           <form action="" method="post">{% csrf_token %}<button class="button-main1" type="submit">let’s get started</button></form> 
+            <form action="{% url 'book_appointment' %}" method="get">
+              <button class="button-main1" type="submit">Let's Get Started</button>
+          </form>
           </div>
             <div class="image1-main1">
                 {%load static%}

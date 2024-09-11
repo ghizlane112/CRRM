@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'campaigns',
      'Rendez',
   #  'clients',
+  'Home',
     'channels',
     'communication',
     'django_celery_beat',

@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 from django.urls import path,include
 from django.contrib.auth.views import LogoutView
 from django.conf import settings
+from Home import views as home_views
 from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('',include('lead.urls')),
@@ -38,7 +39,10 @@ urlpatterns = [
    #  path('',include('lead.urls')),
  
     path('login/', auth_views.LoginView.as_view(), name='login'),
-    path('logout/', LogoutView.as_view(), name='logout'),  
+    path('logout/', LogoutView.as_view(), name='logout'),
+   path('book-appointment/', home_views.book_appointment, name='book_appointment'),
+   path('appointment-success/', home_views.appointment_success, name='appointment_success'),  
+  
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -15,7 +15,7 @@ def analytics_view(request):
 
 
 def lead_status_data(request):
-    data = Lead.objects.values('status').annotate(count=Count('id'))
+    data = Lead.objects.values('statut').annotate(count=Count('id'))
     return JsonResponse(list(data), safe=False)
 
 

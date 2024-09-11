@@ -2,17 +2,22 @@ from django.db import models
 # models.py
 from lead.models import Lead
 from Rendez.models import Event
+from Home.models import Appointment
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
 class Notification(models.Model):
     recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications',null=True)
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_notifications')
+   # sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_notifications')
+    sender = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='sent_notifications')
     message = models.TextField()
     is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     is_notified = models.BooleanField(default=False)  # Pour marquer les rappels déjà notifiés
+    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, related_name='notifications',default=1)
+
+
 
     def __str__(self):
         return f'Notification for {self.recipient.username} from {self.sender.username}'
