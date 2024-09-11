@@ -89,20 +89,15 @@ class CSVImportForm(forms.Form):
 
 
 
-
-#class InteractionForm(forms.ModelForm):
- #   class Meta:
-  #      model = Interaction
-   #     fields = ['type', 'date', 'description', 'lead', 'user']
-
-
 class InteractionForm(forms.ModelForm):
     class Meta:
         model = Interaction
-        fields = ['lead', 'type_interaction', 'date_interaction', 'note']
+        fields = ['type_interaction', 'date_interaction','content']
         widgets = {
             'date_interaction': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
+
+
 
 
 

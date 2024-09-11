@@ -43,24 +43,24 @@ class Lead(models.Model):
 
 class Interaction(models.Model):
     INTERACTION_TYPE_CHOICES = [
-        ('appel', 'Appel'),
+        ('call', 'Call'),
         ('email', 'Email'),
-        ('sms','SMS'),
-        ('autre', 'Autre'),
+        ('meeting', 'Meeting'),
+        ('other', 'Other'),
+        
     ]
 
     lead = models.ForeignKey(Lead, on_delete=models.CASCADE, related_name='interactions')
     utilisateur = models.ForeignKey(User, on_delete=models.CASCADE)
     type_interaction = models.CharField(max_length=10, choices=INTERACTION_TYPE_CHOICES)
     date_interaction = models.DateTimeField()
-    note = models.TextField()
+    content = models.TextField()
     
     def __str__(self):
         return f"{self.get_type_interaction_display()} avec {self.lead.nom} le {self.date_interaction}"
 
     class Meta:
         ordering = ['-date_interaction']
-
 
 
 
