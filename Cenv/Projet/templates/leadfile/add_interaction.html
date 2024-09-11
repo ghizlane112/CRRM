@@ -1,11 +1,18 @@
-{%include 'parts/nav.html'%}
+{% include 'parts/nav.html' %}
 
 <!DOCTYPE html>
 <html>
 <head>
     <title>Ajouter une Interaction</title>
     <style>
-         .right-left{
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+     
+        .right-left{
 background-color:#F6F2F2; 
 border-radius: 15px;
 height: 100%;
@@ -26,43 +33,88 @@ width: 74%;
 position: absolute;
 top: 131px;
 left:24.9%;
-overflow: auto;
-box-shadow: 
-        2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
-        4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
-        6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
+
     }
 
 
     }
+      .right-left  h1, h2 {
+            color: #3D46F2;
+            margin-top: 23px;
+            margin-left: 30px;
+            margin-bottom: 30px;
+        }
+        .right-left form {
+            margin-bottom: 20px;
+        }
+        .right-left button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .right-left button:hover {
+            background-color: #45a049;
+        }
+        .right-left ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .right-left li {
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        .right-left a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .right-left a:hover {
+            text-decoration: underline;
+        }
+        /* Styles pour les éléments de formulaire */
+        .right-left input[type="text"], input[type="email"], input[type="number"], select, textarea {
+            width: 94%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box; /* Inclut le padding et la bordure dans la largeur totale */
+            margin-bottom: 15px;
+            font-size: 16px;
+            background-color: #fff;
+        }
+        .right-left textarea {
+            resize: vertical; /* Permet à l'utilisateur de redimensionner verticalement uniquement */
+            min-height: 100px; /* Hauteur minimale pour le textarea */
+        }
     </style>
 </head>
 <body>
     <div class="left-side">
-        {%include 'parts/button.html'%}
+        {% include 'parts/button.html' %}
     </div>
     <div class="right-left">
-    
-    <h1>Ajouter une Interaction pour {{ lead.prenom }} {{ lead.nom }}</h1>
-     
-      <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Ajouter</button>
-      </form>
-      
-  
-    
-    <!-- Liste des interactions existantes -->
-    <h2>Interactions existantes</h2>
-    <ul>
-        {% for interaction in interactions %}
-            <li>{{ interaction.date_interaction }} - {{ interaction.get_type_interaction_display }} - {{ interaction.note }}</li>
-        {% empty %}
-            <li>Aucune interaction trouvée.</li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'lead_detail' lead.id %}">Retour aux détails du lead</a>
+        <h1>Ajouter une Interaction pour {{ lead.prenom }} {{ lead.nom }}</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Ajouter</button>
+        </form>
+        <h2>Interactions existantes</h2>
+        <ul>
+            {% for interaction in interactions %}
+                <li>{{ interaction.date_interaction }} - {{ interaction.get_type_interaction_display }} - {{ interaction.note }}</li>
+            {% empty %}
+                <li>Aucune interaction trouvée.</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'lead_list' %}">Retour lead list</a>
     </div>
 </body>
 </html>
