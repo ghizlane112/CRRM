@@ -128,26 +128,39 @@
     width: 300px !important;  /* Ajuster la largeur */
     margin: 0 auto;           /* Centrer le graphique */
 }
-#cinquieme-card canvas {
-    
-    height: 150px !important; /* Ajuster la hauteur */
-    width: 300px !important;  /* Ajuster la largeur */
-    margin: 0 auto;   
-    position: relative;
-   right: 50px;
-}
-
-#cinquieme-card{
+#cinquieme-card {
     width: 340px;
     height: 190px;
     top: 347px;
-    right:38px;
+    right: 38px;
     background-color: white;
+    display: flex; /* Utiliser flexbox pour aligner les éléments */
+    justify-content: center;
+    align-items: center;
+    padding: 20px; /* Ajoute un espacement interne */
 }
+
+#cinquieme-card canvas {
+    height: 150px !important; /* Ajuster la hauteur */
+    width: 300px !important;  /* Ajuster la largeur */
+    margin: 0 auto;           /* Centrer le graphique */
+    position: relative;
+    right: 0; /* Centrer l'élément dans la carte */
+}
+
+#cinquieme-card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    text-align: center; /* Centre le titre */
+    color: #333; /* Optionnel : personnaliser la couleur */
+}
+
 #cinquieme-card .info {
-    width: 35%; /* Ajuster la largeur pour les informations */
+    width: 100%; /* Ajuster la largeur pour les informations */
     text-align: left; /* Alignement du texte à gauche */
-    margin-right: 20px; /* Espacement entre les informations et le graphique */
+    margin-bottom: 10px; /* Espacement entre le texte et le graphique */
+    font-size: 14px; /* Optionnel : ajuster la taille du texte */
+    color: #555; /* Couleur plus foncée pour la lisibilité */
 }
 #six-card{
     width: 94.5%;
