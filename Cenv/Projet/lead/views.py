@@ -40,7 +40,7 @@ def three(request):
 
 
 def dashboard(request):
-    leads = Lead.objects.all()[:5]  # Limiter le nombre de leads affichés
+    leads = Lead.objects.all()[:3]  # Limiter le nombre de leads affichés
     return render(request, 'dashboard.html', {
         'leads': leads
     })

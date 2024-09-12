@@ -82,6 +82,7 @@
     left:19px;
   overflow: hidden;
     display: inline;
+    
 }
 
 /* Styles pour les sous-cartes */
@@ -93,7 +94,9 @@
     height: 109px;
     border-radius:none ;
     background-color: white;
-  
+    box-shadow: 
+        2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
+        
 }
 #thrid-card-desous2{
     max-width: 175px;
@@ -103,6 +106,9 @@
     position: relative;
   top: -124px;
   left: 174px;
+  box-shadow: 
+        2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
+       
 }
 #thrid-card-desous3{
     max-width: 180px;
@@ -112,6 +118,9 @@
  left:375px;
  border-radius:none ;
  background-color: white;
+ box-shadow: 
+        2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
+        
 }
 
 
@@ -122,6 +131,9 @@
     top: 329px;
     left:19px;
     background-color: white;
+    box-shadow: 
+        2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
+       
 }
 #forth-card canvas {
     height: 150px !important; /* Ajuster la hauteur */
@@ -138,6 +150,8 @@
     justify-content: center;
     align-items: center;
     padding: 20px; /* Ajoute un espacement interne */
+    box-shadow: 
+        2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
 }
 
 #cinquieme-card canvas {
@@ -163,14 +177,14 @@
     color: #555; /* Couleur plus foncée pour la lisibilité */
 }
 #six-card{
-    width: 94.5%;
-    height: 370px;
+    width: 95.5%;
+    height: auto;
     left: 19px;
     background-color: rgba(255, 255, 255, 0.868);
     position: relative;
     top: 340px;
-  
-
+    box-shadow: 
+        2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
 }
 #six-card a{
 text-decoration: none;
@@ -196,26 +210,17 @@ text-decoration: none;
     float: right;
     margin-left: 12px;
 }
-.input1 .button-desous{
-    position: relative;
-    top: 34px;
-    left :500px;
-    width: 120px;
-height: 30px;
-color: white;
-border-color: #333;
-border-style:groove;
-background-color: #b9b8b8;
-}
+
 .input1 .input-desous{
 width: 300px;
 height: 30px;
 position: relative;
 left :152px;
-background-color: #ffffffe6;
-color: rgba(0, 0, 0, 0.808);
+background-color: #AAAAAA;
+color: rgba(0, 0, 0, 0.539);
 border-color: #333333ee;
 border-style:groove;
+border: none;
 }
 
 
@@ -274,17 +279,17 @@ border-style:groove;
         width: 399px;  
      }
     #thrid-card-desous1 {
-   max-width: 21vh;
+   max-width: 173px;
 }
 #thrid-card-desous2 {
-    max-width: 21vh;
+    max-width: 173px;
     position: relative;
   left: 190px;
 }
 #thrid-card-desous3 {
-    max-width: 22vh;
+    max-width: 173px;
     position: relative; 
-    left:398px;
+    left:390px;
 }
 #thrid-card{
     width: 68%;
@@ -293,7 +298,7 @@ border-style:groove;
     width: 57.5%;
 }
 #cinquieme-card{
-    width: 43vh;
+    width: 344px;
     right:25px;
 }
 }
@@ -330,8 +335,7 @@ border-style:groove;
 
 @media (max-width: 768px) {
     #first-card {
-        width: 340px; /* Largeur pleine pour les petits écrans */
-        height: 170px;
+        width: 340px; /* Largeur pleine pour les petits écrans */ height: 170px;
         left: 0; /* Centre la carte horizontalement */
         margin-left: 12px;
         
@@ -469,10 +473,6 @@ border-style:groove;
 
 
 
-
-
-
-
  <!----six card-->
   <!-- Sixième card -->
   <div class="card text-center text-white  " id="six-card" >
@@ -486,7 +486,6 @@ border-style:groove;
                    <br>
                    <br>
                    <div class="input1">
-                    <div class="button-desous">Recherche</div>
                    <div class="input-desous"> Recherche:Nom...</div>
                    
                     <div></div>
