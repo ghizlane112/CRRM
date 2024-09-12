@@ -1,113 +1,131 @@
-{%include 'parts/nav.html'%}
-
+{% include 'parts/nav.html' %}
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Détails du Lead</title>
     <style>
-.right-side{
-background-color:#F6F2F2; 
-border-radius: 15px;
-height: 100%;
-width: 81%;
-position: absolute;
-top: 131px;
-left:17.5%;
-overflow: auto;
-box-shadow: 
-        2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
-        4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
-        6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
-}
-.right-side-container{
-  
-position: absolute;
-top: 48px;
-left: 22px;
-}
-
-.right-side-container h1{
-
-    color: #3837D3;
-    font-style: Abhaya Libre ExtraBold;
-
-}
-.right-side-container p{
-  font-size: 18px;
- margin-top: 15px;
- margin-bottom: 12px;
-  }
-.right-side-container a{
-    color: #007bff;
- text-decoration: none;
- font-size: 18px;
-}
-  
+        .right-side {
+            background-color: #F6F2F2; 
+            border-radius: 15px;
+            height: 100vh;
+            width: 81%;
+            position: absolute;
+            top: 131px;
+            left: 17.5%;
+            overflow-y: auto;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
+                4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
+                6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
+        }
+        .right-side-container {
+            position: absolute;
+            top: 48px;
+            left: 22px;
+        }
+        .right-side-container h1 {
+            color: #3837D3;
+            font-style: Abhaya Libre ExtraBold;
+        }
+        .right-side-container p {
+            font-size: 18px;
+            margin-top: 15px;
+            margin-bottom: 12px;
+        }
+        .right-side-container a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        .alert {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .alert-info {
+            background-color: #d9edf7;
+            border-color: #bce8f1;
+            color: #31708f;
+        }
+        .alert-success {
+            background-color: #dff0d8;
+            border-color: #d0e9c6;
+            color: #3c763d;
+        }
+        .alert-warning {
+            background-color: #fcf8e3;
+            border-color: #faf2cc;
+            color: #8a6d3b;
+        }
+        .alert-danger {
+            background-color: #f2dede;
+            border-color: #ebccd1;
+            color: #a94442;
+        }
     </style>
 </head>
 <body>
-<div class="left-side">
-{%include 'parts/button.html'%}
-</div>
+    <div class="left-side">
+        {% include 'parts/button.html' %}
+    </div>
 
     <div class="right-side">
         <div class="right-side-container">
-    <h1>Détails du Lead</h1>
-    <p><strong>Nom:</strong> {{ lead.nom }}</p>
-    <p><strong>Prénom:</strong> {{ lead.prenom }}</p>
-    <p><strong>Email:</strong> {{ lead.email }}</p>
-    <p><strong>Téléphone:</strong> {{ lead.telephone }}</p>
-    <p><strong>Source:</strong> {{ lead.source }}</p>
-    <p><strong>Statut:</strong> {{ lead.statut }}</p>
-    <p><strong>Note:</strong> {{ lead.note }}</p>
+            <h1>Détails du Lead</h1>
+            <p><strong>Nom:</strong> {{ lead.nom }}</p>
+            <p><strong>Prénom:</strong> {{ lead.prenom }}</p>
+            <p><strong>Email:</strong> {{ lead.email }}</p>
+            <p><strong>Téléphone:</strong> {{ lead.telephone }}</p>
+            <p><strong>Source:</strong> {{ lead.source }}</p>
+            <p><strong>Statut:</strong> {{ lead.statut }}</p>
+            <p><strong>Note:</strong> {{ lead.note }}</p>
 
+            <!-- Affichage conditionnel du champ raison -->
+            {% if lead.statut == 'Perdu' %}
+                <p><strong>Raison:</strong> {{ lead.raison }}</p>
+            {% endif %}
 
-    <h3>Documents</h3>
-<ul>
-  {% for document in lead.documents.all %}
-    <li>
-      <a href="{{ document.file.url }}">{{ document.file.name }}</a> - {{ document.uploaded_at }}
-      <br>Shared with: 
-      {% for user in document.shared_with.all %}
-        {{ user.username }}
-        {% if not forloop.last %}, {% endif %}
-      {% endfor %}
-    </li>
-  {% endfor %}
-</ul>
+            <h3>Documents</h3>
+            <ul>
+                {% for document in lead.documents.all %}
+                    <li>
+                        <a href="{{ document.file.url }}">{{ document.file.name }}</a> - {{ document.uploaded_at }}
+                        <br>Shared with: 
+                        {% for user in document.shared_with.all %}
+                            {{ user.username }}
+                            {% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </li>
+                {% endfor %}
+            </ul>
 
+            <!-- Affichage des messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
 
+            <!-- Liste des interactions existantes -->
+            <h2>Interactions existantes</h2>
+            <ul>
+                {% for interaction in interactions %}
+                    <li>{{ interaction.date_interaction }} - {{ interaction.get_type_interaction_display }} - {{ interaction.content }} - {{ interaction.utilisateur.username }}</li>
+                {% empty %}
+                    <li>Aucune interaction trouvée.</li>
+                {% endfor %}
+            </ul>
 
-
-
-
-<!-- Affichage des messages -->
-{% if messages %}
-{% for message in messages %}
-    <div class="alert alert-{{ message.tags }}">
-        {{ message }}
-    </div>
-{% endfor %}
-{% endif %}
-
-<!-- Liste des interactions existantes -->
-<h2>Interactions existantes</h2>
-<ul>
-{% for interaction in interactions %}
-    <li>{{ interaction.date_interaction }} - {{ interaction.get_type_interaction_display }} - {{ interaction.content }} - {{ interaction.utilisateur.username }}</li>
-{% empty %}
-    <li>Aucune interaction trouvée.</li>
-{% endfor %}
-</ul>
-<br><br>
-<a href="{% url 'upload_document' lead.id %}">Upload a new document</a>
-
-
-<br><br><br>
-
-    <a href="{% url 'lead_list' %}">Retour à la liste</a>
+            <br><br>
+            <a href="{% url 'upload_document' lead.id %}">Upload a new document</a>
+            <br><br><br>
+            <a href="{% url 'lead_list' %}">Retour à la liste</a>
         </div>
-</div>
+    </div>
 </body>
 </html>

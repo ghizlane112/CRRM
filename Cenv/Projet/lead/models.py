@@ -31,6 +31,7 @@ class Lead(models.Model):
     is_deleted = models.BooleanField(default=False)
     deleted_at = models.DateTimeField(null=True, blank=True)
     campaign = models.ForeignKey(CompanyPublicitaire, on_delete=models.SET_NULL, null=True, blank=True, related_name='lead_campaigns')  # Changed related_name
+    raison = models.TextField(blank=True, null=True)  # Nouveau champ pour la raison
     
     def __str__(self):
         return f"{self.prenom} {self.nom}"

@@ -11,35 +11,35 @@ User = get_user_model()
 
 
 # lead/forms.py
+
 class LeadForm(forms.ModelForm):
+    raison = forms.CharField(required=False, widget=forms.Textarea, label='Raison')
+
     class Meta:
         model = Lead
-        fields = ['nom', 'prenom', 'email', 'telephone', 'source', 'note', 'responsable','statut']
+        fields = ['nom', 'prenom', 'email', 'telephone', 'source', 'note', 'responsable', 'statut', 'raison']
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
 
-           # Masquer le champ 'responsable' pour les utilisateurs non super-utilisateurs
+        # Masquer le champ 'responsable' pour les utilisateurs non super-utilisateurs
         if user and user.is_superuser:
             self.fields['responsable'].queryset = User.objects.filter(is_superuser=False)
         else:
             self.fields.pop('responsable', None)  # Retirer le champ 'responsable'
 
+        # Ajouter le champ 'statut' si le lead existe déjà
         if self.instance and self.instance.pk:
-            # Le lead existe déjà, donc ajouter le champ 'statut'
-            self.fields['statut'] = forms.ChoiceField(choices=Lead.STATUTS, required=False)
+            self.fields['statut'].required = True
         else:
-            # Pas de champ 'statut' pour la création
             self.fields.pop('statut', None)
 
-    def save(self, commit=True):
-        lead = super().save(commit=False)
-        if not self.instance.pk:
-            lead.statut = 'Nouveau'
-        if commit:
-            lead.save()
-        return lead
+        # Afficher ou masquer le champ 'raison' en fonction du statut
+        if self.instance and self.instance.statut == 'Perdu':
+            self.fields['raison'].widget.attrs['style'] = 'display: block;'
+        else:
+            self.fields['raison'].widget.attrs['style'] = 'display: none;'
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -50,6 +50,18 @@ class LeadForm(forms.ModelForm):
             if Lead.objects.filter(email=email).exists():
                 raise forms.ValidationError("Un lead avec cet email existe déjà.")
         return email
+
+    def clean(self):
+        cleaned_data = super().clean()
+        statut = cleaned_data.get('statut')
+        raison = cleaned_data.get('raison')
+
+        if statut == 'Perdu' and not raison:
+            self.add_error('raison', 'La raison est requise lorsque le statut est "Perdu".')
+
+        return cleaned_data
+
+
 
 
 

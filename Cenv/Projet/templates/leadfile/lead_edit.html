@@ -1,5 +1,3 @@
-
-
 {% include 'parts/nav.html' %}
 <!DOCTYPE html>
 <html lang="en">
@@ -8,11 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Lead</title>
     <style>
-         .right {   
+        .right {   
             background-color: #F6F2F2; 
             border-radius: 15px;
-            height: auto;
             width: 81%;
+            height: 100vh;
             overflow: auto;
             position: absolute;
             top: 131px;
@@ -34,16 +32,10 @@
         }
 
         .right form {
-            
             padding: 20px;
-        
         }
 
-        .right form p {
-            margin-bottom: 15px;
-        }
-
-       .right form .form-group {
+        .right form .form-group {
             margin-bottom: 15px;
         }
 
@@ -112,14 +104,85 @@
     <div class="right">
         <div class="container">
             <h1>Edit Lead</h1>
-            <form method="post" action="">
+            <form method="post">
                 {% csrf_token %}
-                {{ form.as_p }}
+                {{ form.non_field_errors }}
+
+                <div class="form-group">
+                    {{ form.nom.label_tag }}
+                    {{ form.nom }}
+                    {{ form.nom.errors }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.prenom.label_tag }}
+                    {{ form.prenom }}
+                    {{ form.prenom.errors }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.email.label_tag }}
+                    {{ form.email }}
+                    {{ form.email.errors }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.telephone.label_tag }}
+                    {{ form.telephone }}
+                    {{ form.telephone.errors }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.source.label_tag }}
+                    {{ form.source }}
+                    {{ form.source.errors }}
+                </div>
+
+                <!-- Champ raison avant le statut -->
+                <div class="form-group">
+                    {{ form.raison.label_tag }}
+                    {{ form.raison }}
+                    {{ form.raison.errors }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.statut.label_tag }}
+                    {{ form.statut }}
+                    {{ form.statut.errors }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.responsable.label_tag }}
+                    {{ form.responsable }}
+                    {{ form.responsable.errors }}
+                </div>
 
                 <button type="submit" class="btn btn-primary">Save</button>
                 <a href="{% url 'lead_list' %}" class="btn btn-secondary">Cancel</a>
             </form>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const statutField = document.querySelector('[name="statut"]');
+            const raisonField = document.querySelector('[name="raison"]');
+            
+            // Fonction pour afficher/masquer le champ raison en fonction du statut
+            function toggleRaisonVisibility() {
+                if (statutField.value === 'Perdu') {
+                    raisonField.style.display = 'block';
+                } else {
+                    raisonField.style.display = 'none';
+                }
+            }
+            
+            // Appeler la fonction au chargement de la page
+            toggleRaisonVisibility();
+
+            // Ajouter un événement pour surveiller les changements dans le champ statut
+            statutField.addEventListener('change', toggleRaisonVisibility);
+        });
+    </script>
 </body>
 </html>
