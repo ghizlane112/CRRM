@@ -6,6 +6,9 @@ from rest_framework import generics
 from django.views.decorators.http import require_POST
 from .models import Lead, Interaction,LeadHistory
 import csv
+from django.contrib import messages
+from django.http import HttpResponseForbidden
+from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
@@ -41,10 +44,6 @@ def dashboard(request):
     return render(request, 'dashboard.html', {
         'leads': leads
     })
-
-
-
-
 
 
 
@@ -289,8 +288,15 @@ class LeadDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 
+
+@login_required
 def add_interaction(request, pk):
     lead = get_object_or_404(Lead, pk=pk)
+    
+    if request.user != lead.responsable and not request.user.is_superuser:
+        messages.error(request, "Vous n'avez pas l'autorisation d'ajouter une interaction à ce lead.")
+        return redirect('lead_detail', pk=lead.pk)
+    
     if request.method == 'POST':
         form = InteractionForm(request.POST)
         if form.is_valid():
@@ -298,18 +304,16 @@ def add_interaction(request, pk):
             interaction.lead = lead
             interaction.utilisateur = request.user
             interaction.save()
-            # Utilisez le bon nom d'argument pour la redirection
             return redirect('lead_detail', pk=lead.pk)
     else:
         form = InteractionForm()
+    
     interactions = Interaction.objects.filter(lead=lead)
     return render(request, 'leadfile/add_interaction.html', {
         'form': form,
         'lead': lead,
         'interactions': interactions
     })
-
-
 
 def add_note(request, pk):
     lead = get_object_or_404(Lead, pk=pk)
