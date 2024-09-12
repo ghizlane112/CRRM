@@ -76,7 +76,36 @@ left: 22px;
     </li>
   {% endfor %}
 </ul>
+
+
+
+
+
+
+<!-- Affichage des messages -->
+{% if messages %}
+{% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+    </div>
+{% endfor %}
+{% endif %}
+
+<!-- Liste des interactions existantes -->
+<h2>Interactions existantes</h2>
+<ul>
+{% for interaction in interactions %}
+    <li>{{ interaction.date_interaction }} - {{ interaction.get_type_interaction_display }} - {{ interaction.content }} - {{ interaction.utilisateur.username }}</li>
+{% empty %}
+    <li>Aucune interaction trouvée.</li>
+{% endfor %}
+</ul>
+<br><br>
 <a href="{% url 'upload_document' lead.id %}">Upload a new document</a>
+
+
+<br><br><br>
+
     <a href="{% url 'lead_list' %}">Retour à la liste</a>
         </div>
 </div>

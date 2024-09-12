@@ -130,7 +130,8 @@ def lead_list(request):
 #### pour details
 def lead_detail(request, pk):
     lead = Lead.objects.get(pk=pk)
-    return render(request, 'leadfile/lead_detail.html', {'lead': lead})
+    interactions = Interaction.objects.filter(lead=lead)
+    return render(request, 'leadfile/lead_detail.html', {'lead': lead,'interactions': interactions})
 
 
 
@@ -304,6 +305,7 @@ def add_interaction(request, pk):
             interaction.lead = lead
             interaction.utilisateur = request.user
             interaction.save()
+            print(f"Interaction sauvegardée: {interaction}")  # Débogage pour vérifier si l'interaction est sauvegardée
             return redirect('lead_detail', pk=lead.pk)
     else:
         form = InteractionForm()
