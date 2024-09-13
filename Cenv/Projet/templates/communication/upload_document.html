@@ -1,18 +1,18 @@
-{%include 'parts/nav.html'%}
+{% include 'parts/nav.html' %}
 {% block content %}
 <head>
   <style>
-   .right-left{
-background-color:#F6F2F2; 
-border-radius: 15px;
-height: 100%;
-width: 81%;
-max-width: 87%;
-position: absolute;
-top: 131px;
-left:17.5%;
-overflow: auto;
-box-shadow: 
+    .right-left {
+      background-color: #F6F2F2; 
+      border-radius: 15px;
+      height: 100%;
+      width: 81%;
+      max-width: 87%;
+      position: absolute;
+      top: 131px;
+      left: 17.5%;
+      overflow: auto;
+      box-shadow: 
         2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
         4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
         6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
@@ -52,6 +52,19 @@ box-shadow:
       background-color: #0056b3;
     }
 
+    /* Augmenter la taille des champs d'entrée */
+    .right-left form input[type="text"],
+    .right-left form input[type="file"],
+    .right-left form textarea {
+      width: 80%;
+      margin-left: 23px;
+      padding: 10px;
+      margin: 5px 0 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1em;
+    }
+
     /* Styles pour la liste des documents */
     .right-left ul {
       list-style-type: none;
@@ -60,6 +73,10 @@ box-shadow:
 
     .right-left ul li {
       margin-bottom: 10px;
+      padding: 10px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
     }
 
     .right-left ul li a {
@@ -70,36 +87,46 @@ box-shadow:
     .right-left ul li a:hover {
       text-decoration: underline;
     }
+
+    /* Styles pour les utilisateurs partagés */
+    .right-left ul li .shared-with {
+      font-size: 0.9em;
+      color: #666;
+    }
+
+    .right-left ul li .shared-with span {
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
   <div class="left-side">
-    {%include 'parts/button.html'%}
-</div>
+    {% include 'parts/button.html' %}
+  </div>
   <div class="right-left">
-  <h2>Upload Document for {{ lead.name }}</h2>
-  
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Upload</button>
-  </form>
+    <h2>Upload Document for {{ lead.name }}</h2>
+    
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Upload</button>
+    </form>
 
-  <h3>Existing Documents</h3>
-  <ul>
-    {% for document in lead.documents.all %}
-      <li>
-        <a href="{{ document.file.url }}">{{ document.file.name }}</a> - {{ document.uploaded_at }}
-        <br>Shared with: 
-        {% for user in document.shared_with.all %}
-          {{ user.username }}
-          {% if not forloop.last %}, {% endif %}
-        {% endfor %}
-      </li>
-    {% endfor %}
-  </ul>
-
-</div>
-
+    <h3>Existing Documents</h3>
+    <ul>
+      {% for document in lead.documents.all %}
+        <li>
+          <a href="{{ document.file.url }}">{{ document.file.name }}</a> - {{ document.uploaded_at }}
+          <div class="shared-with">
+            <br>Shared with: 
+            {% for user in document.shared_with.all %}
+              {{ user.username }}
+              {% if not forloop.last %}, {% endif %}
+            {% endfor %}
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
 </body>
 {% endblock %}
