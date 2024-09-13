@@ -43,7 +43,8 @@ def add_event(request):
             start_date=start_date,
             heur=heur,
             lieu=lieu,
-            description=description
+            description=description,
+            user=request.user  # Associer l'événement à l'utilisateur actuel
         )
         event.save()
 
@@ -56,7 +57,7 @@ def add_event(request):
         )
 
         return JsonResponse({'status': 'success'})
-    
+    return JsonResponse({'status': 'error', 'message': 'Méthode non autorisée'})
 
 
 
@@ -64,7 +65,6 @@ def add_event(request):
 
 
 
-  
 @login_required
 @csrf_exempt
 def update_event(request):
@@ -85,6 +85,11 @@ def update_event(request):
                 return JsonResponse({'status': 'error', 'message': 'Date ou heure invalide'})
 
             event = get_object_or_404(Event, id=event_id)
+
+            # Vérifier si l'utilisateur a le droit de modifier l'événement
+            if not request.user.is_superuser and event.user != request.user:
+                return JsonResponse({'status': 'error', 'message': 'Accès non autorisé'})
+
             event.title = title
             event.start_date = start_date
             event.heur = heur
@@ -109,8 +114,6 @@ def update_event(request):
 
 
 
-
-
 @login_required
 @csrf_exempt
 def delete_event(request):
@@ -119,8 +122,12 @@ def delete_event(request):
         reason = request.POST.get('reason')
         
         try:
-            event = Event.objects.get(id=event_id)
-            
+            event = get_object_or_404(Event, id=event_id)
+
+            # Vérifier si l'utilisateur a le droit de supprimer l'événement
+            if not request.user.is_superuser and event.user != request.user:
+                return JsonResponse({'status': 'error', 'message': 'Accès non autorisé'})
+
             DeletedEvent.objects.create(
                 title=event.title,
                 start_date=event.start_date,
@@ -151,7 +158,6 @@ def delete_event(request):
 
 def dashboard_view(request):
     return render(request, 'dashboard.html')
-
 
 @login_required
 def event_list(request):
@@ -217,29 +223,6 @@ def history_view(request):
     }
     
     return render(request, 'events/history.html', context)
-
-
-
-
-#def event_detail(request, event_id):
-    # Essayez de récupérer l'événement
-    #event = get_object_or_404(Event, id=event_id)
-    
-    # Vérifiez s'il existe un historique de suppression pour cet événement
-    #try:
-     #   deletion_history = History.objects.get(event=event)
-    #    is_deleted = True
-   # except History.DoesNotExist:
-      #  deletion_history = None
-     #   is_deleted = False
-
-    #context = {
-      #  'event': event,
-     #   'deletion_history': deletion_history,
-    #    'is_deleted': is_deleted
-   # }
-
-  #  return render(request, 'events/event_detail.html', context)
 
 
   
