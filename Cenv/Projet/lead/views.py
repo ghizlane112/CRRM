@@ -74,7 +74,7 @@ def search_view(request):
         'campagne_results': campagne_results,
     }
 
-    return render(request, 'nav.html', context)
+    return render(request, 'parts/nav.html', context)
 
 
 

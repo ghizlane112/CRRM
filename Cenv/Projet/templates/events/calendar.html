@@ -207,13 +207,6 @@
 
         <div>
             {% load static %}
-            <form method="post" action="{% url 'create_reminder' %}">
-                {% csrf_token %}
-                <button type="submit" class="btn-rappels">Ajouter Rappel</button>
-            </form>
-        </div>
-        <div>
-            {% load static %}
             <form method="get" action="{% url 'history_view' %}">
                 <button type="submit" class="btn-history">
                     <img src="{% static 'images/Rectangle2093.png' %}" alt="calendrier logo"/> &nbsp Liste des Rendez-vous

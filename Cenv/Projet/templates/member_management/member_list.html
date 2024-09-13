@@ -68,6 +68,11 @@
         .right-left a:hover {
             text-decoration: underline;
         }
+
+        .delete-btn {
+            color: red;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
@@ -89,6 +94,9 @@
                     <th>Prénom</th>
                     <th>Email</th>
                     <th>Type d'utilisateur</th>
+                    {% if user.is_superuser %}
+                        <th>Actions</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -99,10 +107,15 @@
                         <td>{{ member.last_name }}</td>
                         <td>{{ member.email }}</td>
                         <td>{{ member.is_superuser|yesno:"Administrateur,Utilisateur Normal" }}</td>
+                        {% if user.is_superuser %}
+                            <td>
+                                <a href="{% url 'delete_member' member.id %}" class="delete-btn" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce membre ?');">Supprimer</a>
+                            </td>
+                        {% endif %}
                     </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="5">Aucun membre trouvé.</td>
+                        <td colspan="{% if user.is_superuser %}6{% else %}5{% endif %}">Aucun membre trouvé.</td>
                     </tr>
                 {% endfor %}
             </tbody>
