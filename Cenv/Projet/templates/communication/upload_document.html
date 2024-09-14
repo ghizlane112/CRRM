@@ -108,7 +108,9 @@
     
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
-      {{ form.as_p }}
+      <div>
+        {{ form.as_p }}
+    </div>
       <button type="submit">Upload</button>
     </form>
 

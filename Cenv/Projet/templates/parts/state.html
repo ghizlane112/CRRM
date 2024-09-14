@@ -74,61 +74,15 @@
     font-size: 0.8em;
 }
 
-#thrid-card{
-    width: 590px;
-    height: 120px;
-
-    top: 219px;
-    left:19px;
-  overflow: hidden;
-    display: inline;
-    
+.analytics-link{
+    text-decoration: none;
+    color: #333;
 }
-
-/* Styles pour les sous-cartes */
-#thrid-card-desous1 {
-  position: relative;
-  top: -16px;
-  left: -18px;
-   max-width: 173px;
-    height: 109px;
-    border-radius:none ;
-    background-color: white;
-    box-shadow: 
-        2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
-        
-}
-#thrid-card-desous2{
-    max-width: 175px;
-    height: 110px;
-    border-radius:none ;
-    background-color: white;
-    position: relative;
-  top: -124px;
-  left: 174px;
-  box-shadow: 
-        2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
-       
-}
-#thrid-card-desous3{
-    max-width: 180px;
-    height: 110px;
-    position: relative;
-  top: -234px;
- left:375px;
- border-radius:none ;
- background-color: white;
- box-shadow: 
-        2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
-        
-}
-
-
 #forth-card{
-    width: 590px;
-    height: 190px;
+    width: 595px;
+    height: 379px;
     position: relative;
-    top: 329px;
+    top: 210px;
     left:19px;
     background-color: white;
     box-shadow: 
@@ -136,15 +90,15 @@
        
 }
 #forth-card canvas {
-    height: 150px !important; /* Ajuster la hauteur */
-    width: 300px !important;  /* Ajuster la largeur */
+    height: 300px !important; /* Ajuster la hauteur */
+    width: 390px !important;  /* Ajuster la largeur */
     margin: 0 auto;           /* Centrer le graphique */
 }
 #cinquieme-card {
-    width: 340px;
-    height: 190px;
+    width: 21vh;
+    height: 260px;
     top: 347px;
-    right: 38px;
+    right: 30px;
     background-color: white;
     display: flex; /* Utiliser flexbox pour aligner les éléments */
     justify-content: center;
@@ -155,8 +109,8 @@
 }
 
 #cinquieme-card canvas {
-    height: 150px !important; /* Ajuster la hauteur */
-    width: 300px !important;  /* Ajuster la largeur */
+    height: 191px !important; /* Ajuster la hauteur */
+    width: 330px !important;  /* Ajuster la largeur */
     margin: 0 auto;           /* Centrer le graphique */
     position: relative;
     right: 0; /* Centrer l'élément dans la carte */
@@ -182,7 +136,7 @@
     left: 19px;
     background-color: rgba(255, 255, 255, 0.868);
     position: relative;
-    top: 340px;
+    top: 230px;
     box-shadow: 
         2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
 }
@@ -236,25 +190,8 @@ border: none;
     #calendar {
         width: 399px;  
      }
-     #thrid-card-desous1 {
-   max-width: 212px;
-   position: relative;
-  left: -16px;
-  top: -15px;
-  
-}
-#thrid-card-desous2 {
-    max-width: 212px;
-    position: relative;
-  left: 210px;
-}
-#thrid-card-desous3 {
-    max-width: 212px;position: relative; left:440px;
-}
 
-#thrid-card{
-    width: 60%;left:23px;
-}
+
 #forth-card{
     width: 60%;
 }
@@ -278,22 +215,7 @@ border: none;
     #calendar {
         width: 399px;  
      }
-    #thrid-card-desous1 {
-   max-width: 173px;
-}
-#thrid-card-desous2 {
-    max-width: 173px;
-    position: relative;
-  left: 190px;
-}
-#thrid-card-desous3 {
-    max-width: 173px;
-    position: relative; 
-    left:390px;
-}
-#thrid-card{
-    width: 68%;
-}
+
 #forth-card{
     width: 57.5%;
 }
@@ -405,62 +327,21 @@ border: none;
 
 
 
-    <!----troisieme card-->
-    <div class="card text-center text-white mb-3" id="thrid-card">
-        <div class="card-body" style="width: 33rem;">
-          
-           
-
- <!----troisieme card-desous1-->
- <div class="card text-center text-white mb-3" id="thrid-card-desous1">
-    <div class="card-body" >
-        <h4>Total Leads</h4>
-        <p id="total-leads">{{ total_leads}}</p>
-    </div>
-</div>
-
-
-
-<!----troisieme card-desous2-->
-<div class="card text-center text-white mb-3" id="thrid-card-desous2">
-    <div class="card-body" >
-      
-        <h4>Total Conversions</h4>
-        <p id="total-conversions">{{ total_conversions }}</p>
-    
-    </div>
-</div>
-
-
-
-<!----troisieme card-desous3-->
-<div class="card text-center text-white mb-3" id="thrid-card-desous3">
-    <div class="card-body" >
-        <h4>Total Campaigns</h4>
-        <p id="total-campaigns">{{ total_campaigns }}</p>
-    </div>
-    </div>
-        
-
-
-    </div>
-    </div>
-
-
 
 
  <!-- Quatrième card - Taux de Conversion par Campagne -->
+  <a href="{% url 'analytics_view'%}" class="analytics-link">
  <div class="card text-center text-white mb-3" id="forth-card">
     <div class="card-body" style="width: 33rem;">
         <h3>Taux de Conversion par Campagne</h3>
         <canvas id="forthCardChart"></canvas>
     </div>
-</div>
+</div></a>
 
 
 
 
-
+<a href="{% url 'analytics_view'%}" class="analytics-link">
 <!-- Cinquième card - Répartition des Leads par Source -->
 <div class="card text-center text-white mb-3" id="cinquieme-card">
     <div class="card-body" style="width: 33rem;">
@@ -468,7 +349,7 @@ border: none;
         <canvas id="fifthCardChart"></canvas>
     </div>
 </div>
-
+</a>
 
 
 
