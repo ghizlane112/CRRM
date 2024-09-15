@@ -67,8 +67,8 @@
         .table1 {
             position: relative;
             top: 26px;
-            right: 10px;
-            left: 10px;
+            right: 10px !important;
+            left: 10px !important; 
             padding-left: 4px;
             padding-right: 5px;
             border-collapse: collapse;
@@ -164,7 +164,7 @@
         @media (max-width: 1366px) {
             .table1 {
             position: relative;
-            right: 10px;
+            right: 20px;
             left: 46px;
             max-width: 67vh;
          
@@ -349,10 +349,14 @@
             window.location.href = '/lead/' + currentLeadId + '/add-interaction/'; // Assurez-vous que cette URL est correcte
         });
 
-        // Fonction pour soumettre le formulaire de tri
-        function submitSortForm() {
-            document.getElementById('sort-form').submit();
-        }
+          // Fonction pour soumettre le formulaire de tri
+          function submitSortForm() {
+                document.getElementById('sort-form').submit();
+            }
+
+            // Assurez-vous que la fonction est attachée à l'événement onchange du select
+            document.querySelector('select[name="sort"]').addEventListener('change', submitSortForm);
+       
     });
 
 
