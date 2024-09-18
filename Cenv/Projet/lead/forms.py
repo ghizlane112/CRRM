@@ -27,19 +27,23 @@ class LeadForm(forms.ModelForm):
         if user and user.is_superuser:
             self.fields['responsable'].queryset = User.objects.filter(is_superuser=False)
         else:
-            self.fields.pop('responsable', None)  # Retirer le champ 'responsable'
+            self.fields.pop('responsable', None)
 
-        # Ajouter le champ 'statut' si le lead existe déjà
+        # Si c'est une instance existante (édition), le champ 'statut' doit être affiché
         if self.instance and self.instance.pk:
             self.fields['statut'].required = True
         else:
-            self.fields.pop('statut', None)
+            self.fields.pop('statut', None)  # Retirer le champ 'statut' pour la création
 
-        # Afficher ou masquer le champ 'raison' en fonction du statut
-        if self.instance and self.instance.statut == 'Perdu':
-            self.fields['raison'].widget.attrs['style'] = 'display: block;'
+        # Masquer le champ 'raison' lors de l'ajout
+        if not self.instance or not self.instance.pk:
+            self.fields.pop('raison', None)  # Retirer le champ 'raison' pour la création
         else:
-            self.fields['raison'].widget.attrs['style'] = 'display: none;'
+            # Afficher le champ 'raison' si le statut est 'Perdu' lors de l'édition
+            if self.instance.statut == 'Perdu':
+                self.fields['raison'].widget.attrs['style'] = 'display: block;'
+            else:
+                self.fields['raison'].widget.attrs['style'] = 'display: none;'
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
