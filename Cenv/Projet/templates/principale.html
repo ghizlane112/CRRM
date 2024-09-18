@@ -18,15 +18,11 @@
     font-size: 14px;
   }
   .navbar{
-    width: 100%;background: rgb(255, 255, 255);
-    height: 100px;
-  max-width: 100%;
-  max-height: 100px;
+    width: 100%;background: rgb(255, 255, 255); height: 100px; max-width: 100%; max-height: 100px;
     
   }
   
-  .logo img {
-    width: 126px; height: 120px; opacity: 1;}
+  .logo img { width: 126px; height: 120px; opacity: 1;}
   .ul-container{
     width: 490px;display: inline;margin-left: 90px;position: absolute;
   top:30px;right: 40px;
@@ -58,9 +54,11 @@
     position: relative;top: 0px;left: 0px;overflow: hidden;
   }
   .purple-div {
-    width: 100%;max-width: 100%;max-height: 889px;height: 869px;
-   background: rgba(61,70,242,0.800000011920929); opacity: 1; position: absolute;
+    width: 100%;max-width: 100%;max-height: 893px;height: 880px;
+  /* background: rgba(61,70,242,0.800000011920929);*/
+    opacity: 1; position: absolute;
     top: 2px; left: 0px;  
+    background: linear-gradient(150deg, #4c4cff 50%, rgba(0, 0, 0, 0) 68%); /* Dégradé pour la division diagonale */
   }
   .left-side-main1{
     width: 430px !important;height: 470px !important;position: relative;top: 210px;left: 34px !important;
@@ -111,21 +109,15 @@
 /* Container principal */
 /* Container principal */
 .qualities {
-    margin-top: 123px;
-    display: grid; /* Utilisation de Grid Layout */
+    margin-top: 123px; display: grid; /* Utilisation de Grid Layout */
     grid-template-columns: repeat(3, 1fr); /* Trois colonnes de largeur égale */
-    grid-gap: 20px; /* Espace entre les éléments */
-    width: 100%;
-    padding: 20px; /* Ajoute un padding autour du container */
+    grid-gap: 20px; /* Espace entre les éléments */ width: 100%; padding: 20px; /* Ajoute un padding autour du container */
     box-sizing: border-box; /* Inclut le padding dans la largeur totale */
   }
-  
   /* Style commun pour chaque div */
   .qualities > div {
     width: 100%; /* Largeur complète pour chaque div dans la grille */
-    height: 216px; /* Hauteur fixe pour chaque div */
-    opacity: 1;overflow: hidden;
-    text-align: center; /* Centrage du texte */
+    height: 216px; /* Hauteur fixe pour chaque div */ opacity: 1;overflow: hidden;text-align: center; /* Centrage du texte */
   }
   
   /* Styles spécifiques aux textes */
