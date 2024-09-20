@@ -1,8 +1,9 @@
-from django.shortcuts import render
+
 from django.http import HttpResponse
 import openpyxl
+from django.http import HttpResponseRedirect
 # Create your views here.
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from .forms import CampaignForm
 from lead.models import Lead 
 from .models import CompanyPublicitaire
@@ -24,11 +25,12 @@ def campaign_list(request):
 
 
 
+
 def add_campaign(request):
     if request.method == 'POST':
         form = CampaignForm(request.POST)
         if form.is_valid():
-            campaign = form.save()  # Sauvegarde la campagne et les relations Many-to-Many
+            form.save()
             return redirect('campaign_list')
     else:
         form = CampaignForm()
@@ -37,9 +39,6 @@ def add_campaign(request):
         'form': form,
     }
     return render(request, 'campaigns/add_campaign.html', context)
-
-
-
 
 def export_campaigns(request):
     # Créer un classeur Excel
@@ -130,3 +129,32 @@ def export_campaigns_pdf(request):
     response.write(buffer.read())
     buffer.close()
     return response
+
+
+
+def edit_campaign(request, campaign_id):
+    campaign = get_object_or_404(CompanyPublicitaire, id=campaign_id)
+    all_leads = Lead.objects.filter(is_deleted=False)  # Récupérer tous les leads
+
+    if request.method == 'POST':
+        form = CampaignForm(request.POST, instance=campaign)
+        new_lead_id = request.POST.get('new_lead')  # Récupérer le nouvel ID de lead
+        if form.is_valid():
+            form.save()  # Sauvegarder les modifications de la campagne
+            
+            # Ajouter le nouvel lead s'il est sélectionné et n'est pas déjà présent
+            if new_lead_id:
+                lead = Lead.objects.get(id=new_lead_id)
+                if lead not in campaign.leads.all():  # Vérifier si le lead est déjà associé
+                    campaign.leads.add(lead)  # Ajouter le nouveau lead
+
+            return HttpResponseRedirect('/campaigns/')  # Rediriger vers la liste des campagnes
+    else:
+        form = CampaignForm(instance=campaign)
+
+    context = {
+        'form': form,
+        'all_leads': all_leads,  # Passer tous les leads au contexte
+        'campaign': campaign,  # Passer la campagne pour afficher le nom
+    }
+    return render(request, 'campaigns/edit_campaign.html', context)

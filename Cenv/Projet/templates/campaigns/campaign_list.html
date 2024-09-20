@@ -1,23 +1,26 @@
 {% include 'parts/nav.html' %}
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liste des Campagnes</title>
     <style>
         /* Style pour la navigation et le layout */
+
         .right-left {
             background-color: #F6F2F2; 
             border-radius: 15px;
             height: 100%;
-            width: 81%;
+            width: 79%;
             position: absolute;
             top: 131px;
             left: 17.5%;
-            overflow: hidden;
+            overflow-y: auto;
             box-shadow: 
-                2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
-                4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
-                6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
+                2px 2px 5px rgba(0, 0, 0, 0.2),
+                4px 4px 10px rgba(0, 0, 0, 0.4),
+                6px 6px 15px rgba(0, 0, 0, 0.6);
             padding: 20px;
         } 
         table {
@@ -49,13 +52,13 @@
             margin-bottom: 20px;
         }
 
-        .right-left  a {
+        .right-left a {
             color: #3498db;
             text-decoration: none;
             font-weight: bold;
         }
 
-       .right-left a:hover {
+        .right-left a:hover {
             text-decoration: underline;
         }
     </style>
@@ -66,36 +69,42 @@
         {% include 'parts/button.html' %}
     </div>
     <div class="right-left">
-    <h1>Liste des Campagnes</h1>
-    <a href="{% url 'add_campaign' %}">Ajouter une Campagne</a> |
-    <a href="{% url 'export_campaigns' %}">Exporter les Campagnes en Excel</a> |
-    <a href="{% url 'export_campaigns_pdf' %}">Exporter les Campagnes en PDF</a>  <!-- Ajoutez ce lien -->
-    <table>
-        <thead>
-            <tr>
-                <th>Nom de la Campagne</th>
-                <th>Date de Début</th>
-                <th>Date de Fin</th>
-                <th>Budget</th>
-                <th>Nom de l'Entreprise</th>
-                <th>Leads</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for campaign in campaigns %}
+        <h1>Liste des Campagnes</h1>
+        <a href="{% url 'add_campaign' %}">Ajouter une Campagne</a> |
+        <a href="{% url 'export_campaigns' %}">Exporter les Campagnes en Excel</a> |
+        <a href="{% url 'export_campaigns_pdf' %}">Exporter les Campagnes en PDF</a>
+        <table>
+            <thead>
                 <tr>
-                    <td>{{ campaign.name }}</td>
-                    <td>{{ campaign.start_date }}</td>
-                    <td>{{ campaign.end_date }}</td>
-                    <td>{{ campaign.budget }}</td>
-                    <td>{{ campaign.nom_entreprise|default:"Non spécifié" }}</td>
-                    <td>   {% for lead in campaign.leads.all %}
-                        {{ lead.prenom }} {{ lead.nom }}<br>
-                    {% endfor %}</td>
+                    <th>Nom de la Campagne</th>
+                    <th>Date de Début</th>
+                    <th>Date de Fin</th>
+                    <th>Budget</th>
+                    <th>Nom de l'Entreprise</th>
+                    <th>Leads</th>
+                    <th>Actions</th> <!-- Nouvelle colonne pour les actions -->
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                {% for campaign in campaigns %}
+                    <tr>
+                        <td>{{ campaign.name }}</td>
+                        <td>{{ campaign.start_date }}</td>
+                        <td>{{ campaign.end_date }}</td>
+                        <td>{{ campaign.budget }}</td>
+                        <td>{{ campaign.nom_entreprise|default:"Non spécifié" }}</td>
+                        <td>
+                            {% for lead in campaign.leads.all %}
+                                {{ lead.prenom }} {{ lead.nom }}<br>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <a href="{% url 'edit_campaign' campaign.id %}">Éditer</a> <!-- Lien d'édition -->
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
