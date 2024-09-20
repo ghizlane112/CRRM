@@ -10,7 +10,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #F6F9FC; /* Background clair comme sur l'image */
+            background-color: #F6F9FC;
             color: #333;
         }
 
@@ -28,7 +28,7 @@ width: 81%;
 max-width: 81%;
 position: absolute;
 top: 131px;
-left:17.5%;
+left:18.5%;
 overflow-x: hidden;
 overflow-y: auto;
 box-shadow: 
@@ -45,6 +45,8 @@ box-shadow:
                 2px 2px 5px rgba(0, 0, 0, 0.1),
                 4px 4px 10px rgba(0, 0, 0, 0.05);
             margin-bottom: 20px;
+            width: 80%; /* Réduction de la largeur des sections */
+            margin: 0 auto 20px; /* Centrer et espacer les sections */
         }
 
         .chart-container h2, .table-container h2 {
@@ -106,6 +108,10 @@ box-shadow:
 
             canvas {
                 width: 100% !important;
+            }
+
+            .chart-container, .table-container {
+                width: 100%; /* Ajustement pour mobile */
             }
         }
     </style>
