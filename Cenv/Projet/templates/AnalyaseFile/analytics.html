@@ -8,59 +8,104 @@
     <title>Analyse des Leads</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F6F9FC; /* Background clair comme sur l'image */
+            color: #333;
+        }
+
         h1, h2 {
             text-align: center;
             color: #333;
         }
-        .chart-container {
-            width: 80%;
-            max-width: 600px;
-            margin: 20px auto;
+
+        /* Conteneur principal pour la droite */
+        .right-left{
+background-color:#F6F2F2; 
+border-radius: 15px;
+height: 100%;
+width: 81%;
+max-width: 81%;
+position: absolute;
+top: 131px;
+left:17.5%;
+overflow-x: hidden;
+overflow-y: auto;
+box-shadow: 
+        2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
+        4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
+        6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
+    }
+
+        .chart-container, .table-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.1),
+                4px 4px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
         }
+
+        .chart-container h2, .table-container h2 {
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        /* Graphiques */
         canvas {
-            display: block;
-            margin: 10px auto;
-            height: 200px !important;
-            width: 400px !important;
+            max-width: 100%;
+            margin: 0 auto;
+            height: auto;
         }
-        .table-container {
-            width: 80%;
-            max-width: 800px;
-            margin: 20px auto;
-            border-collapse: collapse;
-        }
+
+        /* Tableaux */
         table {
             width: 100%;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            overflow: hidden;
+            border-collapse: collapse;
+            margin-top: 10px;
         }
+
         th, td {
-            padding: 10px;
+            padding: 15px;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
+
         th {
-            background-color: #f4f4f4;
+            background-color: #F6F6F6;
+            font-weight: bold;
         }
-        .right-left {
-            background-color: #F6F2F2;
-            border-radius: 15px;
-            height: 100%;
-            width: 81%;
-            max-width: 87%;
-            position: absolute;
-            top: 131px;
-            left: 17.5%;
-            overflow: auto;
-            box-shadow: 
-                2px 2px 5px rgba(0, 0, 0, 0.2),
-                4px 4px 10px rgba(0, 0, 0, 0.4),
-                6px 6px 15px rgba(0, 0, 0, 0.6);
+
+        /* Ajustement des boutons si nécessaire */
+        .btn-history, .btn-rappels {
+            display: inline-block;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            padding: 14px 24px;
+            margin: 10px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            background-color: #3D46F2;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
+
+        .btn-history:hover, .btn-rappels:hover {
+            background-color: #0056b3;
+        }
+
+        /* Pour les petits écrans */
         @media (max-width: 768px) {
             .right-left {
                 width: 90%;
+            }
+
+            canvas {
+                width: 100% !important;
             }
         }
     </style>
@@ -69,6 +114,7 @@
     <div class="left-side">
         {% include 'parts/button.html' %}
     </div>
+
     <div class="right-left">
         <h1>Analyse des Leads</h1>
         
@@ -76,14 +122,16 @@
         <div class="chart-container">
             <h2>Origine des Leads</h2>
             <canvas id="sourceChart"></canvas>
+        </div>
 
+        <div class="chart-container">
             <h2>Taux de Conversion par Campagne</h2>
             <canvas id="conversionChart"></canvas>
         </div>
 
         <!-- Tableaux pour Rapports -->
-        <h2>Rapport de Conversion par Campagne</h2>
         <div class="table-container">
+            <h2>Rapport de Conversion par Campagne</h2>
             <table id="conversionReportTable">
                 <thead>
                     <tr>
