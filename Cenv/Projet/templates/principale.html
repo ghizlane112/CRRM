@@ -40,6 +40,7 @@
     font-family: Inter;
     font-weight: Semi Bold;
     font-size: 24px;
+    text-decoration: none;
   }
   
   .button-login {
@@ -237,9 +238,7 @@
     display: flex; gap: 10px;
   }
   
-  .footer-section .social-icon img {
-    width: 24px;height: auto;
-  }
+  .footer-section .social-icon img {  width: 24px;height: auto; }
   
   /* Footer bottom */
   .footer-bottom {
@@ -251,9 +250,7 @@
   }
   
 
-
   @media (max-width: 2560px) {
-
     .image1-main1 {
     position: absolute;left: 1300px;width: 1200px;height: 700px;
   }
@@ -309,7 +306,7 @@
         <div   class="ul-container">
             <ul>
                 <li><a >About us</a></li>
-                <li><a >Contact us</a></li>
+                <li><a href="#footer">Contact us</a></li>
                 <li>  {% load static %}<form method="get" action="{%url  'login'%}"><button type="submit" class="button-login" >Login</button></form></li>
                
             </ul></div>
@@ -415,7 +412,7 @@
     
 
 
-    <footer class="footer">
+    <footer class="footer" id="footer">
       <h1>Explorez nos ressources,💪 obtenez de l'aide, et restez connectés avec nous pour tout ce dont vous avez besoin.</h1>
         <div class="footer-container">
           
