@@ -3,21 +3,30 @@
 <head>
   <style>
     /* Styles généraux */
-    .right-left{
-background-color:#F6F2F2; 
-border-radius: 15px;
-height: 100%;
-width: 81%;
-max-width: 87%;
-position: absolute;
-top: 131px;
-left:17.5%;
-overflow-y: auto;
-box-shadow: 
-        2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
-        4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
-        6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
+    .right-left {
+      background-color: #F6F2F2; 
+      border-radius: 15px;
+      height: 100%;
+      width: 81%;
+      max-width: 87%;
+      position: absolute;
+      top: 131px;
+      left: 17.5%;
+      overflow-y: auto;
+      box-shadow: 
+          2px 2px 5px rgba(0, 0, 0, 0.2),
+          4px 4px 10px rgba(0, 0, 0, 0.4),
+          6px 6px 15px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
     }
+    .form-container {
+      flex: 1; /* Prend tout l'espace disponible */
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+
     .card-container {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -84,6 +93,26 @@ box-shadow:
     input[type="checkbox"] {
       display: none;
     }
+
+    /* Style pour le bouton d'upload */
+    .upload-button {
+      margin-top: 20px;
+      margin-left: 27px;
+      margin-right: 16px;
+      margin-bottom: 20px;
+      padding: 8px 4px; /* Réduit le padding */
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em; /* Réduit la taille de la police */
+      width: 94%; /* Définit une largeur fixe (optionnel) */
+    }
+
+    .upload-button:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 <body>
@@ -93,19 +122,19 @@ box-shadow:
   <div class="right-left">
     <h2>Upload Document for {{ lead.name }}</h2>
 
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %}
-      <div>
-        <label>{{ form.file.label }}</label>
-        {{ form.file }}
-        <label>{{ form.description.label }}</label>
-        {{ form.description }}
-      </div>
-      <button type="submit">Upload</button>
+    <div class="form-container">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div>
+          <label>{{ form.file.label }}</label>
+          {{ form.file }}
+          <label>{{ form.description.label }}</label>
+          {{ form.description }}
+        </div>
 
-      <!-- Section cachée pour stocker les utilisateurs sélectionnés -->
-      <div id="selected-users"></div>
-    </form>
+        <!-- Section cachée pour stocker les utilisateurs sélectionnés -->
+        <div id="selected-users"></div>
+    </div>
 
     <h3>Select Users to Share With</h3>
     <div class="card-container">
@@ -116,8 +145,7 @@ box-shadow:
             active
           {% else %}
             inactive
-          {% endif %}
-        ">
+          {% endif %}">
           {% if user.is_active %}
             Active
           {% else %}
@@ -132,6 +160,10 @@ box-shadow:
       </div>
       {% endfor %}
     </div>
+
+    <!-- Bouton de soumission placé à la fin de la page -->
+    <button type="submit" class="upload-button">Upload</button>
+      </form>
   </div>
 
   <script>
