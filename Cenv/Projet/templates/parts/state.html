@@ -406,10 +406,6 @@ border: none;
 
 
 
-
-
-
-
 <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.2/main.min.js'></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -435,7 +431,7 @@ border: none;
 
     document.addEventListener('DOMContentLoaded', function() {
             // Graphique des conversions par campagne dans le quatrième card
-            fetch('{% url "lead_conversion_data" %}')
+            fetch('{% url "conversion_report_data" %}')
                 .then(response => response.json())
                 .then(data => {
                     if (!data || data.length === 0) {
