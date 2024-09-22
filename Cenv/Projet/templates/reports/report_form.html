@@ -14,35 +14,35 @@
             left: 17.5%;
             overflow: auto;
             box-shadow: 
-                2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
-                4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
-                6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
+                2px 2px 5px rgba(0, 0, 0, 0.2),
+                4px 4px 10px rgba(0, 0, 0, 0.4),
+                6px 6px 15px rgba(0, 0, 0, 0.6);
         }
 
         .right-side-desous {
-            padding: 20px; /* Ajouter du padding pour un meilleur espacement */
+            padding: 20px;
         }
 
         .right-side-desous img {
             height: 240px;
             width: 520px;
-            display: block; /* Centrer l'image */
-            margin: 0 auto; /* Centrer l'image */
+            display: block;
+            margin: 0 auto;
             position: relative;
             left: 20px;
             top: -20px;
         }
 
         .right-side-desous-form {
-            text-align: center; /* Centrer le titre et le formulaire */
+            text-align: center;
             margin-top: 20px;
         }
 
         .right-side-desous-form h1 {
             color: #3B4582;
-            margin-bottom: 20px; /* Espacement sous le titre */
+            margin-bottom: 20px;
             margin-right: 10px;
-            margin-top:-40px ;
+            margin-top: -40px;
         }
 
         .right-side-desous-form form {
@@ -52,25 +52,18 @@
         }
 
         .right-side-desous-form form input,
-        .right-side-desous-form form textarea {
+        .right-side-desous-form form textarea,
+        .right-side-desous-form form select {
             padding: 8px;
-            width: 390px;
+            width: 400px; /* Largeur unifiée */
             margin-bottom: 10px;
-             /* Espacement entre les champs */
         }
-        .right-side-desous-form form label{
-          font-size: 18px;
-          font-weight:600px;
-          
-        }
-        .right-side-desous-form form textarea{
-            margin-left: 13px;
-        }
-        .right-side-desous-form form select{
-            padding: 8px;
-            width: 410px;
-            margin-right: 14px;
-            margin-bottom: 10px;
+
+        .right-side-desous-form form label {
+            font-size: 18px;
+            font-weight: 600; /* Retirer le 'px' */
+            /* Affichage en bloc */
+            margin-bottom: 5px; /* Espacement sous le label */
         }
 
         .right-side-desous-form button {
@@ -108,7 +101,25 @@
                 <h1>Créer un Rapport</h1>
                 <form method="post">
                     {% csrf_token %}
-                    {{ form.as_p }}
+                    
+                    <label for="id_title">Titre</label>
+                    {{ form.title }}
+
+                    <label for="id_content">Contenu</label>
+                    {{ form.content }}
+
+                    <label for="id_report_type">Type de Rapport</label>
+                    {{ form.report_type }}
+
+                    <label for="id_start_date">Date de Début</label>
+                    {{ form.start_date }}
+
+                    <label for="id_end_date">Date de Fin</label>
+                    {{ form.end_date }}
+
+                    <label for="id_category">Catégorie</label>
+                    {{ form.category }}
+
                     <button type="submit">Générer ce Rapport</button>
                 </form>
                 <a href="{% url 'report_dashboard' %}">Retour au tableau de bord</a>

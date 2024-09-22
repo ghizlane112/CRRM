@@ -19,23 +19,22 @@
             color: #333;
         }
 
-        /* Conteneur principal pour la droite */
-        .right-left{
-background-color:#F6F2F2; 
-border-radius: 15px;
-height: 100%;
-width: 81%;
-max-width: 81%;
-position: absolute;
-top: 131px;
-left:18.5%;
-overflow-x: hidden;
-overflow-y: auto;
-box-shadow: 
-        2px 2px 5px rgba(0, 0, 0, 0.2), /* Première ombre */
-        4px 4px 10px rgba(0, 0, 0, 0.4), /* Deuxième ombre */
-        6px 6px 15px rgba(0, 0, 0, 0.6); /* Troisième ombre */
-    }
+        .right-left {
+            background-color: #F6F2F2; 
+            border-radius: 15px;
+            height: 100%;
+            width: 81%;
+            max-width: 81%;
+            position: absolute;
+            top: 131px;
+            left: 18.5%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.2),
+                4px 4px 10px rgba(0, 0, 0, 0.4),
+                6px 6px 15px rgba(0, 0, 0, 0.6);
+        }
 
         .chart-container, .table-container {
             background-color: #fff;
@@ -45,24 +44,22 @@ box-shadow:
                 2px 2px 5px rgba(0, 0, 0, 0.1),
                 4px 4px 10px rgba(0, 0, 0, 0.05);
             margin-bottom: 20px;
-            width: 80%; /* Réduction de la largeur des sections */
-            margin: 0 auto 20px; /* Centrer et espacer les sections */
+            width: 80%; 
+            margin: 0 auto 20px; 
         }
 
         .chart-container h2, .table-container h2 {
             margin-bottom: 20px;
-            color:  #3837D3;
+            color: #3837D3;
             font-weight: 600;
         }
 
-        /* Graphiques */
         canvas {
             max-width: 100%;
             margin: 0 auto;
             height: auto;
         }
 
-        /* Tableaux */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -80,7 +77,6 @@ box-shadow:
             font-weight: bold;
         }
 
-        /* Ajustement des boutons si nécessaire */
         .btn-history, .btn-rappels {
             display: inline-block;
             border-radius: 12px;
@@ -100,7 +96,6 @@ box-shadow:
             background-color: #0056b3;
         }
 
-        /* Pour les petits écrans */
         @media (max-width: 768px) {
             .right-left {
                 width: 90%;
@@ -111,7 +106,7 @@ box-shadow:
             }
 
             .chart-container, .table-container {
-                width: 100%; /* Ajustement pour mobile */
+                width: 100%;
             }
         }
     </style>
@@ -122,11 +117,10 @@ box-shadow:
     </div>
 
     <div class="right-left">
-        <h1 style="color: #3837D3; margin-top: 12px;margin-bottom: 12px;">Analyse des Leads</h1>
+        <h1 style="color: #3837D3; margin-top: 12px; margin-bottom: 12px;">Analyse des Leads</h1>
         
-        <!-- Graphiques -->
         <div class="chart-container">
-            <h2 >Origine des Leads</h2>
+            <h2>Origine des Leads</h2>
             <canvas id="sourceChart"></canvas>
         </div>
 
@@ -135,7 +129,6 @@ box-shadow:
             <canvas id="conversionChart"></canvas>
         </div>
 
-        <!-- Tableaux pour Rapports -->
         <div class="table-container">
             <h2>Rapport de Conversion par Campagne</h2>
             <table id="conversionReportTable">
@@ -191,7 +184,7 @@ box-shadow:
                 .catch(error => console.error('Erreur:', error));
 
             // Graphique des conversions par campagne
-            fetch('{% url "lead_conversion_data" %}')
+            fetch('{% url "conversion_report_data" %}')
                 .then(response => response.json())
                 .then(data => {
                     const labels = data.map(item => item.campaign);

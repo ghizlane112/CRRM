@@ -33,23 +33,19 @@ def lead_conversion_data(request):
     return JsonResponse(list(data), safe=False)
 
 
-
 def conversion_report_view(request):
-    # Obtenir toutes les campagnes
     campaigns = CompanyPublicitaire.objects.all()
     data = []
 
-    # Calculer les conversions pour chaque campagne
     for campaign in campaigns:
-        # Leads associés à cette campagne
         leads = campaign.leads.all()
         total_leads = leads.count()
-        # Leads convertis (statut "Converti")
         conversions = leads.filter(statut='Converti').count()
-        # Calculer le taux de conversion (éviter la division par zéro)
+
+        print(f"Campagne: {campaign.name}, Total Leads: {total_leads}, Conversions: {conversions}")  # Log
+
         conversion_rate = (conversions / total_leads * 100) if total_leads > 0 else 0
 
-        # Ajouter les données pour chaque campagne
         data.append({
             'campaign': campaign.name,
             'leads': total_leads,
